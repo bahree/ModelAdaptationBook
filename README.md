@@ -1,6 +1,6 @@
-# Practical Model Adaptation Techniques for Large Language Models
+# Fine-Tuning and Customizing LLMs for Enterprises
 
-Welcome to the code repository for **Practical Model Adaptation Techniques for Large Language Models**.
+Welcome to the code repository for **Fine-Tuning and Customizing LLMs for Enterprises** (working title).
 
 This repository contains all the runnable code, data, and examples from the book, organized by chapter.
 
