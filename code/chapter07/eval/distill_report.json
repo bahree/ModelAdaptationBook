@@ -1,0 +1,29 @@
+{
+  "num_examples": 36,
+  "reference_type": "human",
+  "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+  "teacher_dir": "chapter06/runs/sft_run1",
+  "student_dir": "chapter07/runs/student_run1",
+  "base_overall_f1": 0.23993685416866006,
+  "teacher_overall_f1": 0.38193107873518817,
+  "student_overall_f1": 0.3479146324408637,
+  "base_f1_by_category": {
+    "closed_qa": 0.22334301634617187,
+    "information_extraction": 0.3349912203166981,
+    "open_qa": 0.20623547984553944,
+    "summarization": 0.3990600659266326
+  },
+  "teacher_f1_by_category": {
+    "closed_qa": 0.46713007222263553,
+    "information_extraction": 0.4499241998674848,
+    "open_qa": 0.3192814863431557,
+    "summarization": 0.5519062766296535
+  },
+  "student_f1_by_category": {
+    "closed_qa": 0.38901198463465836,
+    "information_extraction": 0.42390428176169476,
+    "open_qa": 0.29157799084042574,
+    "summarization": 0.5638366499641126
+  },
+  "student_as_pct_of_teacher": 0.9109356420876401
+}

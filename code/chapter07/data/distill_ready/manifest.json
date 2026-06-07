@@ -1,0 +1,22 @@
+{
+  "source": "teacher_distillation",
+  "created_utc": "2026-05-09T05:18:03.285524Z",
+  "seed": 42,
+  "quality_filters": {
+    "min_response_words": 10,
+    "max_response_words": 500
+  },
+  "counts": {
+    "input_total": 200,
+    "after_filter": 179,
+    "removed": 21,
+    "train": 143,
+    "valid": 36
+  },
+  "category_distribution": {
+    "open_qa": 92,
+    "summarization": 18,
+    "closed_qa": 23,
+    "information_extraction": 10
+  }
+}

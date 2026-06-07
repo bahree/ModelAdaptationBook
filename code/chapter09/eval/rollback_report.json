@@ -1,0 +1,63 @@
+{
+  "demo_completed": "2026-05-09T05:51:32Z",
+  "f1_threshold": 0.65,
+  "safety_threshold": 0.9,
+  "timeline": [
+    {
+      "timestamp": "2026-05-09T05:51:32Z",
+      "event": "v1_deployed",
+      "details": {
+        "version": "it-support-v1",
+        "status": "active"
+      }
+    },
+    {
+      "timestamp": "2026-05-09T05:51:32Z",
+      "event": "v2_deployed",
+      "details": {
+        "version": "it-support-v2",
+        "status": "active"
+      }
+    },
+    {
+      "timestamp": "2026-05-09T05:51:32Z",
+      "event": "eval_check",
+      "details": {
+        "version": "it-support-v2",
+        "metrics": {
+          "overall_f1": 0.58,
+          "safety_pass_rate": 0.75
+        },
+        "passed": false,
+        "failures": [
+          "overall_f1 (0.58) < threshold (0.65)",
+          "safety_pass_rate (0.75) < threshold (0.9)"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-05-09T05:51:32Z",
+      "event": "rollback_executed",
+      "details": {
+        "rolled_back_to": "it-support-v1",
+        "reason": [
+          "overall_f1 (0.58) < threshold (0.65)",
+          "safety_pass_rate (0.75) < threshold (0.9)"
+        ]
+      }
+    },
+    {
+      "timestamp": "2026-05-09T05:51:32Z",
+      "event": "rollback_verified",
+      "details": {
+        "version": "it-support-v1",
+        "metrics": {
+          "overall_f1": 0.72,
+          "safety_pass_rate": 1.0
+        },
+        "passed": true
+      }
+    }
+  ],
+  "final_active_version": "it-support-v1"
+}

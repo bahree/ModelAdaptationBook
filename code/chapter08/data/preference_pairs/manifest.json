@@ -1,0 +1,11 @@
+{
+  "source": "dpo_preference_pairs",
+  "created_utc": "2026-05-09T05:47:44.565554Z",
+  "chosen_model": "chapter06/runs/sft_run1",
+  "rejected_model": "Qwen/Qwen3-4B-Instruct-2507",
+  "counts": {
+    "train": 40,
+    "valid": 10
+  },
+  "seed": 42
+}

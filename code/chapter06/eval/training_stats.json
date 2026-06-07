@@ -1,0 +1,49 @@
+{
+  "model": {
+    "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+    "trainable_parameters": 4022468096,
+    "trainable_percentage": "100%",
+    "method": "Full-parameter SFT (no LoRA/PEFT)"
+  },
+  "training": {
+    "dataset": "databricks/databricks-dolly-15k (technical support subset)",
+    "train_examples": 450,
+    "valid_examples": 50,
+    "epochs": 3,
+    "learning_rate": "2e-5",
+    "effective_batch_size": 16,
+    "gradient_checkpointing": true,
+    "precision": "bfloat16",
+    "training_loss_start": 2.2313,
+    "training_loss_end": 1.2799,
+    "best_val_loss": 1.3141,
+    "final_val_loss": 1.3171,
+    "max_gradient_norm": 7.56,
+    "training_runtime_seconds": 605.9,
+    "hardware": "2x NVIDIA A30 (24 GB each)"
+  },
+  "disk_usage": {
+    "final_model_gb": 7.49,
+    "total_run_dir_gb": 52.48,
+    "note": "Full SFT saves the entire model; LoRA adapters are 15-30 MB by comparison"
+  },
+  "evaluation": {
+    "overall_token_f1_base": 0.257,
+    "overall_token_f1_ft": 0.370,
+    "delta": 0.113,
+    "per_category_f1_base": {
+      "closed_qa": 0.314,
+      "information_extraction": 0.367,
+      "open_qa": 0.219,
+      "summarization": 0.242
+    },
+    "per_category_f1_ft": {
+      "closed_qa": 0.635,
+      "information_extraction": 0.481,
+      "open_qa": 0.258,
+      "summarization": 0.857
+    },
+    "behavioral_tests": "16/16 passed",
+    "safety_regression": "No regression detected"
+  }
+}

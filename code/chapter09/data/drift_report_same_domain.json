@@ -1,0 +1,13 @@
+{
+  "centroid_similarity": 0.7108,
+  "drift_score": 0.2892,
+  "min_prompt_similarity": 0.0196,
+  "mean_prompt_similarity": 0.146,
+  "alert_level": "red",
+  "num_reference": 450,
+  "num_production": 50,
+  "vocab_size": 6251,
+  "timestamp": "2026-02-15T19:36:04Z",
+  "reference_path": "chapter06/data/dolly_sft/train.jsonl",
+  "production_path": "chapter06/data/dolly_sft/valid.jsonl"
+}

@@ -1,0 +1,26 @@
+{
+  "dataset": "databricks/databricks-dolly-15k",
+  "created_utc": "2026-05-09T04:07:22.847960Z",
+  "seed": 42,
+  "filters": {
+    "categories": [
+      "closed_qa",
+      "open_qa",
+      "information_extraction",
+      "summarization"
+    ],
+    "min_length": 40,
+    "max_length": 2000
+  },
+  "counts": {
+    "train": 450,
+    "valid": 50
+  },
+  "category_distribution": {
+    "open_qa": 282,
+    "summarization": 53,
+    "closed_qa": 79,
+    "information_extraction": 36
+  },
+  "system_prompt": "You are an IT support assistant. Provide clear, step-by-step answers."
+}

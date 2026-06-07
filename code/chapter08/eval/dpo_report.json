@@ -1,0 +1,24 @@
+{
+  "num_examples": 50,
+  "base_overall_f1": 0.2571609778599955,
+  "sft_overall_f1": 0.3558448516435421,
+  "dpo_overall_f1": 0.3775294356512226,
+  "base_f1_by_category": {
+    "closed_qa": 0.31425866352352266,
+    "information_extraction": 0.3674875911693856,
+    "open_qa": 0.21920501799182235,
+    "summarization": 0.24228596262494567
+  },
+  "sft_f1_by_category": {
+    "closed_qa": 0.5734280035593571,
+    "information_extraction": 0.47245045938438535,
+    "open_qa": 0.262791280907322,
+    "summarization": 0.6632653061224489
+  },
+  "dpo_f1_by_category": {
+    "closed_qa": 0.6345675772806626,
+    "information_extraction": 0.4813856104529189,
+    "open_qa": 0.26876145889961894,
+    "summarization": 0.8571428571428572
+  }
+}
