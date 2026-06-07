@@ -1,4 +1,4 @@
-"""QLoRA fine-tuning script using TRL's SFTTrainer (Listing 5.6).
+"""QLoRA fine-tuning script using TRL's SFTTrainer (Listing 5.5).
 
 Same pipeline as train_lora.py but loads the base model in 4-bit quantization
 (NF4 via bitsandbytes), reducing GPU memory by roughly 4x. This enables

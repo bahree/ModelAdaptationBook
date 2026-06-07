@@ -80,7 +80,7 @@ Write-Host "Step 4/4: Evaluating and comparing results..." -ForegroundColor Cyan
 Write-Host "⏱  Time: 5-10 minutes" -ForegroundColor Gray
 Write-Host ""
 
-python chapter05/scripts/listing_5_4_evaluate.py `
+python chapter05/scripts/listing_5_3_evaluate.py `
   --base Qwen/Qwen3-4B-Instruct-2507 `
   --adapter chapter05/runs/dolly_lora `
   --adapter_alt chapter05/runs/dolly_lora_with_safety `

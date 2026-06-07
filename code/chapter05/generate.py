@@ -1,4 +1,4 @@
-"""Inference script: generate text with the base model and an optional LoRA/QLoRA adapter (Listing 5.5).
+"""Inference script: generate text with the base model and an optional LoRA/QLoRA adapter (Listing 5.4).
 
 Loads the base model, optionally attaches a LoRA or QLoRA adapter, and generates
 a response for a single user prompt. Supports adapter merging for deployment.

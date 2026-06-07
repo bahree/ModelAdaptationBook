@@ -3,7 +3,7 @@
 These illustrate the response types discussed in the chapter's "Data quality
 iterations" section, using the Contoso IT-support assistant. Each is a single
 training row in the same `messages` format produced by
-`scripts/listing_5_2_prepare_dataset.py` (see `dolly_to_messages`).
+`scripts/listing_5_1_prepare_dataset.py` (see `dolly_to_messages`).
 
 > **These rows are illustrative.** The Dolly 15K subset used in this chapter
 > contains no refusals and no tone tags, so these are examples of what you would
