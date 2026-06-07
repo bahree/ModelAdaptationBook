@@ -184,7 +184,7 @@ def main() -> None:
     manifest = {
         "dataset": "databricks/databricks-dolly-15k",
         "split": "train",
-        "created_utc": dt.datetime.now(dt.UTC).isoformat().replace("+00:00", "Z"),
+        "created_utc": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
         "seed": args.seed,
         "filters": {
             "min_length": args.min_length,

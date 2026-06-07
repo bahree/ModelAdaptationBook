@@ -70,21 +70,25 @@ TARGET_MODULES = [
 def step1_prepare_dataset() -> tuple[HFDataset, HFDataset, List[Dict[str, Any]]]:
     """Step 1: download Dolly 15K and keep 40 train + 5 valid + 3 demo examples.
 
-    Same filter and seed as chapter 5's listing_5_2_prepare_dataset.py, just
-    a smaller slice so the run finishes in minutes.
+    Same filter and seed as chapter 5's listing_5_2_prepare_dataset.py, just a
+    smaller slice so the run finishes in minutes.
     """
     print("Step 1: prepare dataset")
     ds = load_dataset("databricks/databricks-dolly-15k", split="train")
 
     rng = random.Random(SEED)
+    # Length filter: the 20-character floor drops empty or degenerate rows (a
+    # bare one-word instruction with no real content); the 2000 ceiling keeps
+    # examples short enough for the 512-token preview.
     examples: List[Dict[str, Any]] = []
     for row in ds:
         instruction = row.get("instruction", "")
         context = row.get("context", "") or ""
         response = row.get("response", "")
-        total = len(instruction) + len(context) + len(response)
-        if 20 <= total <= 2000:
+        total_length = len(instruction) + len(context) + len(response)
+        if 20 <= total_length <= 2000:
             examples.append(row)
+    print(f"  {len(examples)} of {len(ds)} examples pass the length filter")
     rng.shuffle(examples)
 
     def to_messages(row: Dict[str, Any]) -> Dict[str, Any]:
@@ -244,7 +248,7 @@ def step5_save(trainer: SFTTrainer, tokenizer, samples: List[Dict[str, str]]) ->
             "dropout": LORA_DROPOUT,
             "target_modules": TARGET_MODULES,
         },
-        "created_utc": dt.datetime.now(dt.UTC).isoformat().replace("+00:00", "Z"),
+        "created_utc": dt.datetime.now(dt.timezone.utc).isoformat().replace("+00:00", "Z"),
         "samples": samples,
     }
     (OUTPUT_DIR / "manifest.json").write_text(json.dumps(manifest, indent=2))

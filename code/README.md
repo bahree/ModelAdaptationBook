@@ -1,10 +1,12 @@
 # Book code workspace
 
-Welcome to the code repo for the **Model Adaptation** book. This folder contains the runnable code, organized by chapter.
+Welcome to the code repo for **LLM Customization and Fine-Tuning: Adaptation, Distillation, and Alignment** (Manning Publications). This folder contains the runnable code, organized by chapter.
 
 **Repository**: <https://github.com/bahree/ModelAdaptationBook>
 
-> **Working directory:** All setup and run commands in this README must be executed from the **`code/`** directory—not the parent repo folder. If you cloned the repo and are in the root (e.g. `ModelAdaptationBook`), run `cd code` first. Running `pip install -e .` or other commands from the wrong directory will fail.
+> **Working directory:** All setup and run commands in this README must be executed from the **`code/`** directory, not the parent repo folder. If you cloned the repo and are in the root (e.g. `ModelAdaptationBook`), run `cd code` first. Running `pip install -e .` or other commands from the wrong directory will fail.
+
+> **Which hardware do you have?** The full book runs on NVIDIA (CUDA) and AMD (ROCm); Apple Silicon (MPS) runs everything except 4-bit QLoRA and the full-parameter training chapters (6, 7, 8). For the per-chapter capability matrix, GPU memory requirements, validated environments, dependency versions, and performance across GPUs, see **[ACCELERATORS.md](../ACCELERATORS.md)** at the repo root. This README covers Python and PyTorch install; that one covers what runs where.
 
 ## Where is the Code?
 
@@ -13,7 +15,7 @@ The book's code is organized by chapter. Every chapter has runnable code now.
 | Folder | Status | Contents |
 |---|---|---|
 | **`chapter01/`** | **Runnable** | Reproducibility script for the §1.6 sidebar (`run_sidebar_example.py`). Runs the same fictional-policy prompt through base Qwen3-4B, the Chapter 5 LoRA adapter, and the Chapter 6 SFT model. Base-only mode runs without Chapter 5/6 artifacts on disk. |
-| **`chapter02/`** | **Runnable** | Unsloth-based fine-tuning quick-start (`ch02-openfinance-finetuning.py`). Reproduces the Dragon LLM open-finance recipe on Qwen3-0.6B end to end: dataset mix from four HF sources, LoRA via TRL's `SFTTrainer`, five evaluation tests, model export. Needs the `chapter02` extra (`pip install -e ".[chapter02]"`) and a CUDA GPU. |
+| **`chapter02/`** | **Runnable** | A five-step LoRA fine-tuning quick-start (`quickstart.py`) on Qwen3-4B-Instruct-2507 using a 40-example Dolly subset: dataset prep, LoRA via TRL's `SFTTrainer`, generation, and adapter save. Runs in under 10 minutes on a 12 GB GPU and needs only the base install. Also includes `run_chapter5_adapter.py`, an optional preview that loads the chapter 5 adapter for a base-vs-adapter comparison. |
 | **`chapter03/`** | **Runnable** | Data-quality experiment (`ch03_data_quality_explore.py` + helpers), six-step synthetic data pipeline (`ch03_synthetic_data_generation.py`), and `DatasetManifest` module (`ch03_datasetmanifest.py`). The experiment needs a GPU and the `chapter03` extra; the synthetic pipeline needs an Anthropic API key; the manifest module is pure stdlib. |
 | **`chapter04/`** | **Runnable** | In-context learning, few-shot prompting, prompt validator, minimal RAG pipeline, retrieval-quality eval (Precision@k / Recall@k / Hit@1). CPU-friendly. |
 | **`chapter05/`** | **Runnable** | LoRA and QLoRA fine-tuning of Qwen3-4B-Instruct-2507 on a Dolly subset. Train, evaluate, run inference, optional QLoRA. |
@@ -26,7 +28,7 @@ Shared utilities live in **`common/`** (JSONL I/O, env loading, deterministic se
 
 For chapter-specific instructions and the listing-to-code map, see each chapter's `README.md`.
 
-**Recommended Python**: **3.12+** (minimum: 3.10). If you hit install issues, try Python 3.12.
+**Required Python**: **3.12+**. If you hit install issues, confirm `python3 --version` reports 3.12 or higher.
 
 ## One-time setup (Windows/macOS/Linux)
 
@@ -40,14 +42,14 @@ cd code   # if you're in the parent repo (ModelAdaptationBook, etc.)
 
 ### 2. Check Your Python Version
 
-First, verify you have Python 3.10 or higher:
+First, verify you have Python 3.12 or higher:
 
 ```bash
 python3 --version
 # Example output: Python 3.12.3
 ```
 
-**If your version is below 3.10**, install a newer Python version before proceeding.
+**If your version is below 3.12**, install a newer Python version before proceeding.
 
 ### Ubuntu/Debian Prerequisites
 
@@ -127,36 +129,79 @@ Visit the PyTorch installation page and select your configuration:
 
 **Common scenarios:**
 
-- **CUDA 12.6 (most common for Ubuntu 24.04):**
+- **macOS (Apple Silicon: M1/M2/M3/M4):** no CUDA index URL, no special flags. PyTorch uses Apple's MPS (Metal) backend automatically.
+  ```bash
+  pip3 install torch torchvision torchaudio
+  ```
+  After install, verify MPS is available with:
+  ```bash
+  python -c "import torch; print(f'PyTorch: {torch.__version__}'); print(f'MPS available: {torch.backends.mps.is_available()}')"
+  ```
+  See the **macOS compatibility note** at the end of this section for which chapters run on Apple Silicon.
+
+- **macOS (Intel Macs):** no GPU acceleration; PyTorch installs the CPU build.
+  ```bash
+  pip3 install torch torchvision torchaudio
+  ```
+
+- **Linux/Windows with CUDA 12.6 (most common for Ubuntu 24.04):**
   ```bash
   pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
   ```
 
-- **CUDA 12.1 (common for Ubuntu 22.04/Windows):**
+- **Linux/Windows with CUDA 12.1 (common for Ubuntu 22.04/Windows):**
   ```bash
   pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu121
   ```
 
-- **CPU only (testing, no GPU training):**
+- **Linux with an AMD GPU (ROCm):** validated on an AMD Instinct MI300X under ROCm 7.x; the LoRA quickstart, QLoRA (4-bit via `bitsandbytes`), and full-parameter SFT all trained correctly. ROCm is Linux-only and works best on datacenter (MI-series) cards; consumer RDNA support varies by GPU generation. Match the index URL to your ROCm version; the line below is what we tested.
+  ```bash
+  pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm7.0
+  ```
+  On a working ROCm install, `torch.cuda.is_available()` returns `True` (ROCm presents as CUDA in PyTorch), so the chapter preflight checks let you proceed.
+
+- **CPU only (Linux/Windows, no GPU; testing only):**
   ```bash
   pip3 install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
   ```
 
-**Note:** PyTorch CUDA versions don't need to exactly match your system CUDA. For example, PyTorch built for CUDA 12.1 works fine with CUDA 12.4 installed. Choose the closest available version from the PyTorch selector.
+**Note:** PyTorch CUDA versions don't need to exactly match your system CUDA. For example, PyTorch built for CUDA 12.1 works fine with CUDA 12.4 installed. Choose the closest available version from the PyTorch selector. The `--index-url` flag only applies to NVIDIA CUDA builds and the explicit CPU-only build; on macOS the default PyPI wheels are correct.
 
 **Step 4: Verify PyTorch installation**
 
 ```bash
+# Linux/Windows with NVIDIA GPU:
 python -c "import torch; print(f'PyTorch: {torch.__version__}'); print(f'CUDA available: {torch.cuda.is_available()}')"
+
+# macOS (Apple Silicon):
+python -c "import torch; print(f'PyTorch: {torch.__version__}'); print(f'MPS available: {torch.backends.mps.is_available()}')"
 ```
 
-Expected output:
+Expected output (Linux/Windows + NVIDIA):
 ```
 PyTorch: 2.10.0+cu126  (or similar)
-CUDA available: True   (should be True if you have a GPU)
+CUDA available: True
 ```
 
-If CUDA shows `False` but you have a GPU, you may have installed the CPU version by mistake. Reinstall PyTorch with the correct CUDA build.
+Expected output (macOS + Apple Silicon):
+```
+PyTorch: 2.10.0  (or similar; no +cu suffix)
+MPS available: True
+```
+
+If CUDA shows `False` on a Linux/Windows machine that has an NVIDIA GPU, you may have installed the CPU version by mistake. Reinstall PyTorch with the correct CUDA build. If MPS shows `False` on an Apple Silicon Mac, your PyTorch is older than 1.12; upgrade to PyTorch 2.0+.
+
+### macOS / AMD / what runs where
+
+The Apple Silicon path uses Apple's MPS backend instead of CUDA; not every chapter has a Mac-friendly code path. AMD (ROCm) runs the full book on a Linux box. For the per-chapter capability matrix (NVIDIA / Apple Silicon / AMD / CPU), GPU memory requirements, validated environments, dependency versions, and performance comparisons, see **[ACCELERATORS.md](../ACCELERATORS.md)** at the repo root.
+
+Quick rules of thumb covered there:
+
+- **NVIDIA (CUDA) and AMD (ROCm):** full book, including chapter 5 QLoRA and the full-parameter chapters (6, 7, 8).
+- **Apple Silicon (MPS):** chapters 1 (base-only), 2, 3, 4, 5 LoRA, and 9 CPU stages. **Not** chapter 5 QLoRA (`bitsandbytes` is CUDA/ROCm-only) and **not** the full-parameter chapters (they exceed a 16 GB Mac's memory).
+- **CPU only:** lightweight chapters (4, 9 CPU stages, mock backends); training chapters are impractical.
+
+If you only have a Mac, the realistic path for the training chapters is Google Colab or a cloud GPU box.
 
 ## Install the package (from the `code/` directory)
 
@@ -221,15 +266,15 @@ echo 'export HF_TOKEN="hf_..."' >> ~/.bashrc
 
 Once you've completed the setup above, navigate to the chapter you want to work on. Every chapter from 1 onward ships runnable code.
 
-- **Chapter 1 (Why model adaptation?)**: `chapter01/README.md` — reproducibility script for the chapter's "What the gap actually looks like" sidebar. Inference-only.
-- **Chapter 2 (How to adapt?)**: `chapter02/README.md` — Unsloth-based open-finance fine-tuning quick-start. Needs `pip install -e ".[chapter02]"` and a CUDA GPU.
-- **Chapter 3 (What data do I need?)**: `chapter03/README.md` — data-quality experiment, six-step synthetic data pipeline, and dataset manifest module. Needs `pip install -e ".[chapter03]"`; the synthetic pipeline additionally needs `ANTHROPIC_API_KEY`.
-- **Chapter 4 (ICL, few-shot, RAG)**: `chapter04/README.md` — few-shot prompting, prompt validator, minimal RAG pipeline, retrieval evaluation. CPU-friendly; GPU optional.
-- **Chapter 5 (LoRA & QLoRA)**: `chapter05/README.md` — data preparation, training, evaluation, inference; QLoRA branch optional.
-- **Chapter 6 (Full SFT)**: `chapter06/README.md` — full-parameter fine-tuning on a technical-support subset; behavioral tests; safety regression suite.
-- **Chapter 7 (Distillation)**: `chapter07/README.md` — chapter 6 SFT model as teacher, LoRA student, three-way evaluation, optional OpenRouter frontier comparison.
-- **Chapter 8 (DPO and alignment)**: `chapter08/README.md` — preference data pipeline, DPO training, three-way comparison, safety after DPO.
-- **Chapter 9 (Drift / registry / monitor)**: `chapter09/README.md` — model registry, drift detector, rollback demo, canary prompts, safety monitor.
+- **Chapter 1 (Why model adaptation?)**: `chapter01/README.md`: reproducibility script for the chapter's "What the gap actually looks like" sidebar. Inference-only.
+- **Chapter 2 (How to adapt?)**: `chapter02/README.md`: five-step LoRA fine-tuning quick-start on Qwen3-4B-Instruct-2507. Needs only the base install; runs on a 12 GB GPU (or Apple Silicon MPS).
+- **Chapter 3 (What data do I need?)**: `chapter03/README.md`: data-quality experiment, six-step synthetic data pipeline, and dataset manifest module. Needs `pip install -e ".[chapter03]"`; the synthetic pipeline additionally needs `ANTHROPIC_API_KEY`.
+- **Chapter 4 (ICL, few-shot, RAG)**: `chapter04/README.md`: few-shot prompting, prompt validator, minimal RAG pipeline, retrieval evaluation. CPU-friendly; GPU optional.
+- **Chapter 5 (LoRA & QLoRA)**: `chapter05/README.md`: data preparation, training, evaluation, inference; QLoRA branch optional.
+- **Chapter 6 (Full SFT)**: `chapter06/README.md`: full-parameter fine-tuning on a technical-support subset; behavioral tests; safety regression suite.
+- **Chapter 7 (Distillation)**: `chapter07/README.md`: chapter 6 SFT model as teacher, LoRA student, three-way evaluation, optional OpenRouter frontier comparison.
+- **Chapter 8 (DPO and alignment)**: `chapter08/README.md`: preference data pipeline, DPO training, three-way comparison, safety after DPO.
+- **Chapter 9 (Drift / registry / monitor)**: `chapter09/README.md`: model registry, drift detector, rollback demo, canary prompts, safety monitor.
 
 **Run all chapter commands from this `code/` directory with your virtual environment activated** (e.g. `source .venv/bin/activate` on Linux/macOS, or `.venv\Scripts\activate` on Windows). If you open a new terminal or reconnect via SSH, activate the venv again or you may see "No module named 'chapterNN'".
 

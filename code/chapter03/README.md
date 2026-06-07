@@ -13,13 +13,13 @@ This README assumes you have completed the one-time setup from [`code/README.md`
 
 **Chapter 3 needs additional packages not in the base install.** Two separate use cases, two separate extras:
 
-- For the data-quality experiment (uses Unsloth on a GPU):
+- For the data-quality experiment (transformers + PEFT + TRL, already in the base install):
 
   ```bash
   pip install -e ".[chapter03]"
   ```
 
-  This pulls `unsloth`, `unsloth_zoo`, `bitsandbytes`, `matplotlib`, and `scikit-learn`.
+  This pulls `matplotlib` and `scikit-learn` (chart and metrics), `anthropic` (for the synthetic pipeline below), and `bitsandbytes` (only used if you opt into 4-bit on a CUDA GPU; the default is plain bf16, which needs no extra and runs on Apple Silicon and CPU too).
 
 - For the synthetic data pipeline (calls a frontier teacher LLM):
 
@@ -36,7 +36,7 @@ The DatasetManifest module (`ch03_datasetmanifest.py`) needs only the Python sta
 
 | Use case | GPU | VRAM | Notes |
 |---|---|---|---|
-| Data-quality experiment | NVIDIA, CUDA | ≥ 8 GB | Four short training runs of ~6 minutes each. |
+| Data-quality experiment | NVIDIA / Apple Silicon (MPS) / CPU | ~12-16 GB for the default bf16 4B LoRA (or ~6-8 GB with opt-in 4-bit, CUDA only) | Four short LoRA training runs; about 13 minutes total on an A30. |
 | Synthetic data pipeline | None (API-driven) | n/a | Runs on any machine; cost is API calls only (~$1-3 for a full run on Claude). |
 | DatasetManifest demos | None | n/a | Pure stdlib + JSON. |
 
@@ -45,7 +45,7 @@ The DatasetManifest module (`ch03_datasetmanifest.py`) needs only the Python sta
 | File | Contents |
 |------|----------|
 | `ch03_data_quality_explore.py` | Main script for §3.1's data-quality experiment. Defines four data-quality conditions and orchestrates train → evaluate → compare. |
-| `ch03_data_quality_helpers.py` | Helpers for the experiment: load Financial PhraseBank, inject label noise, compute Cohen's Kappa, train a single condition with LoRA via Unsloth, evaluate against a held-out set, print and chart results. |
+| `ch03_data_quality_helpers.py` | Helpers for the experiment: load Financial PhraseBank, inject label noise, compute Cohen's Kappa, train a single condition with LoRA via transformers + PEFT + TRL, evaluate against a held-out set, print and chart results. |
 | `ch03_synthetic_data_generation.py` | The six-step synthetic data pipeline end to end (load seeds → build prompt → call teacher → quality gate → distribution check → mix and save). |
 | `ch03_datasetmanifest.py` | DatasetManifest dataclass (SHA-256 hash, source provenance, quality metadata), `diff_manifests`, and `check_retention_status` helpers. |
 
@@ -123,7 +123,7 @@ No GPU, no API key. Walks the manifest creation, diff, and retention-check examp
 | Asset | Source | Used by |
 |---|---|---|
 | Financial PhraseBank | `takala/financial_phrasebank` (HF) | Data-quality experiment (sentence-level sentiment dataset). |
-| Qwen2.5-0.5B-Instruct | `unsloth/Qwen2.5-0.5B-Instruct` (HF) | Data-quality experiment (small enough to train four times in under an hour). |
+| Qwen3-4B-Instruct-2507 | `Qwen/Qwen3-4B-Instruct-2507` (HF) | Data-quality experiment (the book's spine model; four LoRA runs in about 13 minutes on an A30). |
 
 The synthetic data pipeline also pulls seeds from Financial PhraseBank if not already cached.
 
@@ -131,32 +131,26 @@ The synthetic data pipeline also pulls seeds from Financial PhraseBank if not al
 
 **Data-quality experiment**:
 
-Four conditions, same 150 training examples each, same hyperparameters. Only the label quality differs. Representative numbers from a single A30 run with seed 42:
+Four conditions, same 150 training examples each, same hyperparameters. Only the label quality differs. Representative numbers from a single A30 bf16 run (seed 42):
 
-| Condition | Description | Accuracy |
-|---|---|---|
-| A | Clean labels, balanced classes | ~0.78 |
-| B | Mild noise (5%), balanced | ~0.74 |
-| C | Heavy noise (20%), balanced | ~0.62 |
-| D | Clean labels, imbalanced (60/30/10) | ~0.71 |
+| Condition | Description | Accuracy | macro-F1 |
+|---|---|---|---|
+| A | AllAgree (clean: all annotators agreed) | 0.96 | 0.95 |
+| B | 75Agree (good: typical production quality) | 0.98 | 0.97 |
+| C | 50Agree (noisy: bare-majority agreement) | 0.96 | 0.95 |
+| D | Corrupted (clean sentences, 20% of labels flipped) | 0.84 | 0.82 |
 
-The chapter's argument: condition C (heavy noise) outperforms naive intuition (you might expect it to collapse), and condition D (imbalanced) underperforms more than label noise does at the same volume.
+The chapter's argument: the systematically corrupted condition D drops sharply (0.84) while natural annotator disagreement (A, B, C) stays high (0.96 to 0.98), because a model tolerates fuzzy labels but cannot learn from contradictory ones. Numbers vary run to run; the relative shape is the point.
 
 **Synthetic data pipeline**: produces 100-200 verified synthetic examples per category at the end of a single run, with a manifest JSON capturing source, hash, and quality metadata.
 
 ## Troubleshooting
 
-**"No module named 'unsloth'"** → Run `pip install -e ".[chapter03]"` from `code/`.
-
 **"ANTHROPIC_API_KEY not found"** → The synthetic data pipeline calls Claude; export the key first (`export ANTHROPIC_API_KEY=sk-ant-...`).
 
-**"sklearn not installed"** → Included in the `chapter03` extra; install with `pip install -e ".[chapter03]"`.
+**"sklearn not installed" / Matplotlib import error** → Both are in the `chapter03` extra; install with `pip install -e ".[chapter03]"`. The script gracefully skips the chart if matplotlib is missing.
 
-**Matplotlib import error** → Same answer; the chapter extra includes matplotlib. The script gracefully skips the chart if matplotlib is missing.
-
-**`fatal error: Python.h: No such file or directory`** → Triton's runtime compiler needs the Python development headers. Install `python3.X-dev` (`sudo apt install python3.12-dev` on Ubuntu) and export `CPATH=/usr/include/python3.12` before running the script.
-
-**`NameError: VARIANT_KWARG_KEYS is not defined`** → Unsloth's compile-cache generator does not yet support PEFT 0.18+. The book pins `peft<0.18` in `pyproject.toml`; if your environment has a newer PEFT, run `pip install "peft<0.18"` and delete `code/unsloth_compiled_cache/` before retrying.
+**Out of memory** → The default loads the 4B model in bf16, which wants ~12-16 GB. On a smaller CUDA GPU, set `LOAD_IN_4BIT=True` in `ch03_data_quality_helpers.py` to use 4-bit (needs `bitsandbytes`, CUDA only). On Apple Silicon, use a 16 GB+ machine.
 
 **`Can't pickle <class 'builtins.safe_open'>` during dataset map** → Triggered by `safetensors>=0.6`. The book pins `safetensors<0.6`; reinstall with `pip install "safetensors<0.6"` if a newer version has crept in.
 

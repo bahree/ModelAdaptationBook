@@ -35,6 +35,7 @@ Run from code/:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import re
 from dataclasses import dataclass, field
 from typing import Callable, Dict, List, Optional, Sequence
@@ -53,10 +54,21 @@ def _tokenize(text: str) -> List[str]:
     return re.sub(r"[^a-z0-9\s]", " ", text.lower()).split()
 
 
+def _token_bucket(token: str, dim: int) -> int:
+    """Map a token to a bucket with a stable, process-independent hash.
+
+    Python's built-in ``hash`` is salted per process (PYTHONHASHSEED), so using
+    it here would make embeddings, and therefore retrieval ranking, change from
+    run to run. blake2b gives the same bucket every time.
+    """
+    digest = hashlib.blake2b(token.encode("utf-8"), digest_size=8).digest()
+    return int.from_bytes(digest, "big") % dim
+
+
 def hash_embed(texts: Sequence[str], dim: int = 128) -> np.ndarray:
     """Token-hash fallback embedder (no models required).
 
-    Maps tokens to indices via Python's ``hash`` and accumulates a sparse
+    Maps tokens to indices via a stable hash and accumulates a sparse
     bag-of-words vector that is L2-normalised.  Accuracy is well below a
     real embedder, but the implementation is deterministic and fast and
     is enough to exercise the pipeline in tests.
@@ -64,7 +76,7 @@ def hash_embed(texts: Sequence[str], dim: int = 128) -> np.ndarray:
     vectors = np.zeros((len(texts), dim), dtype=np.float32)
     for i, text in enumerate(texts):
         for tok in _tokenize(text):
-            vectors[i, abs(hash(tok)) % dim] += 1.0
+            vectors[i, _token_bucket(tok, dim)] += 1.0
         norm = float(np.linalg.norm(vectors[i]))
         if norm > 0:
             vectors[i] /= norm

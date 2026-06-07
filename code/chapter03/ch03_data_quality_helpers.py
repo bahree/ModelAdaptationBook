@@ -1,22 +1,22 @@
 #!/usr/bin/env python3
 """
-ch03_3_1_quality_experiment_helpers.py
-───────────────────────────────────────
+ch03_data_quality_helpers.py
+─────────────────────────────
 Infrastructure for the data quality impact experiment.
 
 This file contains all functions that are NOT about the data quality story:
   - Loading Financial PhraseBank from HuggingFace
   - Injecting synthetic label noise
   - Computing Cohen's Kappa
-  - Training one model condition with LoRA via Unsloth
+  - Training one model condition with LoRA via TRL + PEFT
   - Evaluating a checkpoint on a held-out set
   - Printing the results table and saving the chart
 
-The main file (ch03_3_1_data_quality_impact.py) calls these functions.
+The main file (ch03_data_quality_explore.py) calls these functions.
 Keeping them here means the main file stays focused on the experiment design.
 
 Install:
-    pip install unsloth unsloth_zoo datasets transformers trl
+    pip install datasets transformers trl peft bitsandbytes accelerate
     pip install huggingface_hub scikit-learn matplotlib
 """
 
@@ -24,9 +24,6 @@ import os
 import json
 import random
 import zipfile
-import builtins
-from contextlib import contextmanager
-from collections import Counter
 
 from huggingface_hub import hf_hub_download
 from datasets import Dataset
@@ -35,13 +32,13 @@ from datasets import Dataset
 # ── Shared constants ──────────────────────────────────────────────────────────
 # These mirror the values in the main file.
 # Both files import from here so they can never drift out of sync.
-MODEL_NAME      = "unsloth/Qwen2.5-0.5B-Instruct"
+MODEL_NAME      = "Qwen/Qwen3-4B-Instruct-2507"
 MAX_SEQ_LENGTH  = 512
-LOAD_IN_4BIT    = True
+LOAD_IN_4BIT    = False   # plain bf16 LoRA: runs on CUDA, Apple Silicon (MPS), and CPU
 LORA_R          = 8
 LORA_ALPHA      = 8
-TARGET_MODULES  = ["q_proj","k_proj","v_proj","o_proj",
-                    "gate_proj","up_proj","down_proj"]
+TARGET_MODULES  = ["q_proj", "k_proj", "v_proj", "o_proj",
+                   "gate_proj", "up_proj", "down_proj"]
 TRAIN_EPOCHS    = 1
 BATCH_SIZE      = 4
 GRAD_ACCUM      = 2
@@ -53,29 +50,6 @@ SYSTEM_PROMPT = (
     "You are a financial analyst. Classify the sentiment of financial statements.\n"
     "Respond with exactly one word: positive, negative, or neutral."
 )
-
-_UNSLOTH_SUPPRESSED_PRINT_SNIPPETS = (
-    "Unsloth: Your Flash Attention 2 installation seems to be broken.",
-    "Using Xformers instead. No performance changes will be seen.",
-)
-
-
-@contextmanager
-def _suppress_unsloth_flashattn_notice():
-    """Temporarily suppress noisy Unsloth FlashAttention fallback print lines."""
-    original_print = builtins.print
-
-    def filtered_print(*args, **kwargs):
-        message = " ".join(str(a) for a in args)
-        if any(snippet in message for snippet in _UNSLOTH_SUPPRESSED_PRINT_SNIPPETS):
-            return
-        return original_print(*args, **kwargs)
-
-    builtins.print = filtered_print
-    try:
-        yield
-    finally:
-        builtins.print = original_print
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -235,13 +209,26 @@ def make_hf_dataset(examples: list[dict]) -> Dataset:
 # TRAINING
 # ══════════════════════════════════════════════════════════════════════════════
 
+def _make_bnb_config():
+    """Build a 4-bit BitsAndBytes quantization config (nf4 + double quant)."""
+    import torch
+    from transformers import BitsAndBytesConfig
+
+    return BitsAndBytesConfig(
+        load_in_4bit=LOAD_IN_4BIT,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_compute_dtype=torch.bfloat16,
+        bnb_4bit_use_double_quant=True,
+    )
+
+
 def train_condition(
     condition_key: str,
     train_examples: list[dict],
     output_base:    str,
 ) -> str:
     """
-    Fine-tune Qwen2.5-0.5B-Instruct on one experimental condition using LoRA.
+    Fine-tune Qwen3-4B-Instruct on one experimental condition using LoRA.
 
     All hyperparameters are fixed (imported from the constants above) so the
     only variable between calls is the training data.  This isolation is what
@@ -255,32 +242,61 @@ def train_condition(
     Returns:
         Path to the saved checkpoint directory
     """
-    with _suppress_unsloth_flashattn_notice():
-        from unsloth import FastModel
-        from unsloth.chat_templates import get_chat_template
+    import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer
+    from peft import LoraConfig, get_peft_model, TaskType, prepare_model_for_kbit_training
     from trl import SFTTrainer, SFTConfig
 
     output_dir = os.path.join(output_base, condition_key)
     os.makedirs(output_dir, exist_ok=True)
 
-    # Fresh model load for each condition — no weight sharing between runs
-    with _suppress_unsloth_flashattn_notice():
-        model, tokenizer = FastModel.from_pretrained(
-            model_name=MODEL_NAME,
-            max_seq_length=MAX_SEQ_LENGTH,
-            load_in_4bit=LOAD_IN_4BIT,
+    # Fresh model load for each condition — no weight sharing between runs.
+    # Default is plain bf16 (LOAD_IN_4BIT=False) so the experiment runs on CUDA,
+    # Apple Silicon (MPS), and CPU. 4-bit is opt-in and CUDA-only (bitsandbytes).
+    bnb_config = _make_bnb_config() if LOAD_IN_4BIT else None
+    # device_map="auto" is for CUDA (multi-GPU / offload). On Apple Silicon
+    # (MPS) it mis-dispatches under gradient checkpointing ("expected device
+    # meta but got mps"), so place the whole model on one device instead.
+    device_map = "auto" if torch.cuda.is_available() else None
+    model = AutoModelForCausalLM.from_pretrained(
+        MODEL_NAME,
+        quantization_config=bnb_config,
+        device_map=device_map,
+        dtype=torch.bfloat16,
+    )
+    if device_map is None:
+        model = model.to("mps" if torch.backends.mps.is_available() else "cpu")
+    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    # Sync both model.config and model.generation_config — transformers checks both
+    model.config.pad_token_id          = tokenizer.pad_token_id
+    model.config.bos_token_id          = tokenizer.bos_token_id
+    model.generation_config.pad_token_id = tokenizer.pad_token_id
+    model.generation_config.bos_token_id = tokenizer.bos_token_id
+
+    # For 4-bit, this is what makes gradients flow into the LoRA adapter (without
+    # it, grad_norm stays 0 and nothing learns). Harmless to skip for bf16, where
+    # enable_input_require_grads() below is enough for gradient checkpointing.
+    if LOAD_IN_4BIT:
+        model = prepare_model_for_kbit_training(
+            model, use_gradient_checkpointing=True
         )
-    tokenizer = get_chat_template(tokenizer, chat_template="qwen-2.5")
+
+    # Required so gradient checkpointing works with frozen base layers
+    model.enable_input_require_grads()
 
     # LoRA adapter — same rank/alpha for every condition
-    model = FastModel.get_peft_model(
-        model,
-        r=LORA_R, lora_alpha=LORA_ALPHA,
+    lora_config = LoraConfig(
+        r=LORA_R,
+        lora_alpha=LORA_ALPHA,
         target_modules=TARGET_MODULES,
         lora_dropout=0.0,
-        use_gradient_checkpointing="unsloth",
-        random_state=42,
+        task_type=TaskType.CAUSAL_LM,
+        bias="none",
     )
+    model = get_peft_model(model, lora_config)
+    model.print_trainable_parameters()
 
     # Apply chat template to convert role/content dicts → token strings
     def format_fn(batch):
@@ -295,7 +311,7 @@ def train_condition(
 
     trainer = SFTTrainer(
         model=model,
-        tokenizer=tokenizer,
+        processing_class=tokenizer,
         train_dataset=dataset,
         args=SFTConfig(
             output_dir=output_dir,
@@ -311,17 +327,19 @@ def train_condition(
             dataset_text_field="text",
             report_to="none",
             logging_steps=25,
+            gradient_checkpointing=True,
+            gradient_checkpointing_kwargs={"use_reentrant": False},
         ),
     )
 
     stats = trainer.train()
+    # Save the LoRA adapter and tokenizer
     model.save_pretrained(output_dir)
     tokenizer.save_pretrained(output_dir)
     print(f"    training loss: {stats.training_loss:.4f}  →  saved to {output_dir}")
 
     # Free GPU memory before the next condition is loaded
     del model, trainer
-    import torch
     torch.cuda.empty_cache()
 
     return output_dir
@@ -349,22 +367,35 @@ def evaluate_condition(
     Returns:
         dict with accuracy, macro_f1, per_class_f1, and predictions list
     """
-    with _suppress_unsloth_flashattn_notice():
-        from unsloth import FastModel
-        from unsloth.chat_templates import get_chat_template
-    from sklearn.metrics import accuracy_score, f1_score
-    from transformers import GenerationConfig
-
     import torch
+    from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
+    from peft import PeftModel
+    from sklearn.metrics import accuracy_score, f1_score
 
-    with _suppress_unsloth_flashattn_notice():
-        model, tokenizer = FastModel.from_pretrained(
-            model_name=checkpoint_path,
-            max_seq_length=MAX_SEQ_LENGTH,
-            load_in_4bit=LOAD_IN_4BIT,
-        )
-    tokenizer = get_chat_template(tokenizer, chat_template="qwen-2.5")
-    FastModel.for_inference(model)
+    bnb_config = _make_bnb_config() if LOAD_IN_4BIT else None
+
+    # Load the frozen base model, then layer the saved LoRA adapter on top.
+    # device_map="auto" only on CUDA; single-device on MPS/CPU (see train_condition).
+    device_map = "auto" if torch.cuda.is_available() else None
+    base_model = AutoModelForCausalLM.from_pretrained(
+        MODEL_NAME,
+        quantization_config=bnb_config,
+        device_map=device_map,
+        dtype=torch.bfloat16,
+    )
+    if device_map is None:
+        base_model = base_model.to("mps" if torch.backends.mps.is_available() else "cpu")
+    model = PeftModel.from_pretrained(base_model, checkpoint_path)
+    model.eval()
+
+    tokenizer = AutoTokenizer.from_pretrained(checkpoint_path)
+    if tokenizer.pad_token is None:
+        tokenizer.pad_token = tokenizer.eos_token
+    # Sync both model.config and model.generation_config — transformers checks both
+    model.config.pad_token_id          = tokenizer.pad_token_id
+    model.config.bos_token_id          = tokenizer.bos_token_id
+    model.generation_config.pad_token_id = tokenizer.pad_token_id
+    model.generation_config.bos_token_id = tokenizer.bos_token_id
 
     # Avoid repeated warning: do not keep both max_length and max_new_tokens.
     gen_cfg = GenerationConfig.from_model_config(model.config)
@@ -388,11 +419,12 @@ def evaluate_condition(
             tokenize=False,
             add_generation_prompt=True,  # appends the assistant turn marker
         )
-        inputs  = tokenizer(prompt, return_tensors="pt").to("cuda")
-        outputs = model.generate(
-            **inputs,
-            generation_config=gen_cfg,
-        )
+        inputs  = tokenizer(prompt, return_tensors="pt").to(model.device)
+        with torch.no_grad():
+            outputs = model.generate(
+                **inputs,
+                generation_config=gen_cfg,
+            )
         # Decode only the tokens the model generated (not the prompt)
         response = tokenizer.decode(
             outputs[0][inputs["input_ids"].shape[1]:],
@@ -403,7 +435,7 @@ def evaluate_condition(
         first_word = (response.split() or ["neutral"])[0]
         predictions.append(first_word if first_word in LABEL_SET else "neutral")
 
-    del model
+    del model, base_model
     torch.cuda.empty_cache()
 
     # Per-class F1
@@ -508,9 +540,9 @@ def save_accuracy_chart(results: dict[str, dict], output_dir: str) -> str | None
         return None
 
     ORDER   = ["A_clean", "B_good", "C_noisy", "D_corrupted"]
-    labels  = [results[k]["label"]      for k in ORDER]
-    accs    = [results[k]["accuracy"]*100 for k in ORDER]
-    kappas  = [results[k]["kappa"]      for k in ORDER]
+    labels  = [results[k]["label"]        for k in ORDER]
+    accs    = [results[k]["accuracy"]*100  for k in ORDER]
+    kappas  = [results[k]["kappa"]         for k in ORDER]
     hatches = ["", "//", "xx", ".."]
 
     fig, ax = plt.subplots(figsize=(9, 5))

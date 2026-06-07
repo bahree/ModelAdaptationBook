@@ -1,11 +1,13 @@
-# Fine-Tuning and Customizing LLMs for Enterprises
+# LLM Customization and Fine-Tuning: Adaptation, Distillation, and Alignment
 
-Welcome to the code repository for **Fine-Tuning and Customizing LLMs for Enterprises** (working title).
+Welcome to the code repository for **LLM Customization and Fine-Tuning: Adaptation, Distillation, and Alignment** (Manning Publications).
 
 This repository contains all the runnable code, data, and examples from the book, organized by chapter.
 
 **Book Publisher:** Manning Publications (forthcoming)
 **Repository:** <https://github.com/bahree/ModelAdaptationBook>
+
+> **Which hardware do I need?** The full book runs on NVIDIA (CUDA) and AMD (ROCm) GPUs. Most of it also runs on Apple Silicon (MPS), except 4-bit QLoRA and the full-parameter training chapters (6, 7, and 8). See **[ACCELERATORS.md](ACCELERATORS.md)** for the per-chapter breakdown, GPU memory requirements, the setups we validated, dependency versions, and performance across GPUs.
 
 ## What is in this repo?
 
@@ -23,7 +25,7 @@ Every chapter ships with runnable code. The hands-on chapters (4 through 9) repr
 | Chapter and topic | What you build |
 |---|---|
 | **[Chapter 1: Why Model Adaptation?](code/chapter01/README.md)** | A reproducibility script for the §1.6 sidebar. Runs the same prompt through base Qwen3-4B, the Chapter 5 LoRA adapter, and the Chapter 6 SFT model side by side; degrades gracefully if the later-chapter artifacts are not yet built. |
-| **[Chapter 2: How Do I Do Model Adaptation?](code/chapter02/README.md)** | Unsloth-based fine-tuning quick-start that reproduces the Dragon LLM open-finance recipe on Qwen3-0.6B in 15-25 minutes on a single consumer GPU. End-to-end pipeline: data preparation across four HF datasets, LoRA training via TRL's `SFTTrainer`, five evaluation tests, and model export (LoRA adapter, merged 16-bit, GGUF). |
+| **[Chapter 2: How Do I Do Model Adaptation?](code/chapter02/README.md)** | A five-step LoRA fine-tuning quickstart on Qwen3-4B-Instruct-2507 using a 40-example Dolly subset (TRL's `SFTTrainer` plus PEFT): dataset prep, LoRA training, generation, and adapter save. Runs in under 10 minutes on a 12 GB GPU, and on Apple Silicon via MPS. |
 | **[Chapter 3: What Data Do I Need?](code/chapter03/README.md)** | Data-quality experiment that trains the same model on four versions of Financial PhraseBank and compares results on a held-out test set; a six-step synthetic data generation pipeline (load → prompt → generate → quality-gate → distribution-check → mix-and-save) using a frontier teacher; and a standalone `DatasetManifest` module for content hashing, lineage tracking, and retention scheduling. |
 | **[Chapter 4: In-Context Learning and Few-Shot Adaptation](code/chapter04/README.md)** | Few-shot ticket classifier, prompt validator with run-to-run variability measurement, minimal RAG pipeline (50 lines), and a Precision@k / Recall@k / Hit@1 retrieval evaluator. CPU-friendly; GPU optional. |
 | **[Chapter 5: Parameter-Efficient Fine-Tuning (LoRA and QLoRA)](code/chapter05/README.md)** | LoRA and QLoRA adapters trained on a 400-example Dolly subset of Qwen3-4B-Instruct-2507, evaluated against the base model with per-category Token-F1 and a safety regression suite. |
@@ -33,46 +35,64 @@ Every chapter ships with runnable code. The hands-on chapters (4 through 9) repr
 | **[Chapter 9: Managing Model Evolution, Drift, and Versioning](code/chapter09/README.md)** | A JSON-backed model registry, a TF-IDF drift detector, a simulated rollback workflow, a canary-prompt monitor, and a red-team safety monitor with per-category alerting. |
 
 **Start here:**
-1. [code/README.md](code/README.md) — set up your Python environment and install the package.
+1. [code/README.md](code/README.md): set up your Python environment and install the package.
 2. The chapter README for whichever chapter you are reading.
 
 ## Quick start
 
+**1. Clone and create a virtual environment** (Python 3.12+):
+
 ```bash
 git clone https://github.com/bahree/ModelAdaptationBook
 cd ModelAdaptationBook/code
-
-# Set up Python 3.10+ environment and install PyTorch + the book package.
-# Full instructions (including NVIDIA driver install on fresh Ubuntu/Proxmox VMs)
-# are in code/README.md.
 
 python3 -m venv .venv
 source .venv/bin/activate                      # macOS/Linux
 # .venv\Scripts\Activate.ps1                   # Windows PowerShell
 
 python -m pip install -U pip
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
-pip install -e ".[dev]"
+```
 
-# Smoke-test the chapter 4 code (CPU-friendly, no model download needed):
-pytest chapter04/tests/ -v
+**2. Install PyTorch for your platform** (pick the one that matches your machine):
+
+- **NVIDIA GPU (Linux/Windows), CUDA 12.6:**
+  ```bash
+  pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu126
+  ```
+- **macOS (Apple Silicon):** uses the MPS (Metal) backend automatically, no CUDA needed.
+  ```bash
+  pip install torch torchvision torchaudio
+  ```
+- **AMD GPU (Linux, ROCm):** validated on an MI300X (ROCm 7.x). Match the index URL to your ROCm version; the example below is what we tested.
+  ```bash
+  pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/rocm7.0
+  ```
+- **CPU only (any platform, no GPU):**
+  ```bash
+  pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
+  ```
+
+For other CUDA versions (12.1, 11.8) or to confirm the right command for your machine, see the official selector at <https://pytorch.org/get-started/locally/>. `code/README.md` has more detail, including NVIDIA driver install steps for fresh Ubuntu/Proxmox VMs. Not sure which accelerator runs which chapter, or how much GPU memory you need? See **[ACCELERATORS.md](ACCELERATORS.md)**.
+
+**3. Install the book package and smoke-test:**
+
+```bash
+pip install -e ".[dev]"
+pytest chapter04/tests/ -v   # CPU-friendly, no model download needed
 ```
 
 After that, follow the chapter README for the chapter you want to run.
 
-## GPU requirements at a glance
+## Accelerators and environment
 
-| Chapter | Minimum GPU | Recommended | CPU fallback |
-|---|---|---|---|
-| 4 (ICL/RAG) | None for mock backends; ~8 GB for the optional Qwen3-4B HF backend | 12 GB+ | Yes (mock backend / hash embedder) |
-| 5 (LoRA) | 8 GB (RTX 3060/4060+) | 12 GB+ | Yes, but ~20× slower |
-| 5 (QLoRA) | 6 GB | 8 GB+ | Not recommended |
-| 6 (Full SFT) | 24 GB (A30 / RTX 4090) | A100 40 GB+ | No |
-| 7 (Distillation) | 12 GB (LoRA student) + 24 GB to host the chapter 6 teacher | 24 GB+ | Not recommended |
-| 8 (DPO) | 24 GB | A100 40 GB+ | No |
-| 9 (Drift / Registry / Monitor) | None for the CPU stages (registry, drift detector, rollback demo); ~8 GB for the GPU stages (canary, safety monitor) | 12 GB+ | Yes for stages 1, 2, and 4 |
+The full book runs on NVIDIA (CUDA) and AMD (ROCm) GPUs; most of it also runs on Apple Silicon (MPS), and the lightweight chapters run on CPU. **[ACCELERATORS.md](ACCELERATORS.md)** is the complete reference:
 
-**Disk space:** budget about 50 GB free for the Hugging Face model cache plus chapter 6's run directory (full-parameter checkpoints with optimizer state are 22-24 GB each). See `code/chapter06/README.md` for the breakdown.
+- **[What runs where](ACCELERATORS.md#what-runs-where)** — a chapter-by-accelerator capability matrix.
+- **[GPU requirements at a glance](ACCELERATORS.md#gpu-requirements-at-a-glance)** — per-chapter VRAM needs for NVIDIA, AMD, CPU, and Apple Silicon.
+- **[Validated environments](ACCELERATORS.md#validated-environments)** and **[dependency versions](ACCELERATORS.md#dependency-versions)** — the exact machines and package versions we tested.
+- **[Performance across GPUs](ACCELERATORS.md#performance-across-gpus)** — A30 vs MI300X vs H200 timings, plus design insights.
+
+Two common gotchas, both covered there: chapter 5's QLoRA needs an NVIDIA or AMD GPU ([why](ACCELERATORS.md#why-qlora-needs-an-nvidia-or-amd-gpu)), and the full-parameter chapters (6, 7, 8) need ~24 GB so they do not fit a 16 GB Mac.
 
 ## About the book
 

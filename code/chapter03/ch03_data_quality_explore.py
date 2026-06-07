@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 """
-ch03_3_1_data_quality_impact.py
-────────────────────────────────
+ch03_data_quality_explore.py
+────────────────────────────
 Chapter 3, Section 3.1 — Why Data Quality Is the #1 Factor
 
 Demonstrates how data quality alone — with volume held constant — determines
 model accuracy. Four conditions, same 150 training examples each, same model,
 same hyperparameters. Only the label quality differs.
 
-Requires: ch03_3_1_quality_experiment_helpers.py (in the same directory)
+Requires: ch03_data_quality_helpers.py (in the same directory)
 
 Hardware: NVIDIA GPU with ≥ 8 GB VRAM
 Time    : ~25–35 minutes (4 training runs × ~6 minutes)
 
 Install:
-    pip install unsloth unsloth_zoo datasets transformers trl
+    pip install datasets transformers trl peft bitsandbytes accelerate
     pip install huggingface_hub scikit-learn matplotlib
 """
 
@@ -22,13 +22,7 @@ import random
 import warnings
 from collections import Counter
 
-# Suppress known bitsandbytes FutureWarning spam from PyTorch internals.
-warnings.filterwarnings(
-    "ignore",
-    message=r".*_check_is_size will be removed in a future PyTorch release.*",
-    category=FutureWarning,
-    module=r"bitsandbytes\._ops",
-)
+warnings.filterwarnings("ignore", category=FutureWarning)
 
 from chapter03.ch03_data_quality_helpers import (
     load_phrasebank_split,

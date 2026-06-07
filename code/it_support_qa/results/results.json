@@ -1,0 +1,20 @@
+{
+  "base": {
+    "internal_tool_in_body": 0.0,
+    "house_format": 0.0,
+    "token_f1": 0.198,
+    "n": 6
+  },
+  "base+prompt": {
+    "internal_tool_in_body": 0.0,
+    "house_format": 0.0,
+    "token_f1": 0.233,
+    "n": 6
+  },
+  "adapter": {
+    "internal_tool_in_body": 0.5,
+    "house_format": 0.833,
+    "token_f1": 0.576,
+    "n": 6
+  }
+}
