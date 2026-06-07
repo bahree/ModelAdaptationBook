@@ -20,14 +20,14 @@ Shared utilities (JSONL, env, seed) live in **`code/common/`**. Install from `co
 
 | Listing | In the chapter | In the repo |
 |---------|----------------|-------------|
-| **5.2** | Data format; prepare dataset | `scripts/listing_5_2_prepare_dataset.py` |
-| **5.3** | LoRA config + SFTTrainer | `modeling.py`, `train_lora.py` |
-| **5.4** | Evaluation | `scripts/listing_5_4_evaluate.py` |
-| **5.5** | Inference with adapter | `generate.py` |
-| **5.6** | QLoRA 4-bit loading | `train_qlora.py` |
-| **5.7** | Safety regression test | `scripts/listing_5_4_evaluate.py` (safety section) |
+| **5.1** | Data format; prepare dataset | `scripts/listing_5_1_prepare_dataset.py` |
+| **5.2** | LoRA config + SFTTrainer | `modeling.py`, `train_lora.py` |
+| **5.3** | Evaluation | `scripts/listing_5_3_evaluate.py` |
+| **5.4** | Inference with adapter | `generate.py` |
+| **5.5** | QLoRA 4-bit loading | `train_qlora.py` |
+| **5.6** | Safety regression test | `scripts/listing_5_3_evaluate.py` (safety section) |
 
-**Data folder (`data/`):** Dolly 15K is on Hugging Face (`databricks/databricks-dolly-15k`). Create a local subset with `listing_5_2_prepare_dataset.py --out chapter05/data/dolly_subset`. The repo includes `golden/` (small test files for eval) and `smoke/` (minimal train/valid for `validate_chapter05.py`).
+**Data folder (`data/`):** Dolly 15K is on Hugging Face (`databricks/databricks-dolly-15k`). Create a local subset with `listing_5_1_prepare_dataset.py --out chapter05/data/dolly_subset`. The repo includes `golden/` (small test files for eval) and `smoke/` (minimal train/valid for `validate_chapter05.py`).
 
 **What are `data.py` and `dataset.py`?**  
 - **`data.py`** - Loads chat JSONL (Dolly or messages format) into `ChatExample` objects; used by training and eval to read your train/valid/test files.  
@@ -144,7 +144,7 @@ Download and prepare a subset of Dolly 15K:
 **Linux/macOS:**
 ```bash
 # From the code/ directory (venv active)
-python chapter05/scripts/listing_5_2_prepare_dataset.py \
+python chapter05/scripts/listing_5_1_prepare_dataset.py \
   --out chapter05/data/dolly_subset \
   --seed 42 \
   --train 400 \
@@ -154,7 +154,7 @@ python chapter05/scripts/listing_5_2_prepare_dataset.py \
 
 **Windows (PowerShell/CMD):**
 ```powershell
-python chapter05/scripts/listing_5_2_prepare_dataset.py ^
+python chapter05/scripts/listing_5_1_prepare_dataset.py ^
   --out chapter05/data/dolly_subset ^
   --seed 42 ^
   --train 400 ^
@@ -221,7 +221,7 @@ Compare the fine-tuned model to the base model:
 
 **Linux/macOS:**
 ```bash
-python chapter05/scripts/listing_5_4_evaluate.py \
+python chapter05/scripts/listing_5_3_evaluate.py \
   --base Qwen/Qwen3-4B-Instruct-2507 \
   --adapter chapter05/runs/dolly_lora \
   --dolly_test chapter05/data/dolly_subset/test.jsonl
@@ -229,7 +229,7 @@ python chapter05/scripts/listing_5_4_evaluate.py \
 
 **Windows:**
 ```powershell
-python chapter05/scripts/listing_5_4_evaluate.py ^
+python chapter05/scripts/listing_5_3_evaluate.py ^
   --base Qwen/Qwen3-4B-Instruct-2507 ^
   --adapter chapter05/runs/dolly_lora ^
   --dolly_test chapter05/data/dolly_subset/test.jsonl
@@ -302,7 +302,7 @@ To compare LoRA vs QLoRA after training both:
 
 **Linux/macOS:**
 ```bash
-python chapter05/scripts/listing_5_4_evaluate.py \
+python chapter05/scripts/listing_5_3_evaluate.py \
   --base Qwen/Qwen3-4B-Instruct-2507 \
   --adapter chapter05/runs/dolly_lora \
   --adapter_alt chapter05/runs/dolly_qlora \
@@ -311,7 +311,7 @@ python chapter05/scripts/listing_5_4_evaluate.py \
 
 **Windows:**
 ```powershell
-python chapter05/scripts/listing_5_4_evaluate.py ^
+python chapter05/scripts/listing_5_3_evaluate.py ^
   --base Qwen/Qwen3-4B-Instruct-2507 ^
   --adapter chapter05/runs/dolly_lora ^
   --adapter_alt chapter05/runs/dolly_qlora ^
@@ -420,7 +420,7 @@ The evaluation also runs a safety suite to ensure fine-tuning didn't weaken safe
 - Use **QLoRA instead of LoRA** (lower memory)
 
 ### **"Dataset not found"**
-- **Run `listing_5_2_prepare_dataset.py` first** (Step 1)
+- **Run `listing_5_1_prepare_dataset.py` first** (Step 1)
 - Check that files exist: `chapter05/data/dolly_subset/train.jsonl`
 
 ### "TRL not installed"

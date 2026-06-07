@@ -1,4 +1,4 @@
-"""Model loading utilities for LoRA and QLoRA fine-tuning (Listing 5.3).
+"""Model loading utilities for LoRA and QLoRA fine-tuning (Listing 5.2).
 
 Provides functions to:
     - Load the base model in full precision (for LoRA) or 4-bit quantized (for QLoRA).

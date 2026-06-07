@@ -1,4 +1,4 @@
-"""LoRA fine-tuning script using TRL's SFTTrainer (Listing 5.3).
+"""LoRA fine-tuning script using TRL's SFTTrainer (Listing 5.2).
 
 Trains a LoRA adapter on chat-formatted JSONL data and saves the adapter
 weights. The base model is frozen; only the small LoRA matrices are updated.

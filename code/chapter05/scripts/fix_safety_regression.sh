@@ -49,7 +49,7 @@ echo "Step 2/2: Evaluating both adapters (r=16 vs r=8)..."
 echo "⏱  Estimated time: 5-10 minutes"
 echo ""
 
-python chapter05/scripts/listing_5_4_evaluate.py \
+python chapter05/scripts/listing_5_3_evaluate.py \
   --base Qwen/Qwen3-4B-Instruct-2507 \
   --adapter chapter05/runs/dolly_lora \
   --adapter_alt chapter05/runs/dolly_lora_r8 \

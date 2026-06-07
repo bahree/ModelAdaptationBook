@@ -70,7 +70,7 @@ TARGET_MODULES = [
 def step1_prepare_dataset() -> tuple[HFDataset, HFDataset, List[Dict[str, Any]]]:
     """Step 1: download Dolly 15K and keep 40 train + 5 valid + 3 demo examples.
 
-    Same filter and seed as chapter 5's listing_5_2_prepare_dataset.py, just a
+    Same filter and seed as chapter 5's listing_5_1_prepare_dataset.py, just a
     smaller slice so the run finishes in minutes.
     """
     print("Step 1: prepare dataset")

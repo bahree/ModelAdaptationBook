@@ -111,7 +111,7 @@ def print_no_adapter_instructions(args: argparse.Namespace) -> None:
     print("Two ways to fix this:")
     print()
     print("Option A. Train the chapter 5 adapter locally:")
-    print("  python -m chapter05.scripts.listing_5_2_prepare_dataset \\")
+    print("  python -m chapter05.scripts.listing_5_1_prepare_dataset \\")
     print("    --out chapter05/data/dolly_subset --seed 42")
     print("  python -m chapter05.train_lora \\")
     print("    --train chapter05/data/dolly_subset/train.jsonl \\")

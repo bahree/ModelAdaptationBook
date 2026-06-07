@@ -1,4 +1,4 @@
-# Chapter 4 -- In-Context Learning and Few-Shot Adaptation
+# Chapter 4 -- In-Context Learning, Few-Shot, and RAG
 
 This chapter covers how to get useful work out of a model without training it: few-shot prompting, many-shot prompting on long-context models, prompt validation against held-out test sets, and a minimal retrieval-augmented generation (RAG) pipeline. The code in this folder backs the four numbered listings in the chapter.
 
