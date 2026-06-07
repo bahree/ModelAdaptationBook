@@ -1,6 +1,6 @@
 # Book code workspace
 
-Welcome to the code repo for the **Model Adaptation** book. This folder contains the runnable code, organized by chapter.
+Welcome to the code repo for **LLM Customization and Fine-Tuning: Adaptation, Distillation, and Alignment** (Manning Publications). This folder contains the runnable code, organized by chapter.
 
 **Repository**: <https://github.com/bahree/ModelAdaptationBook>
 

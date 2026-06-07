@@ -1,0 +1,16 @@
+CC0 1.0 Universal (Public Domain Dedication)
+
+The author(s) have dedicated this dataset (the hand-authored Contoso IT-support
+Q&A in this folder: it_qa_train.jsonl, quality_pairs.jsonl, and the curated
+content in make_it_qa.py) to the public domain by waiving all of their rights to
+the work worldwide under copyright law, including all related and neighboring
+rights, to the extent allowed by law.
+
+You can copy, modify, distribute, and use the work, even for commercial
+purposes, all without asking permission.
+
+The work is provided "as is" without warranty of any kind.
+
+Full legal text: https://creativecommons.org/publicdomain/zero/1.0/legalcode
+
+Note: "Contoso" is a fictional company and all tool names herein are invented.

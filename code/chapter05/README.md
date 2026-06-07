@@ -182,6 +182,8 @@ Wrote Dolly 15K subset to: chapter05/data/dolly_subset
 
 Dolly 15K has 8 task categories (`open_qa`, `general_qa`, `closed_qa`, `summarization`, `brainstorming`, `classification`, `information_extraction`, `creative_writing`); with `--seed 42 --train 400` the breakdown above is what you will see.
 
+**Outcome types in your own data:** Dolly contains no refusals or tone-tagged examples, which are response types you typically add for an internal assistant. For worked `messages`-format rows showing a refusal, a clarification, and a tone tag (plus a note on inter-annotator agreement for Q&A), see [examples/example_data_prep_outcome_types.md](examples/example_data_prep_outcome_types.md).
+
 ### Step 2: Train LoRA Adapter
 
 Train a LoRA adapter using TRL's SFTTrainer:
@@ -492,6 +494,7 @@ python chapter05/scripts/publish_adapter.py ^
 
 ## See Also
 
+- [Contoso domain-adaptation example, where an adapter beats prompting (base vs. format-prompt vs. LoRA, with sample outputs)](../it_support_qa/README.md) — the section 5.1.8 / figure 5.5 example, full dataset and reproducible run
 - [Base vs LoRA vs QLoRA inference output (same prompt)](examples/example_inference_base_vs_adapter.md)
 - [QLoRA training log and interpretation](examples/example_qlora_training_output.md)
 - [LoRA vs QLoRA evaluation run](examples/example_qlora_evaluation_output.md)

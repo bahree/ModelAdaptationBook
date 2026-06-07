@@ -1,6 +1,6 @@
-# Fine-Tuning and Customizing LLMs for Enterprises
+# LLM Customization and Fine-Tuning: Adaptation, Distillation, and Alignment
 
-Welcome to the code repository for **Fine-Tuning and Customizing LLMs for Enterprises** (working title).
+Welcome to the code repository for **LLM Customization and Fine-Tuning: Adaptation, Distillation, and Alignment** (Manning Publications).
 
 This repository contains all the runnable code, data, and examples from the book, organized by chapter.
 
