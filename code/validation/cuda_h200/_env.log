@@ -1,0 +1,5 @@
+torch 2.12.1+cu126
+platform Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39
+cuda True
+hip None
+mps False

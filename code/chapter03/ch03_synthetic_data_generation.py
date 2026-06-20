@@ -15,19 +15,17 @@ Install : pip install anthropic datasets huggingface_hub scikit-learn
 """
 
 import os
+import re
 import json
 import zipfile
 import random
 import hashlib
 import datetime
 
-import anthropic
 from datasets import Dataset
 from huggingface_hub import hf_hub_download
 
-
-# ── API client (reads ANTHROPIC_API_KEY from environment) ─────────────────────
-client = anthropic.Anthropic()
+import common.env  # noqa: F401  side-effect: load code/.env so the API keys below are visible
 
 # ── Shared constants ──────────────────────────────────────────────────────────
 SYSTEM_PROMPT = (
@@ -38,7 +36,40 @@ SYSTEM_PROMPT = (
 )
 
 SEED_DATASET  = "takala/financial_phrasebank"   # public, CC-BY-NC-SA 3.0
-TEACHER_MODEL = "claude-sonnet-4-6"             # teacher LLM
+TEACHER_MODEL = "claude-sonnet-4-6"             # teacher LLM (direct Anthropic id)
+OPENROUTER_TEACHER_MODEL = "anthropic/claude-sonnet-4.5"  # same family, via OpenRouter
+
+
+def call_teacher(prompt: str, max_tokens: int = 4096, system: str = None) -> str:
+    """Return the teacher LLM's raw text response to a prompt.
+
+    Default path: the Anthropic SDK directly, when ANTHROPIC_API_KEY is set -- this
+    is what the chapter walks through. Fallback: the same Claude model via
+    OpenRouter, when only OPENROUTER_API_KEY is set. It is the same model (no
+    behavioral difference; generation is stochastic regardless), so this just lets
+    the script run with whichever key you have configured, the same way chapters 7
+    and 8 reach frontier models. The anthropic import is deferred so the OpenRouter
+    path does not require the anthropic package.
+    """
+    if os.environ.get("ANTHROPIC_API_KEY"):
+        import anthropic
+        kwargs = {"system": system} if system else {}
+        resp = anthropic.Anthropic().messages.create(
+            model=TEACHER_MODEL,
+            max_tokens=max_tokens,
+            messages=[{"role": "user", "content": prompt}],
+            **kwargs,
+        )
+        return resp.content[0].text
+    if os.environ.get("OPENROUTER_API_KEY"):
+        from common.openrouter import chat
+        messages = [{"role": "system", "content": system}] if system else []
+        messages.append({"role": "user", "content": prompt})
+        return chat(messages, model=OPENROUTER_TEACHER_MODEL, max_tokens=max_tokens)["content"]
+    raise RuntimeError(
+        "No teacher API key found. Set ANTHROPIC_API_KEY (direct Anthropic, the "
+        "chapter default) or OPENROUTER_API_KEY (same model via OpenRouter)."
+    )
 
 
 # ══════════════════════════════════════════════════════════════════════════════
@@ -110,7 +141,7 @@ def load_seeds(n_per_category: int = 20, seed: int = 42) -> list[dict]:
         print(f"    {label:9s}: {len(examples)} examples")
 
     # Preview the first seed so we can see what the teacher will imitate
-    print(f"\n  Sample seed (this style will anchor generation):")
+    print("\n  Sample seed (this style will anchor generation):")
     print(f"    [{seeds[0]['label']:8s}] {seeds[0]['sentence'][:80]}")
     return seeds
 
@@ -282,13 +313,8 @@ def generate_candidates(
 
         prompt = build_generation_prompt(category, seeds, n_per_cat)
 
-        response = client.messages.create(
-            model=TEACHER_MODEL,
-            max_tokens=4096,
-            messages=[{"role": "user", "content": prompt}],
-        )
-
-        candidates = parse_candidates(response.content[0].text, category)
+        raw_text = call_teacher(prompt, max_tokens=4096)
+        candidates = parse_candidates(raw_text, category)
         all_candidates.extend(candidates)
         print(f"parsed {len(candidates)} candidates")
 
@@ -340,6 +366,28 @@ Return ONLY valid JSON, no preamble:
 {"fidelity": X, "format": X, "domain_safety": X, "pass": true_or_false}"""
 
 
+def _parse_judge_json(raw_text: str) -> dict:
+    """
+    Parse the judge model's JSON scores, tolerating markdown fences and a stray
+    preamble. Some providers (e.g. OpenRouter-routed Claude) wrap the object in
+    ```json ... ``` or add a short lead-in even when asked to return only JSON,
+    which a bare json.loads rejects (the generation parser strips fences the
+    same way; this keeps the judge path just as robust).
+    """
+    text = raw_text.strip()
+    if text.startswith("```"):
+        text = "\n".join(text.split("\n")[1:])
+    text = text.removesuffix("```").strip()
+    try:
+        return json.loads(text)
+    except json.JSONDecodeError:
+        # Last resort: pull the first {...} object out of any surrounding prose.
+        match = re.search(r"\{.*\}", text, re.DOTALL)
+        if match:
+            return json.loads(match.group(0))
+        raise
+
+
 def score_one_example(example: dict) -> dict:
     """
     Score a single candidate example using the LLM-as-judge rubric.
@@ -355,15 +403,10 @@ def score_one_example(example: dict) -> dict:
         f"Label: {example['label']}"
     )
 
-    response = client.messages.create(
-        model=TEACHER_MODEL,
-        max_tokens=100,
-        system=JUDGE_SYSTEM_PROMPT,
-        messages=[{"role": "user", "content": content}],
-    )
+    raw_text = call_teacher(content, max_tokens=200, system=JUDGE_SYSTEM_PROMPT)
 
     try:
-        scores = json.loads(response.content[0].text.strip())
+        scores = _parse_judge_json(raw_text)
     except json.JSONDecodeError:
         # If the judge fails to produce valid JSON, treat as failed
         scores = {"fidelity": 0, "format": 0, "domain_safety": 0, "pass": False}
@@ -451,10 +494,9 @@ def check_distribution_alignment(
     Returns:
         Cosine similarity score (0.0–1.0)
     """
-    print(f"\nStep 5: Distribution alignment check...")
+    print("\nStep 5: Distribution alignment check...")
 
     try:
-        import numpy as np
         from sentence_transformers import SentenceTransformer
         from sklearn.metrics.pairwise import cosine_similarity
 
@@ -627,7 +669,7 @@ if __name__ == "__main__":
     # ── Step 2: Build prompts (shown for one category as illustration) ────────
     print("\nStep 2: Building generation prompt (positive category sample)...")
     sample_prompt = build_generation_prompt("positive", seeds, n_to_generate=5)
-    print(f"  Prompt preview (first 300 chars):")
+    print("  Prompt preview (first 300 chars):")
     print(f"  {sample_prompt[:300]}...")
 
     # ── Step 3: Generate candidates ───────────────────────────────────────────
@@ -638,7 +680,7 @@ if __name__ == "__main__":
 
     # Show a sample candidate before quality filtering
     if candidates:
-        print(f"\n  Sample candidate (before quality gate):")
+        print("\n  Sample candidate (before quality gate):")
         ex = candidates[0]
         print(f"    [{ex['label']:8s}] {ex['sentence'][:80]}")
 
@@ -647,13 +689,13 @@ if __name__ == "__main__":
 
     # Show a sample of what passed and what failed
     if passed:
-        print(f"\n  Sample PASSED example:")
+        print("\n  Sample PASSED example:")
         ex = passed[0]
         print(f"    [{ex['label']:8s}] {ex['sentence'][:80]}")
         print(f"    Scores: {ex['scores']}")
 
     if failed:
-        print(f"\n  Sample FAILED example:")
+        print("\n  Sample FAILED example:")
         ex = failed[0]
         print(f"    [{ex['label']:8s}] {ex['sentence'][:80]}")
         print(f"    Scores: {ex['scores']}")
@@ -664,8 +706,8 @@ if __name__ == "__main__":
     # ── Step 6: Mix and save ──────────────────────────────────────────────────
     if passed:
         manifest = mix_and_save(seeds, passed, output_dir="./ch03_synthetic_output")
-        print(f"\n  Next step: pass ./ch03_synthetic_output/train to SFTTrainer")
-        print(f"  Dataset manifest: ./ch03_synthetic_output/manifest.json")
+        print("\n  Next step: pass ./ch03_synthetic_output/train to SFTTrainer")
+        print("  Dataset manifest: ./ch03_synthetic_output/manifest.json")
     else:
         print("\n  No examples passed the quality gate.")
         print("  Check your ANTHROPIC_API_KEY and try with a larger n_per_cat.")

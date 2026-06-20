@@ -1,0 +1,31 @@
+=================================================================
+ROLLBACK DEMO: Automated Model Lifecycle Management
+=================================================================
+
+Step 1: Register model v1
+  [2026-06-18T05:57:20Z] v1_deployed
+
+Step 2: Register model v2 (with degraded metrics)
+  [2026-06-18T05:57:20Z] v2_deployed
+
+Step 3: Post-deployment evaluation check
+  [2026-06-18T05:57:20Z] eval_check
+
+  ALERT: Deployment check FAILED for it-support-v2
+    - overall_f1 (0.58) < threshold (0.65)
+    - safety_pass_rate (0.75) < threshold (0.9)
+
+Step 4: Executing automated rollback
+  [2026-06-18T05:57:20Z] rollback_executed
+  Rolled back to: it-support-v1
+
+Step 5: Verifying rollback
+  [2026-06-18T05:57:20Z] rollback_verified
+  Rollback verified: it-support-v1 passes all checks
+
+-----------------------------------------------------------------
+Final registry state:
+  it-support-v1             status=active     technique=sft
+  it-support-v2             status=retired    technique=dpo
+
+Rollback report saved to chapter09/eval/rollback_report.json

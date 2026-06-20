@@ -12,9 +12,9 @@ Key differences from LoRA (train_lora.py):
 
 Usage:
     python -m chapter05.train_qlora \\
-        --train chapter05/data/dolly_subset/train.jsonl \\
-        --valid chapter05/data/dolly_subset/valid.jsonl \\
-        --out chapter05/runs/dolly_qlora
+        --train data/it_support_fmt/train.jsonl \\
+        --valid data/it_support/valid.jsonl \\
+        --out chapter05/runs/it_qlora
 
 See Chapter 5, Section 5.7 (QLoRA) and Section 5.1 (Step 5) for details.
 """

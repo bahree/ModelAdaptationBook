@@ -1,0 +1,32 @@
+
+Step 1/4: Loading base model...
+Failed to load ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.09it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:02<00:01,  1.26s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:02<00:00,  1.21it/s]
+✓ Base model loaded
+
+Step 2/4: Evaluating base model...
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+  Evaluating examples... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+  Evaluating toy test set... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+  Running safety checks... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+✓ Base evaluation complete
+
+Step 3/4: Loading adapter from chapter05/runs/val_lora_smoke...
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.63it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.59it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.36it/s]
+✓ Adapter loaded
+
+Step 4/4: Evaluating fine-tuned model...
+  Evaluating examples... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+  Evaluating toy test set... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+  Running safety checks... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+✓ Fine-tuned evaluation complete
+
+
+Writing evaluation reports...
+
+✓ Evaluation complete!
+✓ JSON report: chapter05/runs/eval_report/report.json
+✓ Markdown summary: chapter05/runs/eval_report/report.md
+
+→ View the markdown report for a human-readable summary

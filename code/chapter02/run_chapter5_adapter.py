@@ -1,16 +1,16 @@
 """Chapter 2 optional: preview what the same recipe produces at chapter 5 scale.
 
-Loads the LoRA adapter chapter 5 produces (400 examples, three epochs, properly
-evaluated) onto the base model and runs the same three demo prompts the chapter 2
-quickstart prints. Each prompt is generated twice, once with the adapter disabled
-(base) and once with it enabled, so you can see the qualitative shift.
+Loads the LoRA adapter chapter 5 produces (the IT support dataset, three epochs,
+properly evaluated) onto the base model and runs the same three demo prompts the
+chapter 2 quickstart prints. Each prompt is generated twice, once with the adapter
+disabled (base) and once with it enabled, so you can see the qualitative shift.
 
 This is opt-in. Nothing in chapter 2 requires this script. The point is to give
 curious readers a preview of what the same recipe produces at chapter 5's full
 scale before they read chapter 5 in depth.
 
 Adapter resolution order (first match wins):
-    1. Local copy at chapter05/runs/dolly_lora/ (if you have already run Ch5)
+    1. Local copy at chapter05/runs/it_lora/ (if you have already run Ch5)
     2. Hugging Face Hub at the published location (cached after first use)
     3. Local chapter 2 quickstart adapter at chapter02/runs/ch2_quickstart/
        (only when --use-quickstart is passed; the quickstart adapter is NOT
@@ -18,7 +18,7 @@ Adapter resolution order (first match wins):
 
 Run from the code/ directory:
     python -m chapter02.run_chapter5_adapter
-    python -m chapter02.run_chapter5_adapter --hub-repo bahree/qwen3-4b-dolly-lora-ch5
+    python -m chapter02.run_chapter5_adapter --hub-repo bahree/qwen3-4b-it-lora-ch5
     python -m chapter02.run_chapter5_adapter --use-quickstart
 
 If nothing resolves, the script prints the publish/train instructions and exits.
@@ -36,14 +36,13 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
 BASE_MODEL = "Qwen/Qwen3-4B-Instruct-2507"
-CH5_LOCAL_PATH = Path("chapter05/runs/dolly_lora")
+CH5_LOCAL_PATH = Path("chapter05/runs/it_lora")
 QUICKSTART_LOCAL_PATH = Path("chapter02/runs/ch2_quickstart")
-DEFAULT_HUB_REPO = "bahree/qwen3-4b-dolly-lora-ch5"
+DEFAULT_HUB_REPO = "bahree/qwen3-4b-it-lora-ch5"
 SYSTEM_PROMPT = "You are a helpful assistant."
 
-# The three prompts the chapter 2 quickstart prints. They come from the Dolly
-# subset after seed=42 shuffle; hardcoded here so this script reproduces them
-# without depending on the quickstart's random state.
+# The three prompts the chapter 2 quickstart prints, hardcoded here so this
+# script reproduces them without depending on the quickstart's random state.
 DEMO_PROMPTS = [
     (
         "Which of the following are deciduous trees?\n\n"
@@ -111,11 +110,11 @@ def print_no_adapter_instructions(args: argparse.Namespace) -> None:
     print("Two ways to fix this:")
     print()
     print("Option A. Train the chapter 5 adapter locally:")
-    print("  python -m chapter05.scripts.listing_5_1_prepare_dataset \\")
-    print("    --out chapter05/data/dolly_subset --seed 42")
+    print("  python scripts/build_it_support_dataset.py")
+    print("  python scripts/reformat_it_answers.py")
     print("  python -m chapter05.train_lora \\")
-    print("    --train chapter05/data/dolly_subset/train.jsonl \\")
-    print("    --valid chapter05/data/dolly_subset/valid.jsonl \\")
+    print("    --train data/it_support_fmt/train.jsonl \\")
+    print("    --valid data/it_support/valid.jsonl \\")
     print(f"    --out {CH5_LOCAL_PATH}")
     print()
     print("Option B. Pull the published adapter from Hugging Face Hub once it is up:")

@@ -4,7 +4,9 @@ Everything about running this book's code on real hardware: which chapters run
 on which accelerator, GPU memory requirements, the setups we validated, the
 dependency versions, performance across GPUs, and the design insights behind it
 all. The [README](README.md) covers what the book is and how to start; this file
-is the hardware reference it links to.
+is the hardware reference it links to. For the reusable, hard-won lessons behind
+these results (pin the device instead of `device_map="auto"`, Hugging Face rate
+limits, and per-accelerator gotchas), see [LESSONS.md](LESSONS.md).
 
 The short version: the full book runs on **NVIDIA (CUDA)** and **AMD (ROCm)**.
 **Apple Silicon (MPS)** runs everything except 4-bit QLoRA and the
@@ -26,14 +28,28 @@ chapters but is impractical for training.
 | 8 - DPO | ✓ | ✗ | ✓ | Full-model preference optimisation; same memory profile |
 | 9 - drift / registry / monitor | ✓ | ✓ | ✓ | Registry, drift detector, and rollback are CPU/stdlib; canary and safety monitor are inference |
 
-✓ = validated to run. ✗ = does not run on that accelerator (use NVIDIA, AMD, or a cloud GPU). On Apple Silicon, training is correct but slower than on a GPU, so give it at least 16 GB of unified memory.
+✓ = validated to run. ✗ = does not run on that accelerator for *training* (use NVIDIA, AMD, or a cloud GPU) -- but the trained models for chapters 5 to 8 are published on Hugging Face, so you can still run their inference and evaluation on any machine (see [Running without training](#running-without-training-pull-the-model-from-hugging-face)). On Apple Silicon, training is correct but slower than on a GPU, so give it at least 16 GB of unified memory.
 
 ## Which accelerator do I need?
 
 - **Any NVIDIA GPU with enough VRAM** runs everything; this is the reference path.
 - **An AMD GPU on Linux (ROCm)** also runs everything, including QLoRA and the full-parameter chapters. Best on datacenter (MI-series) cards; consumer RDNA support varies by GPU generation.
-- **A Mac (Apple Silicon)** is great for chapters 1 through 5's LoRA path and chapter 9, but cannot do QLoRA or the full-parameter chapters (6, 7, 8). For those, use a cloud GPU.
-- **No GPU?** The lightweight chapters (4, the chapter 9 CPU stages, mock backends) run on CPU; training chapters are impractical.
+- **A Mac (Apple Silicon)** is great for chapters 1 through 5's LoRA path and chapter 9, but cannot *train* QLoRA or the full-parameter chapters (6, 7, 8). For training those, use a cloud GPU.
+- **No GPU, or a Mac/small card?** You can still follow chapters 5 through 8 by pulling the trained model from Hugging Face and running inference or evaluation, without training it. See [Running without training](#running-without-training-pull-the-model-from-hugging-face).
+
+## Running without training: pull the model from Hugging Face
+
+You do not need a training-capable GPU to follow along. Every chapter's trained artifact is published to a single repo, [`bahree/ModelAdaptationBook`](https://huggingface.co/bahree/ModelAdaptationBook), as a per-chapter subfolder. Training a full-parameter model (chapters 6 to 8) needs a CUDA 24 GB+ card, but **loading the published model and running inference or evaluation fits a single smaller GPU or Apple Silicon (MPS)**. So on a Mac you can pull, for example, the chapter 6 SFT model and run its three-way evaluation without ever training it.
+
+| Subfolder | Chapter | Artifact | Base |
+| --- | --- | --- | --- |
+| `ch5-lora` | 5 | LoRA adapter | Qwen3-4B-Instruct-2507 |
+| `ch6-sft` | 6 | full SFT model (standalone) | (full fine-tune) |
+| `ch7-distilled` | 7 | distilled student (LoRA) | Qwen3-4B-Instruct-2507 |
+| `ch8-dpo` | 8 | full DPO model (standalone) | (full fine-tune) |
+| `ch8-dpo-lora` | 8 | LoRA-DPO adapter (fits one 24 GB card) | `ch6-sft` |
+
+Load a full model with `AutoModelForCausalLM.from_pretrained("bahree/ModelAdaptationBook", subfolder="ch6-sft")`, or an adapter with `PeftModel.from_pretrained(base, "bahree/ModelAdaptationBook", subfolder="ch5-lora")`. This is why the "What runs where" table marks chapters 6 to 8 as not running on Apple Silicon: that is about *training* them. You can still *use* their results on a Mac by pulling the trained model.
 
 ## GPU requirements at a glance
 
@@ -60,11 +76,28 @@ QLoRA is LoRA applied on top of a 4-bit quantized base model, and that 4-bit qua
 
 ## Apple Silicon notes
 
-We verified the following on an Apple M4 (16 GB), macOS 15.6.1, using PyTorch's MPS (Metal) backend. These run locally: chapter 1 in base-only mode, the chapter 2 LoRA quickstart, chapter 3's data-quality experiment, chapter 4, chapter 5's LoRA training, and chapter 9's CPU stages. Training on MPS is slower than on a GPU, so give it a Mac with at least 16 GB of unified memory. Two things will not run on Apple Silicon: chapter 5's QLoRA (the `bitsandbytes` 4-bit kernels are CUDA/ROCm-only, see above), and the full-parameter training in chapters 6, 7, and 8 (chapter 6 ran out of memory at roughly 18 GB on the 16 GB Mac). Run those on Google Colab, a cloud GPU, or any CUDA/ROCm machine.
+We verified the following on Apple Silicon (an M2 Pro and an M4, both 16 GB), using PyTorch's MPS (Metal) backend: chapter 1 in base-only mode, the chapter 2 LoRA quickstart, chapter 3's data-quality experiment, chapter 4, chapter 5's LoRA training, loading a LoRA adapter for inference, chapter 9's CPU stages plus its safety monitor and canary prompts on MPS, and pulling any of the published chapter 5 through 8 models from Hugging Face for inference and evaluation. Training on MPS is slower than a GPU, so give it a Mac with at least 16 GB of unified memory.
+
+**One gotcha that matters on a memory-constrained Mac: pin the model to MPS, do not use `device_map="auto"`.** On a 16 GB Mac, `device_map="auto"` offloads layers to the meta/CPU device, and that offload corrupts LoRA training:
+
+- **What we saw:** NaN gradients on an M2 Pro, and a backward device-mismatch error on an M4.
+- **The fix:** pin the model to a single device, `device_map={"":"mps"}` (the `_resolve_device_map` pattern the book's code uses). With the pin, the chapter 2 quickstart trains cleanly: loss ~3.0 to ~1.7 with finite gradients throughout (confirmed on an M4, macOS 26 Tahoe).
+
+Two things still will not run on Apple Silicon regardless:
+
+- **4-bit QLoRA:** the `bitsandbytes` 4-bit kernels are CUDA/ROCm-only.
+- **Full-parameter training (chapters 6, 7, 8):** OOMs at ~18 GB on a 16 GB Mac.
+
+For those, train on a CUDA/ROCm GPU or Colab, or pull the trained model from Hugging Face (see [Running without training](#running-without-training-pull-the-model-from-hugging-face)).
 
 ## AMD GPU notes
 
-The PyTorch ROCm stack supports AMD GPUs on Linux, and we validated the full book on it. On an AMD Instinct MI300X (192 GB) running ROCm 7.x with the PyTorch ROCm wheel, every chapter ran end-to-end, including chapter 5 QLoRA (4-bit via `bitsandbytes`) and the full-parameter training in chapters 6, 7, and 8. So the chapters that a Mac cannot run do run on a ROCm machine. It works best on datacenter (MI-series) cards; consumer RDNA support varies by GPU generation. One caveat: `bitsandbytes` may print a warning that it could not find `rocminfo` and is defaulting the warp size to 64 (correct for CDNA cards like the MI300X); 4-bit training still works, and installing the ROCm command-line tools silences it. The fail-fast checks treat a working ROCm install as a GPU, so they let you proceed.
+The PyTorch ROCm stack supports AMD GPUs on Linux, and we validated the full book on it. On an AMD Instinct MI300X (192 GB) running ROCm 7.x with the PyTorch ROCm wheel, every chapter ran end-to-end, including chapter 5 QLoRA (4-bit via `bitsandbytes`) and the full-parameter chapters (6, 7, 8). So the chapters a Mac cannot train do train on a ROCm machine. A few notes:
+
+- **Best on datacenter (MI-series) cards.** Consumer RDNA support varies by GPU generation.
+- **Benign warning:** `bitsandbytes` may report it could not find `rocminfo` and is defaulting the warp size to 64 (correct for CDNA cards like the MI300X). 4-bit training still works; installing the ROCm command-line tools silences it.
+- **The fail-fast checks treat a working ROCm install as a GPU,** so they let you proceed.
+- **QLoRA needs ROCm 6.2 or newer.** We validated the same MI300X on an older ROCm 6.1 host (`torch 2.6.0+rocm6.1`): the LoRA path and the full-parameter chapters run, but **chapter 5 QLoRA fails**. The PyPI `bitsandbytes` 0.49.2 wheel ships ROCm kernels for 6.2 through 7.x but none for 6.1, the 6.2 binary segfaults on the 6.1 runtime, and a from-source build hits a hipcub 6.1 API gap. It fast-fails in seconds. Use ROCm 6.2+ for QLoRA (the 7.x stack above is the tested-good configuration); everything else runs on 6.1.
 
 ## Validated environments
 
@@ -73,9 +106,11 @@ The code is not pinned to one accelerator. The table records the exact machines 
 | Accelerator | Machine | OS | Driver / runtime | PyTorch | Coverage |
 |---|---|---|---|---|---|
 | NVIDIA CUDA | A30 (24 GB) | Linux | CUDA 12.x | 2.11+cu126 | All chapters (reference platform for the book's published numbers) |
-| NVIDIA CUDA | H200 (141 GB) | Ubuntu 22.04 | driver 590.48.01, compute 9.0 | 2.12.0+cu126 | Full book end-to-end |
-| Apple Silicon (MPS) | Apple M4, 16 GB | macOS 15.6.1 | Metal / MPS | 2.12.0 | Ch1 base-only, Ch2 quickstart, Ch3 experiment, Ch4, Ch5 LoRA, Ch9 CPU stages. Not Ch5 QLoRA or full-parameter Ch6/7/8. |
+| NVIDIA CUDA | H200 (140 GB) | Ubuntu (Nebius) | driver 580.159.04 | 2.12.1+cu126 | Full book end-to-end via validate_all.sh (25/25, incl. all training) |
+| NVIDIA CUDA | B200 (179 GB, Blackwell) | Ubuntu (Nebius) | driver 580.159.04 | 2.11.0+cu128 | Full book end-to-end via validate_all.sh (25/25); needs the cu128 wheel for sm_100, and 4-bit QLoRA is slow on current Blackwell kernels (see below) |
+| Apple Silicon (MPS) | Apple M2 Pro, 16 GB (also M4, 16 GB) | macOS 26.3 (and 15.6) | Metal / MPS | 2.x | Ch4, Ch5 LoRA + adapter load, Ch9 (drift, registry, rollback, safety monitor, canary on MPS), and pull-and-run of the published ch5/ch6/ch8 models. Ch5 QLoRA correctly fast-fails; full-parameter Ch6/7/8 training does not fit 16 GB (pull from Hugging Face instead). |
 | AMD ROCm | Instinct MI300X (192 GB) | Ubuntu 24.04 | ROCm 7.x, HIP 7.0.51831 | 2.10.0+rocm7.0 | Full book end-to-end, including Ch5 QLoRA (4-bit) and full-parameter Ch6/7/8 |
+| AMD ROCm | Instinct MI300X (192 GB) | Ubuntu (RunPod) | ROCm 6.1, HIP 6.1.40091 | 2.6.0+rocm6.1 | Full book except Ch5 QLoRA via validate_all.sh (24/25); QLoRA needs ROCm 6.2+ (no `bitsandbytes` 6.1 kernel, see AMD notes) |
 
 ## Dependency versions
 
@@ -90,9 +125,9 @@ All three GPUs do a full end-to-end pass (every chapter, real 1-epoch training) 
 | Ch2 quickstart | 124 | 80 | 66 |
 | Ch3 data-quality experiment | 750 | 435 | 385 |
 | Ch5 train LoRA | 232 | 133 | 118 |
-| Ch5 eval LoRA | 1008 | re-run* | 369 |
+| Ch5 eval LoRA | 1008 | n/a* | 369 |
 | Ch5 train QLoRA | 296 | 178 | 162 |
-| Ch5 eval QLoRA | 924 | re-run* | 359 |
+| Ch5 eval QLoRA | 924 | n/a* | 359 |
 | Ch6 train SFT (full-parameter) | 217 | 122 | 118 |
 | Ch7 generate teacher data | 620 | 360 | 328 |
 | Ch7 train student | 62 | 44 | 31 |
@@ -102,9 +137,31 @@ All three GPUs do a full end-to-end pass (every chapter, real 1-epoch training) 
 | Ch8 eval DPO | 763 | 381 | 331 |
 | **Full pass (step time)** | **~112 min** | **~53 min** | **~50 min** |
 
-\* The MI300X run's Ch5 eval steps initially failed on a stale documented flag and were re-run separately, so they are not in that run's per-step summary.
+\* The MI300X Ch5 eval steps are not captured in this pass's per-step summary.
 
 The A30 (Ampere, 2020) is roughly 2x the datacenter cards on training and ~2.5-3x on the generation-heavy eval steps. The H200 and MI300X are close to each other; a 4B model on small datasets does not stress either, so the gap between them would only open up with larger models, longer context, or bigger batches.
+
+## Cross-accelerator validation pass (validate_all.sh)
+
+We ran the full code path on every accelerator with one harness, `docs/overview/validate_all.sh --full` (raw scrubbed logs are in `code/validation/<accel>/`). Every box produced **identical functional results**: drift baseline 0.1859 (YELLOW) and a deliberately topic-shifted 0.6855 (RED) with `kubernetes` as the top drift term, the same bias_fairness safety alert, and a clean LoRA adapter load with no offload error. So the code reproduces across Ampere, Hopper, and Blackwell (and on Apple Silicon for the inference paths). Per-step training wall time, in seconds:
+
+| Step | A30 (Ampere) | H200 (Hopper) | B200 (Blackwell) |
+|---|---:|---:|---:|
+| Ch5 LoRA train | 763 | 485 | 993 |
+| Ch5 evaluate | 1230 | 484 | 667 |
+| Ch5 QLoRA train (4-bit) | 959 | 581 | 1112 |
+| Ch6 SFT (full-parameter) | 618 | 343 | 893 |
+| Ch7 student train | 425 | 246 | 997 |
+| Ch8 DPO train | 334 | 146 | 1123 |
+| Ch8 LoRA-DPO train | 320 | 168 | 1160 |
+
+The **H200 is the fastest** across the board. The **B200, despite being the newest and largest card, is the slowest on this workload today.** At the time of testing:
+
+- PyTorch (2.11+cu128) and `bitsandbytes` do not yet have mature Blackwell (sm_100) kernels, so full-parameter steps run at roughly 25 to 33 s/iter and 4-bit QLoRA dequant is about 190x slower per step (the GPU sits around 7% utilized, compute-starved).
+- It runs every chapter correctly; it is simply not yet faster, which should change as the Blackwell software stack matures.
+- It needs the `cu128` PyTorch wheel (the `cu126` build lacks sm_100).
+
+The practical takeaway for choosing hardware today: for this 4B workload an H200 (or even the older A30) is a better bet than a B200 until Blackwell kernel support lands.
 
 ## Results reproduce across accelerators
 

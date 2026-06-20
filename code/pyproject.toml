@@ -27,6 +27,9 @@ dependencies = [
   "transformers>=4.47.0,<5.0",
   "trl>=0.9.0",
   "python-dotenv>=1.0.1",
+  # HTML -> text cleaning for the Stack Exchange IT-support dataset builder
+  # (scripts/build_it_support_dataset.py).
+  "beautifulsoup4>=4.12.0",
 ]
 
 [project.optional-dependencies]

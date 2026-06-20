@@ -9,9 +9,9 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Literal, Optional, Sequence, Tuple
+from typing import Any, Dict, List, Literal
 
-from common.jsonl import read_jsonl, require_keys
+from common.jsonl import read_jsonl
 
 
 Role = Literal["system", "user", "assistant"]

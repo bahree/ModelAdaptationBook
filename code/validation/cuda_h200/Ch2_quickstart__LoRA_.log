@@ -1,0 +1,54 @@
+Step 1: prepare dataset
+  train=40 valid=5 demo=3
+Step 2: load base model and configure LoRA
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.62it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.61it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.38it/s]
+~/FTBook-pvt/code/chapter02/quickstart.py:158: FutureWarning: The default `loss_type` will change from `'nll'` to `'chunked_nll'` in TRL 1.7. For standard models this is transparent (same math, lower memory) and no action is needed — you'll get the new default automatically on upgrade. If you use a custom model, check ahead of time that `loss_type='chunked_nll'` runs and yields the same loss as `'nll'`; if it doesn't, pin `loss_type='nll'` to keep the current behavior and please open an issue at https://github.com/huggingface/trl/issues so we can address the edge case.
+  config = SFTConfig(
+Step 3: train for 20 steps
+Tokenizing train dataset:   0%|          | 0/40 [00:00<?, ? examples/s]Tokenizing train dataset: 100%|██████████| 40/40 [00:00<00:00, 1092.99 examples/s]
+Tokenizing eval dataset:   0%|          | 0/5 [00:00<?, ? examples/s]Tokenizing eval dataset: 100%|██████████| 5/5 [00:00<00:00, 894.69 examples/s]
+The model is already on multiple devices. Skipping the move to device specified in `args`.
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+  0%|          | 0/20 [00:00<?, ?it/s]  5%|▌         | 1/20 [00:02<00:53,  2.81s/it] 10%|█         | 2/20 [00:05<00:45,  2.52s/it] 15%|█▌        | 3/20 [00:07<00:42,  2.52s/it] 20%|██        | 4/20 [00:09<00:39,  2.45s/it] 25%|██▌       | 5/20 [00:12<00:37,  2.48s/it]                                               25%|██▌       | 5/20 [00:12<00:37,  2.48s/it] 30%|███       | 6/20 [00:14<00:32,  2.35s/it] 35%|███▌      | 7/20 [00:16<00:30,  2.33s/it] 40%|████      | 8/20 [00:18<00:27,  2.26s/it] 45%|████▌     | 9/20 [00:21<00:24,  2.26s/it] 50%|█████     | 10/20 [00:23<00:22,  2.21s/it]                                                50%|█████     | 10/20 [00:23<00:22,  2.21s/it]{'loss': 2.6059, 'grad_norm': 1.236215353012085, 'learning_rate': 0.00016, 'entropy': 1.4496663108468055, 'mean_token_accuracy': 0.50919468998909, 'num_tokens': 9922.0, 'epoch': 1.0}
+{'loss': 1.8877, 'grad_norm': 0.46464550495147705, 'learning_rate': 0.00011000000000000002, 'entropy': 1.84824228733778, 'mean_token_accuracy': 0.5851140014827252, 'num_tokens': 19844.0, 'epoch': 2.0}
+
+  0%|          | 0/1 [00:00<?, ?it/s][A                                               
+                                     [A 50%|█████     | 10/20 [00:23<00:22,  2.21s/it]
+100%|██████████| 1/1 [00:00<00:00, 2892.62it/s][A
+                                               [A 55%|█████▌    | 11/20 [00:25<00:20,  2.23s/it] 60%|██████    | 12/20 [00:27<00:17,  2.25s/it] 65%|██████▌   | 13/20 [00:30<00:15,  2.20s/it] 70%|███████   | 14/20 [00:32<00:13,  2.22s/it] 75%|███████▌  | 15/20 [00:34<00:10,  2.18s/it]                                                75%|███████▌  | 15/20 [00:34<00:10,  2.18s/it] 80%|████████  | 16/20 [00:36<00:08,  2.21s/it] 85%|████████▌ | 17/20 [00:38<00:06,  2.17s/it] 90%|█████████ | 18/20 [00:40<00:04,  2.20s/it] 95%|█████████▌| 19/20 [00:43<00:02,  2.16s/it]100%|██████████| 20/20 [00:45<00:00,  2.19s/it]                                               100%|██████████| 20/20 [00:45<00:00,  2.19s/it]{'eval_loss': 2.392575740814209, 'eval_runtime': 0.1355, 'eval_samples_per_second': 36.905, 'eval_steps_per_second': 7.381, 'eval_entropy': 2.397508144378662, 'eval_mean_token_accuracy': 0.47741934657096863, 'eval_num_tokens': 19844.0, 'epoch': 2.0}
+{'loss': 1.73, 'grad_norm': 0.4533025920391083, 'learning_rate': 6e-05, 'entropy': 1.867449524998665, 'mean_token_accuracy': 0.6119720794260501, 'num_tokens': 29766.0, 'epoch': 3.0}
+{'loss': 1.6533, 'grad_norm': 0.4189107418060303, 'learning_rate': 1e-05, 'entropy': 1.7851581633090974, 'mean_token_accuracy': 0.6237683147192001, 'num_tokens': 39688.0, 'epoch': 4.0}
+
+  0%|          | 0/1 [00:00<?, ?it/s][A                                               
+                                     [A100%|██████████| 20/20 [00:45<00:00,  2.19s/it]
+100%|██████████| 1/1 [00:00<00:00, 2822.55it/s][A
+                                               [A                                               100%|██████████| 20/20 [00:45<00:00,  2.19s/it]100%|██████████| 20/20 [00:45<00:00,  2.27s/it]
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+{'eval_loss': 2.390902280807495, 'eval_runtime': 0.1038, 'eval_samples_per_second': 48.165, 'eval_steps_per_second': 9.633, 'eval_entropy': 2.3858790397644043, 'eval_mean_token_accuracy': 0.4831541180610657, 'eval_num_tokens': 39688.0, 'epoch': 4.0}
+{'train_runtime': 45.4272, 'train_samples_per_second': 3.522, 'train_steps_per_second': 0.44, 'train_loss': 1.9692201137542724, 'epoch': 4.0}
+  train wall time: 45.7s
+Step 4: compare outputs on held-out prompts
+
+  Q: I am currently preparing to deploy a JBoss AS into production for the first time
+  BEFORE: You're absolutely right to be cautious about automated package managers when deploying a production Java application server like JBoss AS 5 — especially since J
+  AFTER : **Summary:** For JBoss AS 5 on Ubuntu 8.10, use the default directory structure, place logs in `/var/log/jboss`, and use the provided startup scripts with proper permissions.
+
+**Steps:**
+1. Use the de
+
+  Q: I know that Wubi is slower in disk IO, but I can't find anything about it online
+  BEFORE: You're absolutely right that Wubi (Windows in Ubuntu) is often mentioned as being slower in disk I/O, especially in terms of disk seeks and overall performance,
+  AFTER : **Summary:** Wubi's disk I/O performance is not significantly slower than native Ubuntu installations, with benchmarks showing minimal differences in real-world usage.
+
+**Conclusion:** Wubi's disk I/O
+
+  Q: I have a server with a RAID 1 config. The data on the RAID is in a critical stat
+  BEFORE: You're dealing with a **critical RAID 1 state**, and your symptoms — especially the "Delay Write Failed" error during file copying — are serious indicators of u
+  AFTER : **Summary:** RAID 1 rebuilds are generally safe, but data corruption can occur during the process. Use `smartctl` to check drive health, and consider using `ddrescue` for data recovery.
+
+**Steps:**
+1.
+Step 5: save adapter to chapter02/runs/ch2_quickstart
+
+Done. The adapter is in chapter02/runs/ch2_quickstart/.
+Chapter 5 walks the same recipe with full training, evaluation, and analysis.

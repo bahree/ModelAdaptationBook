@@ -7,7 +7,6 @@ Used by train_lora/train_qlora (SFTTrainer) and eval.py.
 """
 from __future__ import annotations
 
-from dataclasses import asdict
 from typing import Any, Dict, List, Sequence
 
 from datasets import Dataset as HFDataset

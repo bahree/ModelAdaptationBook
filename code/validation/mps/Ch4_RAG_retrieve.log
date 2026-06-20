@@ -1,0 +1,10 @@
+Indexed 12 chunks from chapter04/data/policy_docs.jsonl
+
+#1  score=0.2136  doc='doc_login_001'
+      Password reset emails are sent from no-reply@example.com. The reset link expires after 24 hours from the time the email is sent. If a customer clicks an expired link, they are returned to the login page with an option to request a new link....
+
+#2  score=0.1930  doc='doc_api_002'
+      API keys can be rotated through Account Settings then Developers then API Keys. When a new key is generated, the previous key remains active for 24 hours, providing a grace period to update integrations. After 24 hours, the previous key is ...
+
+#3  score=0.0870  doc='doc_api_001'
+      rate limits are exceeded, the API returns HTTP 429 with a Retry-After header indicating how many seconds to wait before retrying....

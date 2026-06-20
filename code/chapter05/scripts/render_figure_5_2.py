@@ -21,13 +21,13 @@ Usage (from the repo's `code/` directory with venv activated):
 Or with a local adapter or different prompt:
 
     python -m chapter05.scripts.render_figure_5_2 \\
-        --adapter chapter05/runs/dolly_lora \\
+        --adapter chapter05/runs/it_lora \\
         --prompt "Explain how photosynthesis works in simple terms."
 
 Optional flags:
 
     --prompt          User prompt (default: photosynthesis question)
-    --adapter         HF Hub id or local path (default: bahree/qwen3-4b-dolly-lora-ch5)
+    --adapter         HF Hub id or local path (default: bahree/qwen3-4b-it-lora-ch5)
     --max_new_tokens  Generation length cap (default: 220)
     --seed            Torch seed for reproducibility (default: 42)
     --out_dir         Where to save the figure (default: ../docs/chapter5/images,
@@ -66,7 +66,7 @@ except ImportError:
 
 BASE_MODEL = "Qwen/Qwen3-4B-Instruct-2507"
 DEFAULT_PROMPT = "Explain how photosynthesis works in simple terms."
-DEFAULT_ADAPTER = "bahree/qwen3-4b-dolly-lora-ch5"
+DEFAULT_ADAPTER = "bahree/qwen3-4b-it-lora-ch5"
 SYSTEM = "You are a helpful assistant."
 
 
@@ -194,7 +194,7 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(BASE_MODEL)
     base_model = AutoModelForCausalLM.from_pretrained(
         BASE_MODEL,
-        torch_dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
+        dtype=torch.bfloat16 if torch.cuda.is_available() else torch.float32,
         device_map="auto" if torch.cuda.is_available() else None,
     )
     print(f"  Loaded on {next(base_model.parameters()).device}")
@@ -207,7 +207,7 @@ def main():
     print()
     print("Loading LoRA adapter on top of base model...")
     lora_model = PeftModel.from_pretrained(base_model, args.adapter)
-    print(f"  Adapter loaded")
+    print("  Adapter loaded")
 
     print()
     print("Generating with LoRA-adapted model...")

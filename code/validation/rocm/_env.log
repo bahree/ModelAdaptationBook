@@ -1,0 +1,5 @@
+torch 2.6.0+rocm6.1
+platform Linux-6.5.0-28-generic-x86_64-with-glibc2.35
+cuda True
+hip 6.1.40091-a8dbc0c19
+mps False

@@ -10,12 +10,14 @@ Used by train_lora.py, train_qlora.py, generate.py, and eval.py.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Any, Dict, List, Optional, Sequence, Tuple
+from typing import Any, Sequence
 
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 from peft import LoraConfig, prepare_model_for_kbit_training
+
+from common.hub import split_ref, subfolder_kwargs
 
 from .chat_template import ensure_padding
 
@@ -49,9 +51,32 @@ def load_tokenizer(model_name: str):
     Returns:
         A configured AutoTokenizer with padding set (see ensure_padding).
     """
-    tok = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
+    p, s = split_ref(model_name)
+    tok = AutoTokenizer.from_pretrained(p, **subfolder_kwargs(s), trust_remote_code=True)
     ensure_padding(tok)
     return tok
+
+
+def _resolve_device_map(device_map):
+    """Resolve "auto" to a concrete placement that avoids CPU/disk OFFLOAD.
+
+    device_map="auto" offloads layers to CPU/disk on memory-constrained or
+    non-CUDA machines. That offload path trips a PEFT adapter-loading bug
+    (KeyError in _update_offload, e.g.
+    'base_model.model.model.model.embed_tokens') when a LoRA adapter is later
+    attached for eval/inference, which is exactly what a reader on Apple
+    Silicon (MPS) or CPU hits in eval.py / generate.py. Pinning everything to a
+    single device builds no offload index, so the adapter loads cleanly. The 4B
+    base fits on one MPS/CPU device for inference and 1-epoch LoRA.
+    """
+    if device_map != "auto":
+        return device_map
+    if torch.cuda.is_available():
+        return "auto"  # a single 24GB+ CUDA card fits the 4B with no offload
+    mps = getattr(torch.backends, "mps", None)
+    if mps is not None and mps.is_available():
+        return {"": "mps"}
+    return {"": "cpu"}
 
 
 def load_base_model_lora(
@@ -76,9 +101,11 @@ def load_base_model_lora(
     Returns:
         A HuggingFace AutoModelForCausalLM ready for LoRA adapter attachment.
     """
+    p, s = split_ref(model_name)
     model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        device_map=device_map,
+        p,
+        **subfolder_kwargs(s),
+        device_map=_resolve_device_map(device_map),
         dtype=dtype,
         trust_remote_code=True,
     )
@@ -115,6 +142,13 @@ def load_base_model_qlora(
         A quantized model prepared for k-bit training (gradients enabled on
         non-quantized parameters like LayerNorm and LoRA adapters).
     """
+    if not torch.cuda.is_available():
+        raise RuntimeError(
+            "QLoRA (4-bit) requires a CUDA GPU: bitsandbytes does not support "
+            "Apple Silicon (MPS) or CPU. On those platforms use LoRA instead "
+            "(train_lora / load_base_model_lora), which runs in full precision "
+            "and fits the 4B model on a single MPS device."
+        )
     bnb_config = BitsAndBytesConfig(
         load_in_4bit=True,
         # NF4 (NormalFloat4): a 4-bit data type optimized for normally-distributed
@@ -125,9 +159,11 @@ def load_base_model_qlora(
         bnb_4bit_use_double_quant=True,
         bnb_4bit_compute_dtype=compute_dtype,
     )
+    p, s = split_ref(model_name)
     model = AutoModelForCausalLM.from_pretrained(
-        model_name,
-        device_map=device_map,
+        p,
+        **subfolder_kwargs(s),
+        device_map=_resolve_device_map(device_map),
         quantization_config=bnb_config,
         trust_remote_code=True,
     )

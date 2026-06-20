@@ -163,7 +163,7 @@ class DatasetManifest:
         if self.retain_until:
             print(f"  Retain until: {self.retain_until[:10]}")
         if self.trained_models:
-            print(f"  Models trained on this data:")
+            print("  Models trained on this data:")
             for m in self.trained_models:
                 scores = m.get("eval_scores", {})
                 avg = sum(scores.values()) / len(scores) if scores else 0
@@ -300,7 +300,7 @@ if __name__ == "__main__":
     # ── Save manifest ─────────────────────────────────────────────────────────
     os.makedirs("/tmp/ch03_demo/v1_0_0", exist_ok=True)
     m1.save("/tmp/ch03_demo/v1_0_0/manifest.json")
-    print(f"\n  Saved to /tmp/ch03_demo/v1_0_0/manifest.json")
+    print("\n  Saved to /tmp/ch03_demo/v1_0_0/manifest.json")
 
     # ── Record a training run ─────────────────────────────────────────────────
     print("\n[2] Recording training run on v1.0.0")
@@ -318,9 +318,9 @@ if __name__ == "__main__":
     )
     m1.save("/tmp/ch03_demo/v1_0_0/manifest.json")
     print("  Training run recorded:")
-    print(f"  Checkpoint  : ./qwen-open-finance-v1-output")
-    print(f"  Eval scores : sentiment=82%  financial_qa=79%  rag=55%  math=45%")
-    print(f"  Training loss: 0.412")
+    print("  Checkpoint  : ./qwen-open-finance-v1-output")
+    print("  Eval scores : sentiment=82%  financial_qa=79%  rag=55%  math=45%")
+    print("  Training loss: 0.412")
 
     # ── Create manifest v2.0.0 ────────────────────────────────────────────────
     print("\n[3] Creating manifest v2.0.0 (with targeted synthetic data)")
@@ -368,9 +368,9 @@ if __name__ == "__main__":
     m1.log_deletion(user_id="user_98421", affected_examples=3)
     m1.save("/tmp/ch03_demo/v1_0_0/manifest.json")
     pending = [d for d in m1.deletion_log if d["status"] == "pending"]
-    print(f"  Deletion logged: user_98421  |  3 examples affected")
+    print("  Deletion logged: user_98421  |  3 examples affected")
     print(f"  Retraining required: {pending[0]['retraining_needed']}")
-    print(f"  Schedule retraining on v1.0.0 with user_98421 examples removed")
+    print("  Schedule retraining on v1.0.0 with user_98421 examples removed")
 
     # ── Load back and verify ───────────────────────────────────────────────────
     print("\n[7] Load manifest from disk and verify SHA-256")

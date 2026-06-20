@@ -5,9 +5,9 @@ weights. The base model is frozen; only the small LoRA matrices are updated.
 
 Usage:
     python -m chapter05.train_lora \\
-        --train chapter05/data/dolly_subset/train.jsonl \\
-        --valid chapter05/data/dolly_subset/valid.jsonl \\
-        --out chapter05/runs/dolly_lora
+        --train data/it_support_fmt/train.jsonl \\
+        --valid data/it_support/valid.jsonl \\
+        --out chapter05/runs/it_lora
 
 See Chapter 5, Section 5.1 (Step 2) and the README for full details.
 """

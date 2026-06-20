@@ -1,0 +1,16 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Failed to load ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so
+Loading model from bahree/ModelAdaptationBook#ch6-sft
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.17it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.52it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.46it/s]
+The following generation flags are not valid and may be ignored: ['top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+Prompt:   How do I map a network drive on Windows?
+Response: **Summary:** Map a network drive by opening File Explorer, right-clicking the network location, selecting "Map Network Drive," choosing a drive letter, and clicking "Finish."
+
+**Steps:**
+1. Open File Explorer
+2. Right-click the network location you want to map
+3. Select "Map Network Drive"
+4. Choose a drive letter from the "Drive letter" dropdown
+5. Click "Finish"

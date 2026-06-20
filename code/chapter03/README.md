@@ -1,8 +1,12 @@
 # Chapter 3: What Data Do I Need for Model Adaptation?
 
+![The synthetic-data pipeline: load seeds, build a prompt, generate with a teacher model, quality-gate, distribution-check, then mix and save.](images/readme_data_pipeline.png)
+
+*The synthetic-data pipeline this chapter builds. Starting from a few real seed examples, a frontier teacher drafts new candidates, a quality gate scores them on fidelity, format, and safety, a distribution check confirms they match your real data, and the survivors are mixed in and saved with a manifest.*
+
 The code in this folder backs two of Chapter 3's central beats:
 
-1. **The data-quality experiment** (§3.1 "Why data quality is #1") trains the same model on four versions of the same dataset and compares the results on a held-out test set. This is the chapter's empirical argument that data quality determines model quality more than any hyperparameter.
+1. **The data-quality experiment** (§3.1 "Why data quality is #1") trains the same model on four versions of the same dataset and compares the results on a held-out test set. This is the chapter's empirical argument that data quality determines model quality more than any hyperparameter. For a concrete data-quality example in *question answering* (not just classification), see the good-versus-bad answer pairs (`quality_pairs.jsonl`) in [`../contoso_qa_demo/`](../contoso_qa_demo/README.md).
 2. **The six-step synthetic data pipeline** (§3.7 "Generating synthetic training data") walks load → prompt → generate → quality-gate → distribution-check → mix-and-save end to end, using a frontier teacher model.
 
 The chapter's dataset-manifest content (DatasetManifest, lineage, retention) is implemented in a standalone module.
@@ -131,7 +135,7 @@ The synthetic data pipeline also pulls seeds from Financial PhraseBank if not al
 
 **Data-quality experiment**:
 
-Four conditions, same 150 training examples each, same hyperparameters. Only the label quality differs. Representative numbers from a single A30 bf16 run (seed 42):
+Four conditions, same 150 training examples each, same hyperparameters. Only the label quality differs. Representative numbers from a single-GPU bf16 run (seed 42); your numbers will vary in the last digit across hardware and library versions, but the ordering holds:
 
 | Condition | Description | Accuracy | macro-F1 |
 |---|---|---|---|

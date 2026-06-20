@@ -1,0 +1,121 @@
+================= environment =================
+torch 2.11.0+cu126
+platform Linux-6.8.0-124-generic-x86_64-with-glibc2.39
+cuda True
+hip None
+mps False
+DETECTED ACCELERATOR: cuda   (full=1 no_hf=0 no_train=0)
+
+================= TIER A: runs on ANY accelerator =================
+
+===> Ch4 tests
+     PASS  (0s, log: validate_logs/Ch4_tests.log)
+
+===> Ch4 RAG retrieve
+     PASS  (0s, log: validate_logs/Ch4_RAG_retrieve.log)
+
+===> Ch9 registry list
+     PASS  (0s, log: validate_logs/Ch9_registry_list.log)
+
+===> Ch9 drift BASELINE (same-domain)
+     PASS  (0s, log: validate_logs/Ch9_drift_BASELINE__same-domain_.log)
+
+===> Ch9 build drift demo sets
+     PASS  (0s, log: validate_logs/Ch9_build_drift_demo_sets.log)
+
+===> Ch9 drift SHIFTED (Kubernetes/SSO)
+     PASS  (1s, log: validate_logs/Ch9_drift_SHIFTED__Kubernetes_SSO_.log)
+
+===> Ch9 rollback demo
+     PASS  (0s, log: validate_logs/Ch9_rollback_demo.log)
+
+===> Ch3 dataset manifest
+     PASS  (0s, log: validate_logs/Ch3_dataset_manifest.log)
+
+================= TIER B: model inference (cuda) =================
+
+===> Ch5 LoRA train (smoke)
+     PASS  (763s, log: validate_logs/Ch5_LoRA_train__smoke_.log)
+
+===> Ch5 generate (load adapter)
+     PASS  (22s, log: validate_logs/Ch5_generate__load_adapter_.log)
+
+===> Ch5 evaluate (base vs adapter)
+     PASS  (1230s, log: validate_logs/Ch5_evaluate__base_vs_adapter_.log)
+
+===> Ch1 sidebar (base-only)
+     PASS  (29s, log: validate_logs/Ch1_sidebar__base-only_.log)
+
+===> Ch2 quickstart (LoRA)
+     PASS  (154s, log: validate_logs/Ch2_quickstart__LoRA_.log)
+
+===> Ch9 safety monitor
+     PASS  (70s, log: validate_logs/Ch9_safety_monitor.log)
+
+===> Ch9 canary prompts
+     PASS  (60s, log: validate_logs/Ch9_canary_prompts.log)
+
+================= HF pull-and-run (bahree/ModelAdaptationBook) =================
+
+===> HF pull ch5-lora (adapter)
+     PASS  (24s, log: validate_logs/HF_pull_ch5-lora__adapter_.log)
+
+===> HF pull ch6-sft (full model)
+     PASS  (20s, log: validate_logs/HF_pull_ch6-sft__full_model_.log)
+
+===> HF pull ch8-dpo (full model)
+     PASS  (20s, log: validate_logs/HF_pull_ch8-dpo__full_model_.log)
+
+===> HF pull ch7-distilled (adapter)
+     PASS  (24s, log: validate_logs/HF_pull_ch7-distilled__adapter_.log)
+
+===> HF pull ch8-dpo-lora (adapter on ch6-sft)
+     PASS  (23s, log: validate_logs/HF_pull_ch8-dpo-lora__adapter_on_ch6-sft_.log)
+
+================= TIER C: training (cuda, full) =================
+
+===> Ch5 QLoRA train
+     PASS  (959s, log: validate_logs/Ch5_QLoRA_train.log)
+
+===> Ch6 SFT train
+     PASS  (618s, log: validate_logs/Ch6_SFT_train.log)
+
+===> Ch7 student train
+     PASS  (425s, log: validate_logs/Ch7_student_train.log)
+
+===> Ch8 DPO train
+     PASS  (334s, log: validate_logs/Ch8_DPO_train.log)
+
+===> Ch8 LoRA-DPO train (single-card)
+     PASS  (320s, log: validate_logs/Ch8_LoRA-DPO_train__single-card_.log)
+
+===================== SUMMARY (cuda) =====================
+PASS                       |      0s | Ch4 tests                                | expect: pass (CPU)
+PASS                       |      0s | Ch4 RAG retrieve                         | expect: retrieves
+PASS                       |      0s | Ch9 registry list                        | expect: runs
+PASS                       |      0s | Ch9 drift BASELINE (same-domain)         | expect: YELLOW ~0.186
+PASS                       |      0s | Ch9 build drift demo sets                | expect: writes shifted set
+PASS                       |      1s | Ch9 drift SHIFTED (Kubernetes/SSO)       | expect: RED + kubernetes term
+PASS                       |      0s | Ch9 rollback demo                        | expect: rolls back
+PASS                       |      0s | Ch3 dataset manifest                     | expect: runs (stdlib)
+PASS                       |    763s | Ch5 LoRA train (smoke)                   | expect: trains an adapter
+PASS                       |     22s | Ch5 generate (load adapter)              | expect: loads adapter, NO KeyError
+PASS                       |   1230s | Ch5 evaluate (base vs adapter)           | expect: per-category Token-F1
+PASS                       |     29s | Ch1 sidebar (base-only)                  | expect: base inference runs
+PASS                       |    154s | Ch2 quickstart (LoRA)                    | expect: 5-step quickstart trains
+PASS                       |     70s | Ch9 safety monitor                       | expect: per-category report (rc=1 on alert is normal)
+PASS                       |     60s | Ch9 canary prompts                       | expect: runs 10 canaries
+PASS                       |     24s | HF pull ch5-lora (adapter)               | expect: loads + generates
+PASS                       |     20s | HF pull ch6-sft (full model)             | expect: loads + generates
+PASS                       |     20s | HF pull ch8-dpo (full model)             | expect: loads + generates
+PASS                       |     24s | HF pull ch7-distilled (adapter)          | expect: loads + generates
+PASS                       |     23s | HF pull ch8-dpo-lora (adapter on ch6-sft) | expect: loads + generates
+PASS                       |    959s | Ch5 QLoRA train                          | expect: 4-bit trains (bnb)
+PASS                       |    618s | Ch6 SFT train                            | expect: full fine-tune runs
+PASS                       |    425s | Ch7 student train                        | expect: distillation runs
+PASS                       |    334s | Ch8 DPO train                            | expect: DPO runs
+PASS                       |    320s | Ch8 LoRA-DPO train (single-card)         | expect: LoRA-DPO runs
+
+Logs in validate_logs/. PASS=ran+asserts ok; GUARD=correct fast-fail; ASSERT-FAIL=ran but
+output unexpected (inspect log); FAIL=error. Send validate_logs/ back for review.
+RC=0

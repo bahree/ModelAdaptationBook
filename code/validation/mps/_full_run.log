@@ -1,0 +1,83 @@
+================= environment =================
+torch 2.12.1
+platform macOS-26.3.2-arm64-arm-64bit
+cuda False
+hip None
+mps True
+DETECTED ACCELERATOR: mps   (full=0 no_hf=0 no_train=0)
+
+================= TIER A: runs on ANY accelerator =================
+
+===> Ch4 tests
+     PASS  (log: validate_logs/Ch4_tests.log)
+
+===> Ch4 RAG retrieve
+     PASS  (log: validate_logs/Ch4_RAG_retrieve.log)
+
+===> Ch9 registry list
+     PASS  (log: validate_logs/Ch9_registry_list.log)
+
+===> Ch9 drift BASELINE (same-domain)
+     PASS  (log: validate_logs/Ch9_drift_BASELINE__same-domain_.log)
+
+===> Ch9 build drift demo sets
+     PASS  (log: validate_logs/Ch9_build_drift_demo_sets.log)
+
+===> Ch9 drift SHIFTED (Kubernetes/SSO)
+     PASS  (log: validate_logs/Ch9_drift_SHIFTED__Kubernetes_SSO_.log)
+
+===> Ch9 rollback demo
+     PASS  (log: validate_logs/Ch9_rollback_demo.log)
+
+================= TIER B: model inference (mps) =================
+
+---- Ch5 LoRA train (smoke): adapter already present, reusing for the adapter-load test
+
+===> Ch5 generate (load adapter)
+     PASS  (log: validate_logs/Ch5_generate__load_adapter_.log)
+
+===> Ch9 safety monitor
+     PASS  (log: validate_logs/Ch9_safety_monitor.log)
+
+===> Ch9 canary prompts
+     PASS  (log: validate_logs/Ch9_canary_prompts.log)
+
+================= HF pull-and-run (bahree/ModelAdaptationBook) =================
+
+===> HF pull ch5-lora (adapter)
+     PASS  (log: validate_logs/HF_pull_ch5-lora__adapter_.log)
+
+===> HF pull ch6-sft (full model)
+     PASS  (log: validate_logs/HF_pull_ch6-sft__full_model_.log)
+
+===> HF pull ch8-dpo (full model)
+     PASS  (log: validate_logs/HF_pull_ch8-dpo__full_model_.log)
+
+================= TIER GUARD: QLoRA fast-fail on MPS =================
+
+===> Ch5 QLoRA (expect GUARD)
+     GUARD (expected)  (log: validate_logs/Ch5_QLoRA__expect_GUARD_.log)
+
+---- Ch6/7/8 full training: needs CUDA/ROCm 24 GB+ (OOMs on 16 GB Mac); inference covered via HF pull above
+
+===================== SUMMARY (mps) =====================
+PASS                       | Ch4 tests                                | expect: pass (CPU)
+PASS                       | Ch4 RAG retrieve                         | expect: retrieves
+PASS                       | Ch9 registry list                        | expect: runs
+PASS                       | Ch9 drift BASELINE (same-domain)         | expect: YELLOW ~0.186
+PASS                       | Ch9 build drift demo sets                | expect: writes shifted set
+PASS                       | Ch9 drift SHIFTED (Kubernetes/SSO)       | expect: RED + kubernetes term
+PASS                       | Ch9 rollback demo                        | expect: rolls back
+SKIP/MANUAL                | Ch5 LoRA train (smoke)                   | adapter already present, reusing for the adapter-load test
+PASS                       | Ch5 generate (load adapter)              | expect: loads adapter, NO KeyError
+PASS                       | Ch9 safety monitor                       | expect: per-category report (rc=1 on alert is normal)
+PASS                       | Ch9 canary prompts                       | expect: runs 10 canaries
+PASS                       | HF pull ch5-lora (adapter)               | expect: loads + generates
+PASS                       | HF pull ch6-sft (full model)             | expect: loads + generates
+PASS                       | HF pull ch8-dpo (full model)             | expect: loads + generates
+GUARD (expected)           | Ch5 QLoRA (expect GUARD)                 | expect: fast-fail: CUDA-only message
+SKIP/MANUAL                | Ch6/7/8 full training                    | needs CUDA/ROCm 24 GB+ (OOMs on 16 GB Mac); inference covered via HF pull above
+
+Logs in validate_logs/. PASS=ran+asserts ok; GUARD=correct fast-fail; ASSERT-FAIL=ran but
+output unexpected (inspect log); FAIL=error. Send validate_logs/ back for review.
+RC=0

@@ -5,7 +5,7 @@ adapter as a .tar.gz archive, and optionally pushes it to Hugging Face Hub.
 
 Usage:
     python chapter05/scripts/publish_adapter.py \\
-        --adapter chapter05/runs/dolly_lora \\
+        --adapter chapter05/runs/it_lora \\
         --repo_id my-org/dolly-lora-adapter \\
         --private
 """

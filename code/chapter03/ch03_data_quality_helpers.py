@@ -108,7 +108,7 @@ def cohen_kappa(ann_a: list[str], ann_b: list[str]) -> float:
     n      = len(ann_a)
     labels = set(ann_a) | set(ann_b)
     p_o    = sum(a == b for a, b in zip(ann_a, ann_b)) / n
-    p_e    = sum((ann_a.count(l)/n)*(ann_b.count(l)/n) for l in labels)
+    p_e    = sum((ann_a.count(lab)/n)*(ann_b.count(lab)/n) for lab in labels)
     return round((p_o - p_e) / (1 - p_e), 3) if p_e < 1.0 else 1.0
 
 
@@ -133,7 +133,7 @@ def estimate_kappa(examples: list[dict], noise_rate: float = 0.0, seed: int = 99
     ann_b  = []
     for lbl in ann_a:
         if rng.random() < noise_rate:
-            ann_b.append(rng.choice([l for l in LABEL_SET if l != lbl]))
+            ann_b.append(rng.choice([lab for lab in LABEL_SET if lab != lbl]))
         else:
             ann_b.append(lbl)
     return cohen_kappa(ann_a, ann_b)
@@ -170,7 +170,7 @@ def inject_label_noise(
     result = []
     for ex in examples:
         if rng.random() < noise_rate:
-            wrong = [l for l in LABEL_SET if l != ex["label"]]
+            wrong = [lab for lab in LABEL_SET if lab != ex["label"]]
             result.append({**ex, "label": rng.choice(wrong), "corrupted": True})
         else:
             result.append({**ex, "corrupted": False})
@@ -493,13 +493,13 @@ def print_results_table(results: dict[str, dict]) -> None:
     if d_acc < c_acc:
         diff = (c_acc - d_acc) * 100
         print(f"    Condition D scores {diff:.1f} pp LOWER than Condition C,")
-        print(f"    even though D uses cleaner base sentences.")
-        print(f"    → Systematic label errors are more damaging than natural disagreement.")
+        print("    even though D uses cleaner base sentences.")
+        print("    → Systematic label errors are more damaging than natural disagreement.")
     else:
-        print(f"    Conditions C and D degraded similarly — both error types reduce accuracy.")
+        print("    Conditions C and D degraded similarly — both error types reduce accuracy.")
 
     # Per-class F1 for clean vs corrupted
-    print(f"\n  Per-class F1  (clean A  vs  corrupted D):")
+    print("\n  Per-class F1  (clean A  vs  corrupted D):")
     print(f"  {'Class':10s}  {'A: clean':>9s}  {'D: corrupted':>12s}  {'Change':>8s}")
     print("  " + "─" * 46)
     for lbl in LABEL_SET:

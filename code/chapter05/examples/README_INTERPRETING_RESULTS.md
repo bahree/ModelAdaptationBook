@@ -1,20 +1,20 @@
 # Understanding Your Evaluation Results
 
-This guide helps you interpret the evaluation report from `listing_5_3_evaluate.py`.
+This guide helps you interpret the evaluation report from `listing_5_3_evaluate.py` on the IT support dataset.
 
 ---
 
-## Quick Reference: What Good Results Look Like
+## Quick Reference: What These Results Look Like
 
-### For 400 Training Examples (3 Epochs)
+### For 450 Training Examples (3 Epochs), IT Support Dataset
 
-| Metric | Base Model | After LoRA | Improvement |
-|--------|-----------|-----------|-------------|
-| **Exact Match** | 0-10% | 5-20% | +5-15% |
-| **Token-F1** | 0.20-0.35 | 0.35-0.55 | +0.10-0.20 |
-| **Safety Refusal** | 90-100% | 90-100% | ±0-5% |
+| Metric | Base Model | After LoRA | Change |
+|--------|-----------|-----------|--------|
+| **Exact Match** | 0% | 0% | flat (models paraphrase) |
+| **Token-F1** | ~0.15-0.16 | ~0.15-0.16 | roughly flat |
+| **Safety Refusal** | 100% | 60% | regression (helpful-only data) |
 
-**Key insight:** With only 400 training examples, don't expect high absolute numbers. Focus on **positive deltas** (improvements).
+**Key insight:** On long generative IT answers, token-F1 barely moves and exact match stays at zero. The metric that actually changes is the **safety refusal rate**, and it changes for the worse.
 
 ---
 
@@ -25,185 +25,138 @@ This guide helps you interpret the evaluation report from `listing_5_3_evaluate.
 ```
 ## base
 - **Overall exact match**: 0.0%
-- **Overall token-F1**: 0.212
+- **Overall token-F1**: 0.158
 - **Safety refusal rate**: 100.0%
 
 ## adapter
 - **Overall exact match**: 0.0%
-- **Overall token-F1**: 0.344
+- **Overall token-F1**: 0.156
 - **Safety refusal rate**: 60.0%
 
 ## adapter (Improvement vs Base)
-- **Overall token-F1 Δ**: +0.1321 (13.2 percentage points)
-- **Safety refusal rate Δ**: -40.0% (REGRESSION!)
+- **Overall token-F1 Δ**: -0.0014 (essentially flat)
+- **Safety refusal rate Δ**: -40.0% (REGRESSION)
 ```
 
 ---
 
 ## What Each Metric Means
 
-### 1. **Exact Match (EM)**
+### 1. Exact Match (EM)
 
 **What it measures:** Percentage of responses that *exactly* match the reference answer after whitespace normalization.
 
-**Typical values:**
-- Base model: 0-10% (general-purpose models rarely match exactly)
-- After LoRA (400 examples): 5-20%
-- After LoRA (2000 examples): 20-40%
+**What you see here:** 0% for base and adapter alike.
 
-**Why it's often 0%:**
-- Models rephrase answers (e.g., "The capital is Paris" vs "Paris is the capital")
-- Small test sets (50 examples) amplify variability
-- Instruction-tuned models prioritize helpfulness over exact phrasing
+**Why it's 0%:**
+- IT answers are long and open-ended; the model paraphrases instead of copying.
+- "Restart the VPN client and update it" and "Update your VPN client, then restart it" are both correct but share almost no exact phrasing.
+- Instruction-tuned models prioritize a helpful answer over matching a reference string.
 
-**What to look for:** Positive delta (Δ). Even +5% EM is meaningful.
+**What to look for:** Don't read into exact match for this task. It is the wrong tool for long generative answers.
 
 ---
 
-### 2. **Token-F1**
+### 2. Token-F1
 
 **What it measures:** Word overlap between generated and reference responses. Range: 0.0 (no overlap) to 1.0 (perfect overlap).
 
-**Typical values:**
-- Base model: 0.15-0.35
-- After LoRA (400 examples): 0.30-0.55
-- After LoRA (2000 examples): 0.50-0.75
+**What you see here:**
+- Base: 0.158
+- Adapter: 0.156 (a 0.0014 drop, i.e. flat)
 
-**Interpreting scores:**
-- **< 0.20**: Model is not following instructions well
-- **0.20-0.40**: Partial understanding, some relevant content
-- **0.40-0.60**: Good instruction-following, most content relevant
-- **> 0.60**: Strong alignment with reference answers
+**Why it stays flat:** On long free-form IT answers, token overlap with a *single* reference is a weak signal. Two correct troubleshooting answers can use entirely different words. So token-F1 lands in the same ~0.15-0.16 band before and after fine-tuning, and the small per-category swings are mostly noise across 7-8 examples per topic.
 
-**In your report:**
-- Base: 0.212 (weak)
-- Adapter: 0.344 (moderate, +13.2% improvement) ✅
-
-**Verdict:** **This is actually decent improvement!** Token-F1 jumped 62% (0.212 → 0.344). The adapter learned to generate more relevant responses.
+**The takeaway:** Token-F1 is the wrong lens here. The chapter uses **format-adherence checks** (does the answer follow the expected IT-support structure?) and an **LLM judge** for the real quality signal. Use those, not token-F1, to decide whether the adapter improved.
 
 ---
 
-### 3. **Safety Refusal Rate**
+### 3. Safety Refusal Rate
 
 **What it measures:** Percentage of harmful/unsafe prompts where the model refuses to answer.
 
-**Typical values:**
-- Well-aligned models: 90-100% refusal
-- Undertrained/misaligned models: 50-80% refusal
+**What you see here:**
+- Base: 100% (Qwen3-4B-Instruct is well-aligned out of the box)
+- Adapter: 60% (-40% REGRESSION)
 
-**In your report:**
-- Base: 100% (perfect! Qwen3-4B-Instruct is well-aligned)
-- Adapter: 60% (-40% REGRESSION) ⚠️
-
-**Verdict:** **This is a safety regression.** Your fine-tuned model is less safe than the base model.
+**Verdict:** This is a safety regression, and it is the single most important result in the report.
 
 **Why this happened:**
-- Dolly 15K dataset doesn't include safety training data
-- LoRA adapters can override base model safety behaviors
-- 400 examples of neutral instructions "diluted" the safety alignment
+- The IT support training data is **helpful-only**: it contains no refusals and no safety examples.
+- Fine-tuning on helpful-only data erodes the base model's learned refusal behavior.
+- 450 examples of "be helpful and answer the IT question" dilute the alignment that produced refusals.
 
 **How to fix:**
-1. **Add safety examples to training data** (10-20% of dataset)
-2. **Use a smaller LoRA rank** (r=8 instead of r=16) to preserve more base behavior
-3. **Reduce training epochs** (2 instead of 3)
-4. **Use QLoRA with lower learning rate** (more conservative)
+1. **Add safety examples to the training data** (harmful prompts paired with refusals, ~10-20% of the mix). This is the real fix.
+2. Keep a refusal slice in the data permanently so retraining doesn't undo it.
+3. Re-run the eval and confirm the refusal rate recovers before deploying.
+
+Note that QLoRA in this project's runs kept the refusal rate at 100% on the same eval, so the regression is not inevitable; it depends on the run and the data mix. Always measure it.
 
 ---
 
 ## Per-Category Results
 
 ```
-**Per-Category Improvements:**
-- classification: EM Δ=+0.0%, F1 Δ=+0.4851  ✅ (48% improvement!)
-- summarization: EM Δ=+0.0%, F1 Δ=+0.2945  ✅ (29% improvement!)
-- open_qa: EM Δ=+0.0%, F1 Δ=+0.1576       ✅ (15% improvement!)
-- brainstorming: EM Δ=+0.0%, F1 Δ=-0.0235 ⚠️ (slight regression)
-- general_qa: EM Δ=+0.0%, F1 Δ=-0.0687    ⚠️ (regression)
+**Per-Category Improvements (LoRA vs base):**
+- general: F1 Δ=+0.0172
+- hardware: F1 Δ=+0.0112
+- networking: F1 Δ=+0.0299
+- software: F1 Δ=+0.0138
+- linux: F1 Δ=-0.0644
+- windows: F1 Δ=-0.0137
+- security: F1 Δ=-0.0063
 ```
 
-**Interpretation:**
-- **Classification tasks** improved the most (+48% F1) — adapter learned to categorize well
-- **Summarization** also strong (+29% F1)
-- **Open QA** improved (+15% F1)
-- **Brainstorming/General QA** slightly regressed — adapter specialized at the cost of generalization
-
-**This is normal:** LoRA adapters trade off some generalization for specialization. The dataset had fewer brainstorming examples, so that category didn't improve as much.
+**Interpretation:** Each category has only 7-8 examples, so these swings are small and mostly noise. A +0.03 here or a -0.06 there does not establish that the adapter is better or worse at networking versus linux. Treat per-category token-F1 as a sanity check, not a verdict.
 
 ---
 
-## Overall Assessment of Your Results
+## Overall Assessment of These Results
 
-### ✅ **Good News:**
-1. **Token-F1 improved by 13.2 percentage points** (62% relative improvement)
-2. **Strong gains in classification (+48%), summarization (+29%), and open QA (+15%)**
-3. **No catastrophic forgetting** — base capabilities mostly preserved
-4. **Training completed successfully** without errors
+### What the numbers say
+1. **Token-F1 is flat** (0.158 -> 0.156). Fine-tuning did not move the token-overlap metric, which is expected for long generative IT answers.
+2. **Exact match is 0%** throughout, because the model paraphrases.
+3. **Safety regressed** from 100% to 60%, because the training data has no refusals.
 
-### ⚠️ **Areas for Improvement:**
-1. **Safety regression (-40%)** — This is the biggest concern
-2. **0% exact match** — Indicates the model's phrasing differs from references (common but improvable)
-3. **Mixed per-category results** — Some tasks regressed slightly
+### What actually changed (use the right tools)
+- The adapter changes answer **style and format**, not token overlap. The inference example (`example_inference_base_vs_adapter.md`) shows the base model emitting long, emoji-and-markdown answers while the adapter emits concise IT-support prose. That difference is real and is what fine-tuning bought you; token-F1 just doesn't capture it.
+- Use **format-adherence** and an **LLM judge** to measure the quality change, and watch the **safety refusal rate** for regressions.
 
-### 🎯 **Overall Verdict:**
+### Overall verdict
 
-**This is a typical "first LoRA run" result with a small dataset (400 examples).** You successfully fine-tuned the model and saw meaningful improvement in instruction-following (Token-F1). However, the safety regression needs to be addressed before deployment.
-
-**For a book chapter demonstration:** These results are **pedagogically valuable** — they show both success (F1 improvement) and a common pitfall (safety regression), teaching readers to interpret real-world results critically.
+**This is a typical, honest first LoRA run on a small domain dataset.** It teaches two real lessons: (1) token-F1 is the wrong metric for long generative answers, and (2) fine-tuning on helpful-only data can erode safety refusals. Both are worth showing readers rather than hiding behind a cherry-picked metric.
 
 ---
 
 ## Next Steps to Improve
 
-### Option 1: Quick Fix (Preserve Safety)
-```bash
-# Reduce LoRA rank to preserve more base model behavior
-python -m chapter05.train_lora \
-  --train chapter05/data/dolly_subset/train.jsonl \
-  --valid chapter05/data/dolly_subset/valid.jsonl \
-  --out chapter05/runs/dolly_lora_safe \
-  --lora_r 8 \
-  --epochs 2
-```
+### Option 1: Restore Safety (the real fix)
+1. Collect 50-100 safety examples (harmful prompts with refusal responses).
+2. Mix them into the training data (10-20% of total).
+3. Retrain with the same hyperparameters and re-check the refusal rate.
 
-### Option 2: Add Safety Data
-1. Collect 50-100 safety examples (harmful prompts with refusal responses)
-2. Mix into training data (10-20% of total)
-3. Retrain with same hyperparameters
+### Option 2: Measure Quality the Right Way
+- Run the format-adherence check and the LLM judge from the chapter instead of leaning on token-F1.
+- Compare base vs adapter on answer structure and tone, as in the inference example.
 
 ### Option 3: More Training Data
-- Scale up to 1000-2000 Dolly examples
-- Expect EM: 15-30%, Token-F1: 0.50-0.70
-- Safety may improve with more diverse data
-
----
-
-## Comparing to Chapter Expectations
-
-**Chapter said to expect:**
-- Base: ~65-70% EM, ~0.75-0.80 F1
-- Adapter: ~80-88% EM, ~0.85-0.90 F1
-
-**Why your results are lower:**
-1. **Different base model behavior:** Qwen3-4B-Instruct prioritizes conversational style over exact match
-2. **Small dataset:** 400 examples vs 2000+ in typical production settings
-3. **Evaluation stringency:** Your test set may have more open-ended questions
-4. **Random variation:** With only 50 test examples, variance is high
-
-**This is OK!** The chapter numbers are aspirational (larger dataset). Your results show the *pattern* that matters: **positive improvement** after fine-tuning.
+- Scale the IT support dataset up beyond 450 examples for a stronger, more consistent adapter.
+- Keep a permanent safety slice in the mix so retraining never reintroduces the regression.
 
 ---
 
 ## Key Takeaways
 
-1. **Focus on deltas (Δ), not absolute scores.** Your +13.2% Token-F1 improvement is meaningful.
+1. **Pick the right metric.** Token-F1 and exact match barely move on long generative IT answers. Use format-adherence and an LLM judge.
 
-2. **Safety matters.** Always check safety metrics. Your -40% regression is a red flag for production but a great learning moment for the chapter.
+2. **Safety matters most here.** The 100% -> 60% refusal drop is the headline result and a deployment blocker until fixed.
 
-3. **Per-category insights are valuable.** They show which tasks your adapter specialized in (classification, summarization) vs. which regressed (brainstorming).
+3. **Safety data is absent from helpful-only training.** The IT support set has no refusals, which is exactly why refusals eroded. Add them back.
 
-4. **400 examples is a starting point, not the end.** Scale up to 1000-2000 for production-grade results.
+4. **Per-category swings are noise.** With 7-8 examples per topic, don't over-read small deltas.
 
-5. **These are real results.** Don't cherry-pick. Show readers both successes and pitfalls.
+5. **These are real results.** Don't cherry-pick. Show readers both the flat token-F1 and the safety regression.
 
 ---
 
@@ -211,28 +164,26 @@ python -m chapter05.train_lora \
 
 **Suggested narrative:**
 
-> "After training, we evaluate the adapter on 50 held-out examples. The report shows:
-> 
-> - **Token-F1 improved from 0.21 → 0.34** (+13 percentage points), indicating the adapter learned to generate more relevant responses.
-> - **Classification tasks saw a 48% improvement**, demonstrating the adapter specialized in categorization.
-> - **Safety refusal rate dropped from 100% → 60%** (−40%), a regression we need to address.
-> 
-> With only 400 training examples, we don't expect perfect scores. The key insight is **positive improvement** in instruction-following, measured by Token-F1. However, the safety regression highlights a critical lesson: fine-tuning can inadvertently override base model safety. To fix this, we'd add safety examples to the training data or use a smaller LoRA rank (r=8) to preserve more base behavior.
-> 
-> For production, scale up to 1000-2000 examples and always validate safety before deployment."
+> "After training, we evaluate the adapter on 50 held-out IT support examples. The report shows:
+>
+> - **Token-F1 stayed flat** (0.158 -> 0.156). On long generative answers, token overlap with a single reference is a weak signal, so we rely on format-adherence checks and an LLM judge for the real quality picture.
+> - **Exact match is 0%** throughout, because the model paraphrases rather than copying references.
+> - **Safety refusal rate dropped from 100% to 60%** (-40%). Our IT support data is helpful-only, with no refusals, so fine-tuning eroded the base model's safety behavior.
+>
+> The lesson is twofold: choose a metric that fits long generative answers, and watch safety closely. To restore refusals, we'd add explicit safety examples to the training mix and re-evaluate before deployment."
 
 ---
 
 ## Questions?
 
 **Q: Why is exact match 0%?**  
-A: Instruction-tuned models rephrase answers. Focus on Token-F1 instead.
+A: Instruction-tuned models paraphrase long IT answers. Exact match is the wrong tool here; use format-adherence and an LLM judge.
 
-**Q: Is 0.344 F1 good?**  
-A: For 400 examples, yes! It's a 62% improvement over base (0.212). With 2000 examples, expect 0.50-0.70.
+**Q: Token-F1 barely moved. Did fine-tuning do anything?**  
+A: Yes, but not in token overlap. It changed answer style and format (concise IT-support prose vs long markdown). Token-F1 doesn't capture that; the inference example does.
 
 **Q: Should I deploy this adapter?**  
-A: **No.** The safety regression (-40%) is a blocker. Fix safety first.
+A: Not as-is. The safety regression (100% -> 60%) is a blocker. Add safety data and re-check first.
 
 **Q: How do I improve results?**  
-A: (1) More data (1000-2000 examples), (2) Add safety examples, (3) Try smaller LoRA rank (r=8), (4) Tune hyperparameters (epochs, learning rate).
+A: (1) Add safety examples to training, (2) measure quality with format-adherence and an LLM judge, (3) scale up the dataset while keeping a permanent safety slice.

@@ -1,0 +1,6 @@
+# These cross-accelerator validation logs are committed deliberately. The repo
+# root ignores *.log, so re-include them here. This nested rule travels WITH the
+# folder when it is copied into the shared and public repos, so the logs publish
+# even if a consuming repo's root .gitignore differs or is stale.
+!*.log
+!**/*.log
