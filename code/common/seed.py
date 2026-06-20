@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import os
 import random
-from typing import Optional
 
 
 def seed_everything(seed: int) -> None:

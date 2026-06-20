@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "~/FTBook-pvt/code/chapter05/train_qlora.py", line 170, in <module>
+    main()
+  File "~/FTBook-pvt/code/chapter05/train_qlora.py", line 107, in main
+    model = load_base_model_qlora(
+            ^^^^^^^^^^^^^^^^^^^^^^
+  File "~/FTBook-pvt/code/chapter05/modeling.py", line 146, in load_base_model_qlora
+    raise RuntimeError(
+RuntimeError: QLoRA (4-bit) requires a CUDA GPU: bitsandbytes does not support Apple Silicon (MPS) or CPU. On those platforms use LoRA instead (train_lora / load_base_model_lora), which runs in full precision and fits the 4B model on a single MPS device.

@@ -15,10 +15,10 @@ The book's code is organized by chapter. Every chapter has runnable code now.
 | Folder | Status | Contents |
 |---|---|---|
 | **`chapter01/`** | **Runnable** | Reproducibility script for the §1.6 sidebar (`run_sidebar_example.py`). Runs the same fictional-policy prompt through base Qwen3-4B, the Chapter 5 LoRA adapter, and the Chapter 6 SFT model. Base-only mode runs without Chapter 5/6 artifacts on disk. |
-| **`chapter02/`** | **Runnable** | A five-step LoRA fine-tuning quick-start (`quickstart.py`) on Qwen3-4B-Instruct-2507 using a 40-example Dolly subset: dataset prep, LoRA via TRL's `SFTTrainer`, generation, and adapter save. Runs in under 10 minutes on a 12 GB GPU and needs only the base install. Also includes `run_chapter5_adapter.py`, an optional preview that loads the chapter 5 adapter for a base-vs-adapter comparison. |
+| **`chapter02/`** | **Runnable** | A five-step LoRA fine-tuning quick-start (`quickstart.py`) on Qwen3-4B-Instruct-2507 using a 40-example slice of the IT-support dataset: dataset prep, LoRA via TRL's `SFTTrainer`, generation, and adapter save. Runs in under 10 minutes on a 12 GB GPU and needs only the base install. Also includes `run_chapter5_adapter.py`, an optional preview that loads the chapter 5 adapter for a base-vs-adapter comparison. |
 | **`chapter03/`** | **Runnable** | Data-quality experiment (`ch03_data_quality_explore.py` + helpers), six-step synthetic data pipeline (`ch03_synthetic_data_generation.py`), and `DatasetManifest` module (`ch03_datasetmanifest.py`). The experiment needs a GPU and the `chapter03` extra; the synthetic pipeline needs an Anthropic API key; the manifest module is pure stdlib. |
 | **`chapter04/`** | **Runnable** | In-context learning, few-shot prompting, prompt validator, minimal RAG pipeline, retrieval-quality eval (Precision@k / Recall@k / Hit@1). CPU-friendly. |
-| **`chapter05/`** | **Runnable** | LoRA and QLoRA fine-tuning of Qwen3-4B-Instruct-2507 on a Dolly subset. Train, evaluate, run inference, optional QLoRA. |
+| **`chapter05/`** | **Runnable** | LoRA and QLoRA fine-tuning of Qwen3-4B-Instruct-2507 on the IT-support dataset (Stack Exchange IT Q&A plus a Dolly mix-in). Train, evaluate, run inference, optional QLoRA. |
 | **`chapter06/`** | **Runnable** | Full-parameter SFT on the same base model, with overfit monitoring, three-way base-vs-LoRA-vs-SFT eval, behavioral tests, and a safety regression suite. |
 | **`chapter07/`** | **Runnable** | Black-box distillation from the chapter 6 SFT teacher into a LoRA student. Quality filtering, three-way comparison, safety robustness check, and an optional OpenRouter-backed SFT-vs-frontier comparison. |
 | **`chapter08/`** | **Runnable** | DPO (Direct Preference Optimization) on the chapter 6 SFT model using TRL's `DPOTrainer`, three-way base-vs-SFT-vs-DPO comparison, safety-after-DPO check. |
@@ -262,6 +262,25 @@ echo 'export HF_TOKEN="hf_..."' >> ~/.bashrc
 
 **Note:** If you don't set a token, downloads still work but you may see warnings about unauthenticated requests. This is harmless.
 
+## API keys (optional)
+
+A few scripts call a hosted LLM API. **None of the core Chapter 1-5 hands-on work (LoRA/QLoRA training, evaluation, inference) needs an API key**, and the IT support dataset is already committed under `data/it_support*`, so you only need a key if you want to *rebuild the data from scratch* or run the optional generation / judging scripts.
+
+Two keys are used, depending on what you run:
+
+- **`OPENROUTER_API_KEY`** — the dataset build's answer-reformatting step (`scripts/reformat_it_answers.py`), the Chapter 5 Contoso capstone seed expansion (`contoso_qa_demo/expand_seed.py`), the LLM-as-judge evaluation (`scripts/eval_3lens.py`), and Chapter 7's optional frontier comparison. Create a key at <https://openrouter.ai/keys>.
+- **`ANTHROPIC_API_KEY`** — only Chapter 3's synthetic-data pipeline (`chapter03/ch03_synthetic_data_generation.py`), which calls the Anthropic API directly. Create a key at <https://console.anthropic.com>.
+
+Set whichever you need in `code/.env` (gitignored, auto-loaded by `common/env.py`), or export it in your shell:
+
+```bash
+# code/.env
+OPENROUTER_API_KEY=sk-or-...
+ANTHROPIC_API_KEY=sk-ant-...
+```
+
+If a script that needs a key can't find one, it exits with a clear message naming the variable.
+
 ## Getting Started
 
 Once you've completed the setup above, navigate to the chapter you want to work on. Every chapter from 1 onward ships runnable code.
@@ -293,6 +312,20 @@ Each chapter README contains:
   - To silence the warning: set `HF_HUB_DISABLE_SYMLINKS_WARNING=1`.
 - You may see a note about **Xet storage** and `hf_xet` not being installed. This is optional; downloads still work.
 - You may see non-fatal warnings from Transformers (e.g. deprecations). These should not prevent downloads or runs.
+
+## The training data (the IT-support dataset)
+
+The hands-on chapters train on the book's **IT-support dataset**: real Stack Exchange IT Q&A (Super User, Ask Ubuntu, and Server Fault), filtered to genuine support topics, plus a small slice of Databricks Dolly mixed in to preserve general capability. Build it once from this `code/` directory:
+
+```bash
+# 1. Build the dataset -> data/it_support/ (train.jsonl, valid.jsonl, preferences.jsonl, manifest.json, attribution.jsonl)
+python scripts/build_it_support_dataset.py
+
+# 2. Reformat the answers into the house style -> data/it_support_fmt/train.jsonl
+python scripts/reformat_it_answers.py
+```
+
+The builder depends on `beautifulsoup4` (to clean the Stack Exchange HTML) and `datasets`, both pulled in by the base install. Per-example source URLs for the Stack Exchange content are written to `data/it_support/attribution.jsonl` (dataset licenses and redistribution terms are in the [main README](../README.md#license-and-data-attribution)). The chapter 2 quickstart and chapter 5 onward load the prepared data from `data/it_support_fmt` (and `data/it_support/valid.jsonl`).
 
 ## Shared conventions across chapters
 

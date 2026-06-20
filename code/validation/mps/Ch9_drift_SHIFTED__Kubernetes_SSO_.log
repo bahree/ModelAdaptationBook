@@ -1,0 +1,20 @@
+Reference prompts: 450
+Production prompts: 50
+
+Drift score:         0.6855
+Centroid similarity: 0.3145
+Alert level:         RED
+
+Top drift terms (prominent in production, weak in reference):
+  sso                  delta=+0.0761
+  kubernetes           delta=+0.0626
+  deployment           delta=+0.0520
+  container            delta=+0.0513
+  configure            delta=+0.0397
+  pod                  delta=+0.0383
+  pods                 delta=+0.0330
+  cloud                delta=+0.0318
+
+High drift detected -- consider retraining or data refresh.
+
+Report saved to validate_logs/drift_shifted.json

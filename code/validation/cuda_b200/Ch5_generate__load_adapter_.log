@@ -1,0 +1,8 @@
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.70it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.68it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.49it/s]
+The following generation flags are not valid and may be ignored: ['top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+<|im_start|>system
+You are a helpful assistant.<|im_end|>
+<|im_start|>user
+How do I reset my Windows password?<|im_end|>
+<|im_start|>assistant
+You can reset your Windows password using a password reset disk, or by booting into Safe Mode and changing the password through the command line.<|im_end|>

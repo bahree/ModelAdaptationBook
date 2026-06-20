@@ -1,5 +1,9 @@
 # Chapter 4 -- In-Context Learning, Few-Shot, and RAG
 
+![Two axes of adaptation: prompting, few-shot, and RAG change the input; LoRA, SFT, and alignment change the model; hybrids combine both.](images/readme_two_axes.png)
+
+*Two different ways to adapt a model. Prompting, few-shot, and RAG change what the model sees (the input axis); LoRA, SFT, and alignment change what the model is (the model axis). They are complementary, not competing, and most production systems combine both. This chapter covers the input-axis techniques.*
+
 This chapter covers how to get useful work out of a model without training it: few-shot prompting, many-shot prompting on long-context models, prompt validation against held-out test sets, and a minimal retrieval-augmented generation (RAG) pipeline. The code in this folder backs the four numbered listings in the chapter.
 
 The code is a mix of **CPU-friendly** modules (many-shot assembly, RAG, the prompt validator with the mock backend) and **GPU-friendly** modules (the full prompt validator and the few-shot demo with the transformers backend). Most of the chapter can be exercised on a laptop; the LLM-calling demos benefit from a GPU.

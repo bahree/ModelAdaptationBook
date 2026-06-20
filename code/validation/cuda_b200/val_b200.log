@@ -1,0 +1,311 @@
+===== BOOTSTRAP START Thu Jun 18 05:56:27 UTC 2026 =====
+installing uv...
+downloading uv 0.11.21 x86_64-unknown-linux-gnu
+installing to ~/.local/bin
+  uv
+  uvx
+everything's installed!
+uv 0.11.21 (x86_64-unknown-linux-gnu)
+Using CPython 3.12.3 interpreter at: /usr/bin/python3.12
+Creating virtual environment at: .venv
+Activate with: source .venv/bin/activate
+Python 3.12.3
+----- trying torch from https://download.pytorch.org/whl/cu128  -----
+Resolved 33 packages in 3.62s
+Downloading nvidia-cusparse-cu12 (274.9MiB)
+Downloading nvidia-cuda-nvrtc-cu12 (84.0MiB)
+Downloading nvidia-nccl-cu12 (283.0MiB)
+Downloading nvidia-cublas-cu12 (566.8MiB)
+Downloading nvidia-cufile-cu12 (1.1MiB)
+Downloading nvidia-nvjitlink-cu12 (37.4MiB)
+Downloading nvidia-cusparselt-cu12 (273.9MiB)
+Downloading nvidia-cudnn-cu12 (627.4MiB)
+Downloading nvidia-cufft-cu12 (184.2MiB)
+Downloading nvidia-nvshmem-cu12 (132.7MiB)
+Downloading nvidia-cuda-cupti-cu12 (9.8MiB)
+Downloading nvidia-cusolver-cu12 (255.1MiB)
+Downloading nvidia-curand-cu12 (60.7MiB)
+Downloading networkx (2.0MiB)
+Downloading cuda-bindings (11.6MiB)
+Downloading sympy (6.0MiB)
+Downloading numpy (15.9MiB)
+Downloading pillow (6.8MiB)
+Downloading triton (179.6MiB)
+Downloading torchaudio (1.6MiB)
+Downloading torch (782.3MiB)
+Downloading torchvision (7.7MiB)
+ Downloaded nvidia-cufile-cu12
+ Downloaded torchaudio
+ Downloaded nvidia-cuda-cupti-cu12
+ Downloaded cuda-bindings
+ Downloaded torchvision
+ Downloaded pillow
+ Downloaded nvidia-nvjitlink-cu12
+ Downloaded nvidia-cuda-nvrtc-cu12
+ Downloaded networkx
+ Downloaded triton
+ Downloaded nvidia-curand-cu12
+ Downloaded numpy
+ Downloaded nvidia-nccl-cu12
+ Downloaded nvidia-cusparse-cu12
+ Downloaded nvidia-nvshmem-cu12
+ Downloaded sympy
+ Downloaded nvidia-cusparselt-cu12
+ Downloaded nvidia-cufft-cu12
+ Downloaded nvidia-cusolver-cu12
+ Downloaded nvidia-cudnn-cu12
+ Downloaded nvidia-cublas-cu12
+ Downloaded torch
+Prepared 33 packages in 29.33s
+Installed 33 packages in 104ms
+ + cuda-bindings==12.9.4
+ + cuda-pathfinder==1.2.2
+ + cuda-toolkit==12.8.1
+ + filelock==3.29.0
+ + fsspec==2026.4.0
+ + jinja2==3.1.6
+ + markupsafe==3.0.3
+ + mpmath==1.3.0
+ + networkx==3.6.1
+ + numpy==2.4.4
+ + nvidia-cublas-cu12==12.8.4.1
+ + nvidia-cuda-cupti-cu12==12.8.90
+ + nvidia-cuda-nvrtc-cu12==12.8.93
+ + nvidia-cuda-runtime-cu12==12.8.90
+ + nvidia-cudnn-cu12==9.19.0.56
+ + nvidia-cufft-cu12==11.3.3.83
+ + nvidia-cufile-cu12==1.13.1.3
+ + nvidia-curand-cu12==10.3.9.90
+ + nvidia-cusolver-cu12==11.7.3.90
+ + nvidia-cusparse-cu12==12.5.8.93
+ + nvidia-cusparselt-cu12==0.7.1
+ + nvidia-nccl-cu12==2.28.9
+ + nvidia-nvjitlink-cu12==12.8.93
+ + nvidia-nvshmem-cu12==3.4.5
+ + nvidia-nvtx-cu12==12.8.90
+ + pillow==12.2.0
+ + setuptools==70.2.0
+ + sympy==1.14.0
+ + torch==2.11.0+cu128
+ + torchaudio==2.11.0+cu128
+ + torchvision==0.26.0+cu128
+ + triton==3.6.0
+ + typing-extensions==4.15.0
+torch 2.11.0+cu128 cuda 12.8
+arch_list ['sm_75', 'sm_80', 'sm_86', 'sm_90', 'sm_100', 'sm_120']
+device NVIDIA B200
+MATMUL_OK True
+===== TORCH_WHEEL_USED: stable cu128 (ok=1) =====
+Resolved 87 packages in 1.49s
+   Building model-adaptation-book @ file://~/FTBook-pvt/code
+Downloading ruff (11.0MiB)
+Downloading aiohttp (1.7MiB)
+Downloading hf-xet (4.3MiB)
+Downloading tokenizers (3.1MiB)
+Downloading pygments (1.2MiB)
+Downloading pyarrow (46.6MiB)
+Downloading pandas (10.4MiB)
+Downloading scipy (33.6MiB)
+Downloading transformers (11.4MiB)
+Downloading scikit-learn (8.7MiB)
+ Downloaded pygments
+ Downloaded aiohttp
+ Downloaded tokenizers
+ Downloaded hf-xet
+      Built model-adaptation-book @ file://~/FTBook-pvt/code
+ Downloaded scikit-learn
+ Downloaded ruff
+ Downloaded transformers
+ Downloaded pandas
+ Downloaded scipy
+ Downloaded pyarrow
+Prepared 57 packages in 4.52s
+Installed 57 packages in 33ms
+ + accelerate==1.14.0
+ + aiohappyeyeballs==2.6.2
+ + aiohttp==3.14.1
+ + aiosignal==1.4.0
+ + anyio==4.14.0
+ + attrs==26.1.0
+ + beautifulsoup4==4.15.0
+ + certifi==2026.6.17
+ + charset-normalizer==3.4.7
+ + datasets==5.0.0
+ + dill==0.4.1
+ + evaluate==0.4.6
+ + frozenlist==1.8.0
+ + h11==0.16.0
+ + hf-xet==1.5.1
+ + httpcore==1.0.9
+ + httpx==0.28.1
+ + huggingface-hub==0.36.2
+ + idna==3.18
+ + iniconfig==2.3.0
+ + joblib==1.5.3
+ + markdown-it-py==4.2.0
+ + mdurl==0.1.2
+ + model-adaptation-book==0.1.0 (from file://~/FTBook-pvt/code)
+ + multidict==6.7.1
+ + multiprocess==0.70.19
+ + narwhals==2.22.1
+ + packaging==26.2
+ + pandas==3.0.3
+ + peft==0.17.1
+ + pluggy==1.6.0
+ + propcache==0.5.2
+ + psutil==7.2.2
+ + pyarrow==24.0.0
+ + pygments==2.20.0
+ + pytest==9.1.0
+ + python-dateutil==2.9.0.post0
+ + python-dotenv==1.2.2
+ + pyyaml==6.0.3
+ + regex==2026.5.9
+ + requests==2.34.2
+ + rich==15.0.0
+ + ruff==0.15.17
+ + safetensors==0.5.3
+ + scikit-learn==1.9.0
+ + scipy==1.17.1
+ + sentence-transformers==5.6.0
+ + six==1.17.0
+ + soupsieve==2.8.4
+ + threadpoolctl==3.6.0
+ + tokenizers==0.22.2
+ + tqdm==4.68.3
+ + transformers==4.57.6
+ + trl==1.6.0
+ + urllib3==2.7.0
+ + xxhash==3.7.0
+ + yarl==1.24.2
+Resolved 32 packages in 413ms
+Downloading bitsandbytes (57.8MiB)
+ Downloaded bitsandbytes
+Prepared 1 package in 2.68s
+Installed 1 package in 30ms
+ + bitsandbytes==0.49.2
+===== ENV READY Thu Jun 18 05:57:15 UTC 2026 =====
+final torch 2.11.0+cu128 cuda_avail True NVIDIA B200
+===== VALIDATE START Thu Jun 18 05:57:17 UTC 2026 =====
+================= environment =================
+torch 2.11.0+cu128
+platform Linux-6.11.0-1016-nvidia-x86_64-with-glibc2.39
+cuda True
+hip None
+mps False
+DETECTED ACCELERATOR: cuda   (full=1 no_hf=0 no_train=0)
+
+================= TIER A: runs on ANY accelerator =================
+
+===> Ch4 tests
+     PASS  (1s, log: validate_logs/Ch4_tests.log)
+
+===> Ch4 RAG retrieve
+     PASS  (0s, log: validate_logs/Ch4_RAG_retrieve.log)
+
+===> Ch9 registry list
+     PASS  (0s, log: validate_logs/Ch9_registry_list.log)
+
+===> Ch9 drift BASELINE (same-domain)
+     PASS  (0s, log: validate_logs/Ch9_drift_BASELINE__same-domain_.log)
+
+===> Ch9 build drift demo sets
+     PASS  (0s, log: validate_logs/Ch9_build_drift_demo_sets.log)
+
+===> Ch9 drift SHIFTED (Kubernetes/SSO)
+     PASS  (0s, log: validate_logs/Ch9_drift_SHIFTED__Kubernetes_SSO_.log)
+
+===> Ch9 rollback demo
+     PASS  (0s, log: validate_logs/Ch9_rollback_demo.log)
+
+===> Ch3 dataset manifest
+     PASS  (0s, log: validate_logs/Ch3_dataset_manifest.log)
+
+================= TIER B: model inference (cuda) =================
+
+===> Ch5 LoRA train (smoke)
+     PASS  (993s, log: validate_logs/Ch5_LoRA_train__smoke_.log)
+
+===> Ch5 generate (load adapter)
+     PASS  (17s, log: validate_logs/Ch5_generate__load_adapter_.log)
+
+===> Ch5 evaluate (base vs adapter)
+     PASS  (667s, log: validate_logs/Ch5_evaluate__base_vs_adapter_.log)
+
+===> Ch1 sidebar (base-only)
+     PASS  (81s, log: validate_logs/Ch1_sidebar__base-only_.log)
+
+===> Ch2 quickstart (LoRA)
+     PASS  (225s, log: validate_logs/Ch2_quickstart__LoRA_.log)
+
+===> Ch9 safety monitor
+     PASS  (122s, log: validate_logs/Ch9_safety_monitor.log)
+
+===> Ch9 canary prompts
+     PASS  (60s, log: validate_logs/Ch9_canary_prompts.log)
+
+================= HF pull-and-run (bahree/ModelAdaptationBook) =================
+
+===> HF pull ch5-lora (adapter)
+     PASS  (23s, log: validate_logs/HF_pull_ch5-lora__adapter_.log)
+
+===> HF pull ch6-sft (full model)
+     PASS  (31s, log: validate_logs/HF_pull_ch6-sft__full_model_.log)
+
+===> HF pull ch8-dpo (full model)
+     PASS  (98s, log: validate_logs/HF_pull_ch8-dpo__full_model_.log)
+
+===> HF pull ch7-distilled (adapter)
+     PASS  (22s, log: validate_logs/HF_pull_ch7-distilled__adapter_.log)
+
+===> HF pull ch8-dpo-lora (adapter on ch6-sft)
+     PASS  (23s, log: validate_logs/HF_pull_ch8-dpo-lora__adapter_on_ch6-sft_.log)
+
+================= TIER C: training (cuda, full) =================
+
+===> Ch5 QLoRA train
+     PASS  (1112s, log: validate_logs/Ch5_QLoRA_train.log)
+
+===> Ch6 SFT train
+     PASS  (893s, log: validate_logs/Ch6_SFT_train.log)
+
+===> Ch7 student train
+     PASS  (997s, log: validate_logs/Ch7_student_train.log)
+
+===> Ch8 DPO train
+     PASS  (1123s, log: validate_logs/Ch8_DPO_train.log)
+
+===> Ch8 LoRA-DPO train (single-card)
+     PASS  (1160s, log: validate_logs/Ch8_LoRA-DPO_train__single-card_.log)
+
+===================== SUMMARY (cuda) =====================
+PASS                       |      1s | Ch4 tests                                | expect: pass (CPU)
+PASS                       |      0s | Ch4 RAG retrieve                         | expect: retrieves
+PASS                       |      0s | Ch9 registry list                        | expect: runs
+PASS                       |      0s | Ch9 drift BASELINE (same-domain)         | expect: YELLOW ~0.186
+PASS                       |      0s | Ch9 build drift demo sets                | expect: writes shifted set
+PASS                       |      0s | Ch9 drift SHIFTED (Kubernetes/SSO)       | expect: RED + kubernetes term
+PASS                       |      0s | Ch9 rollback demo                        | expect: rolls back
+PASS                       |      0s | Ch3 dataset manifest                     | expect: runs (stdlib)
+PASS                       |    993s | Ch5 LoRA train (smoke)                   | expect: trains an adapter
+PASS                       |     17s | Ch5 generate (load adapter)              | expect: loads adapter, NO KeyError
+PASS                       |    667s | Ch5 evaluate (base vs adapter)           | expect: per-category Token-F1
+PASS                       |     81s | Ch1 sidebar (base-only)                  | expect: base inference runs
+PASS                       |    225s | Ch2 quickstart (LoRA)                    | expect: 5-step quickstart trains
+PASS                       |    122s | Ch9 safety monitor                       | expect: per-category report (rc=1 on alert is normal)
+PASS                       |     60s | Ch9 canary prompts                       | expect: runs 10 canaries
+PASS                       |     23s | HF pull ch5-lora (adapter)               | expect: loads + generates
+PASS                       |     31s | HF pull ch6-sft (full model)             | expect: loads + generates
+PASS                       |     98s | HF pull ch8-dpo (full model)             | expect: loads + generates
+PASS                       |     22s | HF pull ch7-distilled (adapter)          | expect: loads + generates
+PASS                       |     23s | HF pull ch8-dpo-lora (adapter on ch6-sft) | expect: loads + generates
+PASS                       |   1112s | Ch5 QLoRA train                          | expect: 4-bit trains (bnb)
+PASS                       |    893s | Ch6 SFT train                            | expect: full fine-tune runs
+PASS                       |    997s | Ch7 student train                        | expect: distillation runs
+PASS                       |   1123s | Ch8 DPO train                            | expect: DPO runs
+PASS                       |   1160s | Ch8 LoRA-DPO train (single-card)         | expect: LoRA-DPO runs
+
+Logs in validate_logs/. PASS=ran+asserts ok; GUARD=correct fast-fail; ASSERT-FAIL=ran but
+output unexpected (inspect log); FAIL=error. Send validate_logs/ back for review.
+===== VALIDATE END Thu Jun 18 08:04:48 UTC 2026 rc=0 =====
+===== BOOTSTRAP DONE Thu Jun 18 08:04:48 UTC 2026 =====

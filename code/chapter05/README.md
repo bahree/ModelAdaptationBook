@@ -1,5 +1,9 @@
 # Chapter 5 - LoRA and QLoRA Fine-Tuning (Qwen3-4B)
 
+![How LoRA works: the frozen pretrained weights plus a small trainable low-rank adapter (B times A), summed to produce the output.](images/readme_lora.png)
+
+*How LoRA works. The pretrained weights stay frozen; a small low-rank adapter (B and A) is the only trainable part, and its output is added to the base. Because the base never changes, one copy can serve many adapters. This chapter trains LoRA and QLoRA adapters on the IT-support dataset.*
+
 This chapter demonstrates parameter-efficient fine-tuning using LoRA and QLoRA on **`Qwen/Qwen3-4B-Instruct-2507`**. You'll learn how to fine-tune a model, evaluate improvements, check for safety regression, and use adapters for inference.
 
 **Repository**: <https://github.com/bahree/ModelAdaptationBook>
@@ -20,46 +24,45 @@ Shared utilities (JSONL, env, seed) live in **`code/common/`**. Install from `co
 
 | Listing | In the chapter | In the repo |
 |---------|----------------|-------------|
-| **5.1** | Data format; prepare dataset | `scripts/listing_5_1_prepare_dataset.py` |
+| **5.1** | Data format; build dataset | `scripts/build_it_support_dataset.py` |
 | **5.2** | LoRA config + SFTTrainer | `modeling.py`, `train_lora.py` |
 | **5.3** | Evaluation | `scripts/listing_5_3_evaluate.py` |
 | **5.4** | Inference with adapter | `generate.py` |
 | **5.5** | QLoRA 4-bit loading | `train_qlora.py` |
 | **5.6** | Safety regression test | `scripts/listing_5_3_evaluate.py` (safety section) |
 
-**Data folder (`data/`):** Dolly 15K is on Hugging Face (`databricks/databricks-dolly-15k`). Create a local subset with `listing_5_1_prepare_dataset.py --out chapter05/data/dolly_subset`. The repo includes `golden/` (small test files for eval) and `smoke/` (minimal train/valid for `validate_chapter05.py`).
+**Data folder (`data/`):** The book's IT support dataset is built locally from real Stack Exchange IT Q&A (Super User, Ask Ubuntu, Server Fault) with a small Databricks Dolly mix-in for general-capability retention. Build it with `python scripts/build_it_support_dataset.py` (writes `data/it_support/`), then `python scripts/reformat_it_answers.py` (writes house-format `data/it_support_fmt/train.jsonl`). The repo includes `golden/` (small test files for eval) and `smoke/` (minimal train/valid for `validate_chapter05.py`).
 
 **What are `data.py` and `dataset.py`?**  
-- **`data.py`** - Loads chat JSONL (Dolly or messages format) into `ChatExample` objects; used by training and eval to read your train/valid/test files.  
+- **`data.py`** - Loads chat JSONL (messages format) into `ChatExample` objects; used by training and eval to read your train/valid/test files.  
 - **`dataset.py`** - Turns those examples into the format SFTTrainer needs (`prepare_dataset_for_sft`) or into tokenized batches for loss evaluation (`encode_examples`). Both are core to the chapter flow, not legacy.
 
 ---
 
 ## What We're Fine-Tuning
 
-We're fine-tuning Qwen3-4B-Instruct-2507 to improve **instruction-following quality** across diverse tasks. The base model is already instruction-tuned; the chapter demonstrates that even a 400-example LoRA pass produces measurable, category-dependent improvements.
+We're fine-tuning Qwen3-4B-Instruct-2507 on the book's IT support dataset to adapt it to a specific domain and house answer style. The base model is already instruction-tuned; the chapter demonstrates what a small LoRA pass does (and, just as important, what a word-overlap metric can and cannot tell you) on long, generative IT support answers.
 
 **What we measure:**
-- **Token-F1** (the primary metric for chapters 5 through 8): word-level overlap between the model's response and the reference, scored 0 to 1.
-- **Per-category Token-F1**: breakdown across the 8 Dolly categories (open QA, general QA, closed QA, creative writing, brainstorming, classification, summarization, information extraction).
+- **Token-F1** (the primary metric for chapters 5 through 8): word-level overlap between the model's response and the reference, scored 0 to 1. On long free-form IT answers this metric is nearly blind, which is one of the chapter's main lessons.
+- **Format adherence and an LLM judge**: because token-F1 moves so little on generative answers, the chapter leans on house-format adherence and an LLM-as-judge pass to actually tell whether the adapter helped.
 - **Safety refusal rate**: fraction of red-team prompts the model declines to answer; watched for regression after fine-tuning.
 
-**Expected results** (representative measured values on the chapter's 400 / 50 / 50 Dolly split with `seed=42`; your numbers will move within ±0.02 across hardware and library versions):
+**Expected results** (representative measured values; your numbers will move across hardware and library versions):
 
-- Base Qwen3-4B-Instruct-2507: Token-F1 ≈ 0.212, safety refusal 100%.
-- After LoRA (r=16, 3 epochs): Token-F1 ≈ 0.345 (+0.13), safety refusal can drop substantially (-40 to -80 pp in our measurements).
-- After QLoRA (r=8, 3 epochs): Token-F1 ≈ 0.39, safety refusal ≈ 40-60%.
+- Base Qwen3-4B-Instruct-2507: Token-F1 ≈ 0.158, safety refusal 100%.
+- After LoRA (r=16, 3 epochs): Token-F1 ≈ 0.155 (roughly flat), safety refusal drops to ≈ 60%.
 
-The safety regression on the broader Dolly subset is real and load-bearing for the chapter — it motivates the safety-regression suite that follows the eval and previews the safety conversation in chapter 6 and chapter 8.
+The headline takeaway: token-F1 is essentially flat (0.158 → 0.155) because word overlap is a poor proxy for the quality of a long generative answer, while the safety refusal rate drops from 100% to 60%. That safety regression is real and load-bearing for the chapter, it motivates the safety-regression suite that follows the eval and previews the safety conversation in chapter 6 and chapter 8.
 
-## Why Dolly 15K?
+## Why the IT support dataset?
 
-We use **`databricks/databricks-dolly-15k`** because:
+We use **the book's IT support dataset** because:
 
-1. **Narrative continuity.** Chapter 4 uses Dolly 15K for few-shot prompting (no training). Chapter 5 uses the same dataset for LoRA fine-tuning, showing the progression from prompting to training on the same data. Chapter 6 reuses it for full SFT on a technical-support subset.
-2. **Real public dataset.** Dolly 15K is widely used and commercially viable (CC-BY-SA-3.0). Human-authored, not synthetic.
-3. **Measurable tasks.** Eight distinct categories with enough examples in each to surface per-category effects.
-4. **Right size for LoRA.** A 400-example training set is the sweet spot: enough to show improvement, small enough to run end to end in ~10-15 minutes on a single consumer GPU.
+1. **Narrative continuity.** It threads the IT-support running example across chapters 4 through 9: chapter 4 uses it for few-shot prompting (no training), chapter 5 uses it for LoRA fine-tuning, and later chapters reuse it for SFT, preference optimization, and monitoring.
+2. **Real public content.** The questions and answers come from real Stack Exchange IT communities (Super User, Ask Ubuntu, Server Fault), with a small Databricks Dolly mix-in to retain general-capability coverage. Human-authored, not synthetic.
+3. **A real domain, a real house style.** IT support answers are long and free-form, which is exactly where a word-overlap metric breaks down and you need format adherence plus an LLM judge.
+4. **Right size for LoRA.** The training set is small enough to run end to end in ~10-15 minutes on a single consumer GPU, large enough to show what a LoRA pass does.
 
 ## Prerequisites
 
@@ -125,7 +128,7 @@ Chapter 5 validation
 - **LoRA**: minimum **8 GB VRAM** (RTX 3060 / 4060 class).
 - **QLoRA**: minimum **6 GB VRAM** (works on smaller GPUs).
 - **Recommended**: **12 GB+ VRAM** (RTX 4070 / 4080, NVIDIA A30, A100) for faster training.
-- **Training time on a single A30**: ~10-12 minutes for LoRA, ~14 minutes for QLoRA (400 examples, 3 epochs). On smaller GPUs allocate up to 25-35 minutes.
+- **Training time on a single A30**: ~10-12 minutes for LoRA, ~14 minutes for QLoRA (the IT support training set, 3 epochs). On smaller GPUs allocate up to 25-35 minutes.
 
 ## Step-by-Step Instructions
 
@@ -137,52 +140,47 @@ source .venv/bin/activate   # Linux/macOS
 # Windows:  .venv\Scripts\activate
 ```
 
-### Step 1: Download and Prepare the Dataset
+### Step 1: Build and Prepare the Dataset
 
-Download and prepare a subset of Dolly 15K:
+Build the IT support dataset, then reformat the answers into the house style. Run these two scripts from the `code/chapter05/` directory:
 
 **Linux/macOS:**
 ```bash
-# From the code/ directory (venv active)
-python chapter05/scripts/listing_5_1_prepare_dataset.py \
-  --out chapter05/data/dolly_subset \
-  --seed 42 \
-  --train 400 \
-  --valid 50 \
-  --test 50
+# From code/chapter05/ (venv active)
+python scripts/build_it_support_dataset.py
+python scripts/reformat_it_answers.py
 ```
 
 **Windows (PowerShell/CMD):**
 ```powershell
-python chapter05/scripts/listing_5_1_prepare_dataset.py ^
-  --out chapter05/data/dolly_subset ^
-  --seed 42 ^
-  --train 400 ^
-  --valid 50 ^
-  --test 50
+python scripts\build_it_support_dataset.py
+python scripts\reformat_it_answers.py
 ```
 
 This will:
-- Download Dolly 15K from Hugging Face (first run only)
-- Filter examples by length (20-2000 characters)
-- Create train/valid/test splits with seed=42 for reproducibility
-- Convert to messages format compatible with SFTTrainer
-- Save to `chapter05/data/dolly_subset/`
+- Download the source Stack Exchange IT Q&A (Super User, Ask Ubuntu, Server Fault) and a small Databricks Dolly mix-in from Hugging Face (first run only), using the `datasets` library
+- Clean the HTML answer bodies with `beautifulsoup4`
+- Create train/valid splits plus a `preferences.jsonl` file (used later for preference optimization)
+- Write a `manifest.json` and an `attribution.jsonl` recording the per-example source URL and license
+- Save to `data/it_support/` (`train.jsonl`, `valid.jsonl`, `preferences.jsonl`, `manifest.json`, `attribution.jsonl`)
 
-**Expected output:**
+The second script (`reformat_it_answers.py`) rewrites the answers into the chapter's house format and writes `data/it_support_fmt/train.jsonl`, the file you train on.
+
+**Resulting files:**
 ```
-Loading Databricks Dolly 15K dataset...
-Filtered to ~13880 examples (length 20-2000 chars)
-Wrote Dolly 15K subset to: chapter05/data/dolly_subset
-  - Train: 400 examples
-  - Valid: 50 examples
-  - Test: 50 examples
-  - Categories: {'open_qa': 107, 'general_qa': 69, 'classification': 61, ...}
+data/it_support/
+  train.jsonl
+  valid.jsonl
+  preferences.jsonl
+  manifest.json
+  attribution.jsonl
+data/it_support_fmt/
+  train.jsonl        # house-format training file
 ```
 
-Dolly 15K has 8 task categories (`open_qa`, `general_qa`, `closed_qa`, `summarization`, `brainstorming`, `classification`, `information_extraction`, `creative_writing`); with `--seed 42 --train 400` the breakdown above is what you will see.
+**Attribution:** per-example source URLs are recorded in `data/it_support/attribution.jsonl`, so you can attribute every answer back to its origin. Dataset licenses are listed once in the [main README](../../README.md#license-and-data-attribution).
 
-**Outcome types in your own data:** Dolly contains no refusals or tone-tagged examples, which are response types you typically add for an internal assistant. For worked `messages`-format rows showing a refusal, a clarification, and a tone tag (plus a note on inter-annotator agreement for Q&A), see [examples/example_data_prep_outcome_types.md](examples/example_data_prep_outcome_types.md).
+**Outcome types in your own data:** For worked `messages`-format rows showing a refusal, a clarification, and a tone tag (plus a note on inter-annotator agreement for Q&A), see [examples/example_data_prep_outcome_types.md](examples/example_data_prep_outcome_types.md).
 
 ### Step 2: Train LoRA Adapter
 
@@ -191,28 +189,28 @@ Train a LoRA adapter using TRL's SFTTrainer:
 **Linux/macOS:**
 ```bash
 python -m chapter05.train_lora \
-  --train chapter05/data/dolly_subset/train.jsonl \
-  --valid chapter05/data/dolly_subset/valid.jsonl \
-  --out chapter05/runs/dolly_lora
+  --train data/it_support_fmt/train.jsonl \
+  --valid data/it_support/valid.jsonl \
+  --out chapter05/runs/it_lora
 ```
 
 **Windows:**
 ```powershell
 python -m chapter05.train_lora ^
-  --train chapter05/data/dolly_subset/train.jsonl ^
-  --valid chapter05/data/dolly_subset/valid.jsonl ^
-  --out chapter05/runs/dolly_lora
+  --train data/it_support_fmt/train.jsonl ^
+  --valid data/it_support/valid.jsonl ^
+  --out chapter05/runs/it_lora
 ```
 
 **What happens:**
 - Loads base model (Qwen3-4B)
 - Creates LoRA config (r=16, alpha=32)
 - Trains for **3 epochs** (**15-20 minutes** on RTX 4070)
-- Saves adapter to `chapter05/runs/dolly_lora/`
+- Saves adapter to `chapter05/runs/it_lora/`
 
 **Expected output:**
 ```
-Saved LoRA adapter to: **chapter05/runs/dolly_lora**
+Saved LoRA adapter to: **chapter05/runs/it_lora**
 ```
 
 ### Step 3: Evaluate LoRA vs Base Model
@@ -221,28 +219,30 @@ Compare the fine-tuned model to the base model:
 
 **Linux/macOS:**
 ```bash
-python chapter05/scripts/listing_5_3_evaluate.py \
+python -m chapter05.scripts.listing_5_3_evaluate \
   --base Qwen/Qwen3-4B-Instruct-2507 \
-  --adapter chapter05/runs/dolly_lora \
-  --dolly_test chapter05/data/dolly_subset/test.jsonl
+  --adapter chapter05/runs/it_lora \
+  --dolly_test data/it_support/valid.jsonl
 ```
 
 **Windows:**
 ```powershell
-python chapter05/scripts/listing_5_3_evaluate.py ^
+python -m chapter05.scripts.listing_5_3_evaluate ^
   --base Qwen/Qwen3-4B-Instruct-2507 ^
-  --adapter chapter05/runs/dolly_lora ^
-  --dolly_test chapter05/data/dolly_subset/test.jsonl
+  --adapter chapter05/runs/it_lora ^
+  --dolly_test data/it_support/valid.jsonl
 ```
+
+(The `--dolly_test` flag is the evaluation-set flag; here it points at the IT support validation file.)
 
 **This generates:**
 - `chapter05/runs/eval_report/report.json` - Detailed metrics
 - `chapter05/runs/eval_report/report.md` - **Human-readable summary**
 
 **What you'll see:**
-- Overall accuracy improvement (e.g., 70% → 85%)
-- Per-category improvements (which task types improved most)
-- **Safety regression check** (ensures fine-tuning didn't break safety)
+- Overall token-F1 that barely moves (≈ 0.158 base → ≈ 0.155 adapter) — the chapter's point that word overlap is blind on long generative answers
+- Format-adherence and LLM-judge signals, which are what actually tell you whether the adapter helped
+- **Safety regression check** (the refusal rate drops from 100% to ≈ 60%)
 
 ### Step 4: Run Inference with the Adapter
 
@@ -254,8 +254,8 @@ cd /path/to/ModelAdaptationBook/code
 source .venv/bin/activate
 python -m chapter05.generate \
   --base Qwen/Qwen3-4B-Instruct-2507 \
-  --adapter chapter05/runs/dolly_lora \
-  --prompt "Explain how photosynthesis works in simple terms."
+  --adapter chapter05/runs/it_lora \
+  --prompt "My laptop won't connect to the office Wi-Fi after a Windows update. How do I fix it?"
 ```
 
 **Windows:**
@@ -264,8 +264,8 @@ cd C:\path\to\ModelAdaptationBook\code
 .venv\Scripts\activate
 python -m chapter05.generate ^
   --base Qwen/Qwen3-4B-Instruct-2507 ^
-  --adapter chapter05/runs/dolly_lora ^
-  --prompt "Explain how photosynthesis works in simple terms."
+  --adapter chapter05/runs/it_lora ^
+  --prompt "My laptop won't connect to the office Wi-Fi after a Windows update. How do I fix it?"
 ```
 
 **Side-by-side example:** A full example with the same prompt run on the base model and on the base + adapter (commands, outputs, and what to notice) is in [examples/example_inference_base_vs_adapter.md](examples/example_inference_base_vs_adapter.md). A screenshot of the terminal output is in [images/chap5-inference_base_vs_adapter.png](images/chap5-inference_base_vs_adapter.png)—useful for comparing base vs adapter at a glance.
@@ -277,17 +277,17 @@ QLoRA uses 4-bit quantization, enabling training on smaller GPUs. (You already i
 **Linux/macOS:**
 ```bash
 python -m chapter05.train_qlora \
-  --train chapter05/data/dolly_subset/train.jsonl \
-  --valid chapter05/data/dolly_subset/valid.jsonl \
-  --out chapter05/runs/dolly_qlora
+  --train data/it_support_fmt/train.jsonl \
+  --valid data/it_support/valid.jsonl \
+  --out chapter05/runs/it_qlora
 ```
 
 **Windows:**
 ```powershell
 python -m chapter05.train_qlora ^
-  --train chapter05/data/dolly_subset/train.jsonl ^
-  --valid chapter05/data/dolly_subset/valid.jsonl ^
-  --out chapter05/runs/dolly_qlora
+  --train data/it_support_fmt/train.jsonl ^
+  --valid data/it_support/valid.jsonl ^
+  --out chapter05/runs/it_qlora
 ```
 
 **Differences from LoRA:**
@@ -296,29 +296,31 @@ python -m chapter05.train_qlora ^
 - Slightly longer training time (25-35 minutes)
 - Similar or slightly lower accuracy (~1-2% difference)
 
-**Expected output:** Training logs show loss, learning rate, and mean token accuracy per step; at the end you'll see `Saved QLoRA adapter to: chapter05/runs/dolly_qlora`. For a full example log and an explanation of each line (including the tokenizer PAD message and HF warning), see [examples/example_qlora_training_output.md](examples/example_qlora_training_output.md).
+**Expected output:** Training logs show loss, learning rate, and mean token accuracy per step; at the end you'll see `Saved QLoRA adapter to: chapter05/runs/it_qlora`. For a full example log and an explanation of each line (including the tokenizer PAD message and HF warning), see [examples/example_qlora_training_output.md](examples/example_qlora_training_output.md).
 
 To compare LoRA vs QLoRA after training both:
 
 **Linux/macOS:**
 ```bash
-python chapter05/scripts/listing_5_3_evaluate.py \
+python -m chapter05.scripts.listing_5_3_evaluate \
   --base Qwen/Qwen3-4B-Instruct-2507 \
-  --adapter chapter05/runs/dolly_lora \
-  --adapter_alt chapter05/runs/dolly_qlora \
-  --dolly_test chapter05/data/dolly_subset/test.jsonl
+  --adapter chapter05/runs/it_lora \
+  --adapter_alt chapter05/runs/it_qlora \
+  --dolly_test data/it_support/valid.jsonl
 ```
 
 **Windows:**
 ```powershell
-python chapter05/scripts/listing_5_3_evaluate.py ^
+python -m chapter05.scripts.listing_5_3_evaluate ^
   --base Qwen/Qwen3-4B-Instruct-2507 ^
-  --adapter chapter05/runs/dolly_lora ^
-  --adapter_alt chapter05/runs/dolly_qlora ^
-  --dolly_test chapter05/data/dolly_subset/test.jsonl
+  --adapter chapter05/runs/it_lora ^
+  --adapter_alt chapter05/runs/it_qlora ^
+  --dolly_test data/it_support/valid.jsonl
 ```
 
 **Expected output:** Steps 1–4 run for the base and LoRA adapter; then the script loads and evaluates the alternative adapter (QLoRA) and writes one report comparing all three. For a full example log and explanation of each step, see [examples/example_qlora_evaluation_output.md](examples/example_qlora_evaluation_output.md).
+
+> **Memory note (single-GPU friendly):** the comparison evaluates base, adapter, and `--adapter_alt` one model at a time, freeing each (and clearing the CUDA cache) before loading the next, so peak usage stays around the size of a single model (~8–10 GB) rather than three at once. This lets the three-way comparison run on a single mid-range GPU (12 GB+). If you ever see "*Some parameters are on the meta device because they were offloaded to the cpu*" during evaluation, the run has spilled to CPU and will be very slow — that means GPU memory is exhausted; close other GPU processes (or use a larger-memory card) rather than letting it offload.
 
 **What you'll see:**
 ```
@@ -330,7 +332,7 @@ Evaluating examples... ━━━━━━━━━━━━━━ 50/50
 Running safety checks... ━━━━━━━━━━━━ 10/10
 **[OK]** Base evaluation complete
 
-Step 3/4: Loading adapter from chapter05/runs/dolly_lora...
+Step 3/4: Loading adapter from chapter05/runs/it_lora...
 **[OK]** Adapter loaded
 
 Step 4/4: Evaluating fine-tuned model...
@@ -356,44 +358,30 @@ The evaluation script measures:
 | **Exact Match (EM)** | Percentage of responses that exactly match the reference (after normalization) |
 | **Token F1** | Token-level F1 score (measures partial correctness) |
 
-**Per-category metrics** (accuracy broken down by task type):
-
-| Category | Description |
-|----------|--------------|
-| `open_qa` | Open-ended questions |
-| `closed_qa` | Factual questions with specific answers |
-| `creative_writing` | Creative tasks |
-| `brainstorming` | Idea generation |
-| `classification` | Categorization tasks |
-| `summarization` | Text summarization |
-| `information_extraction` | Extracting structured info |
-
 ### Expected Results
 
-With only 400 training examples, absolute scores are modest. Focus on **deltas** vs the base model.
+On long, free-form IT support answers, absolute token-F1 scores are low and barely move with fine-tuning. That is the point: focus on whether the adapter learns the house format and on the safety check, not on a near-flat word-overlap number.
 
 **Base Qwen3-4B-Instruct-2507** (the floor):
 - Overall exact match: 0%
-- Overall Token-F1: 0.21
+- Overall Token-F1: ≈ 0.158
 - Safety refusal rate: 100% (well-aligned base)
 
-**After LoRA (r=16, 3 epochs, 400 examples)** — representative measured numbers (your run will vary within ±0.02 on F1 across hardware and library versions):
+**After LoRA (r=16, 3 epochs)** — representative measured numbers (your run will vary across hardware and library versions):
 - Overall exact match: 0%
-- **Overall Token-F1: ~0.34-0.39** (Δ +0.13 to +0.18)
-- **Safety refusal rate: 20-60%** (Δ −40 to −80 pp — see the warning below)
-- Per-category: strong gains in classification (+0.48 F1) and summarization (+0.29 F1); modest on open QA (+0.15); small or negative on creative writing and brainstorming.
+- **Overall Token-F1: ≈ 0.155** (roughly flat vs base)
+- **Safety refusal rate: ≈ 60%** (down from 100% — see the warning below)
+- Token-F1 is nearly blind here because word overlap does not capture whether a long IT answer is correct, well-structured, or in the house format. Use format adherence and an LLM judge to see the real change.
 
-**The safety regression is real.** On our validated 2026-05-09 run, the LoRA adapter dropped the safety-refusal rate from 100% to 20% on a 10-prompt red-team set — the adapter answers 8 of 10 prompts the base model correctly refuses. The chapter's safety-regression suite catches this; the fix is to either (a) keep a smaller LoRA rank such as `r=8`, (b) add explicit refusal examples to the training data, or (c) follow with a preference-optimisation pass (chapter 8) to re-instill the alignment.
-
-**For higher absolute scores:** scale to 1,000-2,000 training examples. Expect Token-F1 in the 0.50-0.70 range and EM in the 15-35% range, at proportionally longer training time.
+**The safety regression is real.** The LoRA adapter drops the safety-refusal rate from 100% to roughly 60% on the red-team set — the adapter answers prompts the base model correctly refuses. The chapter's safety-regression suite catches this; the fix is to either (a) keep a smaller LoRA rank such as `r=8`, (b) add explicit refusal examples to the training data, or (c) follow with a preference-optimization pass (chapter 8) to re-instill the alignment.
 
 **→ See [examples/README_INTERPRETING_RESULTS.md](examples/README_INTERPRETING_RESULTS.md) for detailed guidance on understanding your results.** For a full example of a report comparing base, LoRA, and QLoRA (with section-by-section interpretation), see [examples/example_eval_report_lora_vs_qlora.md](examples/example_eval_report_lora_vs_qlora.md).
 
-**Why We See Improvement:**
-- Base model is general-purpose; fine-tuning adapts it to the specific instruction style and task distribution in Dolly
-- With small datasets (400 examples), models specialize but may show mixed results across categories
-- LoRA learns to better follow the instruction format and response patterns
-- 400 examples is enough to show clear improvement without overfitting
+**Why token-F1 stays flat (and what to look at instead):**
+- The base model is already a strong general instruction-follower; on free-form IT answers a small LoRA pass changes wording and format more than it changes raw word overlap with the reference
+- Token-F1 rewards matching the reference's exact words, which long generative answers rarely do even when they are correct
+- The signals that actually move are house-format adherence and LLM-judge quality, plus the safety refusal rate
+- This is the chapter's core evaluation lesson: pick a metric that matches the task, not one that is merely easy to compute
 
 ### Safety Regression Check
 
@@ -420,8 +408,8 @@ The evaluation also runs a safety suite to ensure fine-tuning didn't weaken safe
 - Use **QLoRA instead of LoRA** (lower memory)
 
 ### **"Dataset not found"**
-- **Run `listing_5_1_prepare_dataset.py` first** (Step 1)
-- Check that files exist: `chapter05/data/dolly_subset/train.jsonl`
+- **Run `build_it_support_dataset.py` then `reformat_it_answers.py` first** (Step 1)
+- Check that files exist: `data/it_support_fmt/train.jsonl` and `data/it_support/valid.jsonl`
 
 ### "TRL not installed"
 - Install: `pip install trl>=0.9.0`
@@ -475,26 +463,26 @@ The publish command picks the cached token up automatically; `HF_TOKEN` env var 
 **Linux/macOS:**
 ```bash
 python chapter05/scripts/publish_adapter.py \
-  --adapter chapter05/runs/dolly_lora \
-  --repo_id <your-username>/qwen3-4b-dolly-lora \
+  --adapter chapter05/runs/it_lora \
+  --repo_id <your-username>/qwen3-4b-it-support-lora \
   --private \
-  --dataset_manifest chapter05/data/dolly_subset/manifest.json \
+  --dataset_manifest chapter05/data/it_support/manifest.json \
   --eval_report chapter05/runs/eval_report/report.json
 ```
 
 **Windows:**
 ```powershell
 python chapter05/scripts/publish_adapter.py ^
-  --adapter chapter05/runs/dolly_lora ^
-  --repo_id <your-username>/qwen3-4b-dolly-lora ^
+  --adapter chapter05/runs/it_lora ^
+  --repo_id <your-username>/qwen3-4b-it-support-lora ^
   --private ^
-  --dataset_manifest chapter05/data/dolly_subset/manifest.json ^
+  --dataset_manifest chapter05/data/it_support/manifest.json ^
   --eval_report chapter05/runs/eval_report/report.json
 ```
 
 ## See Also
 
-- [Contoso domain-adaptation example, where an adapter beats prompting (base vs. format-prompt vs. LoRA, with sample outputs)](../it_support_qa/README.md) — the section 5.1.8 / figure 5.5 example, full dataset and reproducible run
+- [Contoso domain-adaptation example, where an adapter beats prompting (base vs. format-prompt vs. LoRA, with sample outputs)](../contoso_qa_demo/README.md) — the section 5.1.8 / figure 5.5 example, full dataset and reproducible run
 - [Base vs LoRA vs QLoRA inference output (same prompt)](examples/example_inference_base_vs_adapter.md)
 - [QLoRA training log and interpretation](examples/example_qlora_training_output.md)
 - [LoRA vs QLoRA evaluation run](examples/example_qlora_evaluation_output.md)

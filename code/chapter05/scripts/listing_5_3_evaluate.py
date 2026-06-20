@@ -7,15 +7,15 @@ and a human-readable Markdown summary.
 Usage (base vs. single adapter):
     python chapter05/scripts/listing_5_3_evaluate.py \\
         --base Qwen/Qwen3-4B-Instruct-2507 \\
-        --adapter chapter05/runs/dolly_lora \\
-        --dolly_test chapter05/data/dolly_subset/test.jsonl
+        --adapter chapter05/runs/it_lora \\
+        --dolly_test data/it_support/valid.jsonl
 
 Usage (base vs. LoRA vs. QLoRA):
     python chapter05/scripts/listing_5_3_evaluate.py \\
         --base Qwen/Qwen3-4B-Instruct-2507 \\
-        --adapter chapter05/runs/dolly_lora \\
-        --adapter_alt chapter05/runs/dolly_qlora \\
-        --dolly_test chapter05/data/dolly_subset/test.jsonl
+        --adapter chapter05/runs/it_lora \\
+        --adapter_alt chapter05/runs/it_qlora \\
+        --dolly_test data/it_support/valid.jsonl
 
 See Chapter 5, Section 5.1 (Step 3) for walkthrough and expected results.
 """
@@ -27,7 +27,6 @@ from typing import Any, Dict, Optional
 
 from chapter05.eval import (
     eval_dolly_test_set,
-    eval_loss_on_jsonl,
     eval_toy_golden,
     load_model_variant,
     safety_suite,
@@ -44,11 +43,30 @@ def parse_args() -> argparse.Namespace:
         generation settings, and output directory.
     """
     ap = argparse.ArgumentParser()
-    ap.add_argument("--base", default="Qwen/Qwen3-4B-Instruct-2507")
-    ap.add_argument("--adapter", default=None, help="Adapter folder path for main run")
-    ap.add_argument("--adapter_alt", default=None, help="Adapter folder path for comparison run")
+    ap.add_argument(
+        "--base",
+        default="Qwen/Qwen3-4B-Instruct-2507",
+        help="Base model: accepts a local path, an HF repo id, or 'repo#subfolder' "
+        "(e.g. bahree/ModelAdaptationBook#ch6-sft)",
+    )
+    ap.add_argument(
+        "--adapter",
+        default=None,
+        help="Adapter for main run: accepts a local path, an HF repo id, or "
+        "'repo#subfolder' (e.g. bahree/ModelAdaptationBook#ch5-lora)",
+    )
+    ap.add_argument(
+        "--adapter_alt",
+        default=None,
+        help="Adapter for comparison run: accepts a local path, an HF repo id, or "
+        "'repo#subfolder' (e.g. bahree/ModelAdaptationBook#ch8-dpo-lora)",
+    )
 
-    ap.add_argument("--dolly_test", default=None, help="Dolly test set JSONL path (primary evaluation)")
+    ap.add_argument(
+        "--dolly_test",
+        default=None,
+        help="Test set JSONL path for primary evaluation (e.g. data/it_support/valid.jsonl)",
+    )
     ap.add_argument("--toy_golden", default="chapter05/data/golden/toy_test.jsonl", help="Toy test set (optional)")
     ap.add_argument("--safety_prompts", default="chapter05/data/golden/safety_regression_prompts.jsonl")
 
@@ -127,6 +145,17 @@ def main() -> None:
     base_res = summarize_variant("base", base_model, base_tok, args)
     console.print("[green]✓[/green] Base evaluation complete\n")
 
+    # Free each model before loading the next so the base + adapter (+ optional
+    # alternative adapter) never sit in GPU memory at the same time. Without this,
+    # a single 24 GB GPU runs out of memory on the third model and offloads it to
+    # CPU, which makes the comparison evaluation unusably slow.
+    import gc
+    import torch as _torch
+    del base_model, base_tok
+    gc.collect()
+    if _torch.cuda.is_available():
+        _torch.cuda.empty_cache()
+
     res: Dict[str, Any] = {"base": base_res}
 
     if args.adapter:
@@ -137,6 +166,10 @@ def main() -> None:
         console.print("[bold cyan]Step 4/4:[/bold cyan] Evaluating fine-tuned model...")
         res["adapter"] = summarize_variant("adapter", m, t, args)
         console.print("[green]✓[/green] Fine-tuned evaluation complete\n")
+        del m, t
+        gc.collect()
+        if _torch.cuda.is_available():
+            _torch.cuda.empty_cache()
 
     if args.adapter_alt:
         console.print(f"[bold cyan]Loading alternative adapter from {args.adapter_alt}...[/bold cyan]")
@@ -213,7 +246,7 @@ def main() -> None:
         return f"{x:+.4f}"
 
     lines = []
-    lines.append(f"# Chapter 5 Evaluation Report")
+    lines.append("# Chapter 5 Evaluation Report")
     lines.append("")
     lines.append(f"- Base model: `{args.base}`")
     lines.append(f"- System prompt: `{args.system_prompt}`")
@@ -234,12 +267,12 @@ def main() -> None:
         # Primary: Dolly metrics
         if variant.get("dolly"):
             d = variant["dolly"]
-            lines.append(f"### Dolly Test Set (Instruction-Following)")
+            lines.append("### Dolly Test Set (Instruction-Following)")
             lines.append(f"- **Overall exact match**: {fmt_pct(d['exact_match'])}")
             lines.append(f"- **Overall token-F1**: {d['token_f1']:.3f}")
             lines.append(f"- **Test examples**: {d['count']}")
             if d.get("category_metrics"):
-                lines.append(f"\n**Per-Category Accuracy:**")
+                lines.append("\n**Per-Category Accuracy:**")
                 for cat, metrics in sorted(d["category_metrics"].items()):
                     lines.append(
                         f"- {cat}: EM={fmt_pct(metrics['exact_match'])}, F1={metrics['token_f1']:.3f} "
@@ -269,11 +302,11 @@ def main() -> None:
         
         # Primary: Dolly metrics
         if d.get("dolly"):
-            lines.append(f"### Dolly Test Set Improvements")
+            lines.append("### Dolly Test Set Improvements")
             lines.append(f"- **Overall exact match Δ**: {fmt_delta(d['dolly']['exact_match'], pct=True)}")
             lines.append(f"- **Overall token-F1 Δ**: {fmt_delta(d['dolly']['token_f1'])}")
             if d["dolly"].get("category_metrics"):
-                lines.append(f"\n**Per-Category Improvements:**")
+                lines.append("\n**Per-Category Improvements:**")
                 for cat, metrics in sorted(d["dolly"]["category_metrics"].items()):
                     em_delta = metrics.get("exact_match")
                     f1_delta = metrics.get("token_f1")
@@ -299,10 +332,10 @@ def main() -> None:
     console.print("\n[bold cyan]Writing evaluation reports...[/bold cyan]")
     (out_dir / "report.md").write_text("\n".join(lines) + "\n", encoding="utf-8")
     
-    console.print(f"\n[bold green]✓ Evaluation complete![/bold green]")
+    console.print("\n[bold green]✓ Evaluation complete![/bold green]")
     console.print(f"[green]✓[/green] JSON report: {out_dir / 'report.json'}")
     console.print(f"[green]✓[/green] Markdown summary: {out_dir / 'report.md'}")
-    console.print(f"\n[yellow]→[/yellow] View the markdown report for a human-readable summary")
+    console.print("\n[yellow]→[/yellow] View the markdown report for a human-readable summary")
 
 
 if __name__ == "__main__":

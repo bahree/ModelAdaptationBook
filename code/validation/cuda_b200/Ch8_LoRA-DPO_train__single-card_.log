@@ -1,0 +1,695 @@
+The tokenizer you are loading from 'chapter06/runs/val_sft' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading SFT model from: chapter06/runs/val_sft
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.36it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.74it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.67it/s]
+Train: 300 pairs | Valid: 300 pairs
+Adding EOS to train dataset:   0%|          | 0/300 [00:00<?, ? examples/s]Adding EOS to train dataset: 100%|██████████| 300/300 [00:00<00:00, 32202.77 examples/s]
+Tokenizing train dataset:   0%|          | 0/300 [00:00<?, ? examples/s][RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+Tokenizing train dataset:  35%|███▌      | 106/300 [00:00<00:00, 1051.77 examples/s][RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+Tokenizing train dataset:  73%|███████▎  | 220/300 [00:00<00:00, 1098.53 examples/s][RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+Tokenizing train dataset: 100%|██████████| 300/300 [00:00<00:00, 1046.17 examples/s]
+Adding EOS to eval dataset:   0%|          | 0/300 [00:00<?, ? examples/s]Adding EOS to eval dataset: 100%|██████████| 300/300 [00:00<00:00, 35829.36 examples/s]
+Tokenizing eval dataset:   0%|          | 0/300 [00:00<?, ? examples/s][RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+Tokenizing eval dataset:  41%|████      | 123/300 [00:00<00:00, 1208.80 examples/s][RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+Tokenizing eval dataset:  82%|████████▏ | 245/300 [00:00<00:00, 1201.76 examples/s][RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+chosen. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+[RANK 0] Mismatch between tokenized prompt and the start of tokenized prompt+rejected. This may be due to unexpected tokenizer behavior, whitespace issues, or special token handling. Verify that the tokenizer is processing text consistently.
+Tokenizing eval dataset: 100%|██████████| 300/300 [00:00<00:00, 1123.60 examples/s]
+The model is already on multiple devices. Skipping the move to device specified in `args`.
+
+=== Starting DPO training ===
+  Mode:              LoRA-DPO (adapter)
+  Beta (KL penalty): 0.1
+  Learning rate:     5e-06
+  Epochs:            1
+  Starting from:     chapter06/runs/val_sft
+  0%|          | 0/38 [00:00<?, ?it/s]  3%|▎         | 1/38 [00:44<27:25, 44.46s/it]  5%|▌         | 2/38 [01:33<28:11, 46.99s/it]  8%|▊         | 3/38 [02:11<24:59, 42.84s/it] 11%|█         | 4/38 [02:52<23:50, 42.07s/it] 13%|█▎        | 5/38 [03:25<21:31, 39.15s/it]                                               13%|█▎        | 5/38 [03:25<21:31, 39.15s/it] 16%|█▌        | 6/38 [03:51<18:26, 34.56s/it] 18%|█▊        | 7/38 [04:28<18:10, 35.17s/it] 21%|██        | 8/38 [04:56<16:29, 32.99s/it] 24%|██▎       | 9/38 [05:35<16:47, 34.76s/it] 26%|██▋       | 10/38 [06:03<15:20, 32.89s/it]                                                26%|██▋       | 10/38 [06:03<15:20, 32.89s/it] 29%|██▉       | 11/38 [06:39<15:13, 33.83s/it] 32%|███▏      | 12/38 [07:33<17:15, 39.81s/it] 34%|███▍      | 13/38 [08:03<15:21, 36.88s/it] 37%|███▋      | 14/38 [08:37<14:28, 36.19s/it] 39%|███▉      | 15/38 [09:00<12:21, 32.22s/it]                                                39%|███▉      | 15/38 [09:00<12:21, 32.22s/it] 42%|████▏     | 16/38 [09:27<11:08, 30.40s/it] 45%|████▍     | 17/38 [09:47<09:37, 27.51s/it] 47%|████▋     | 18/38 [10:37<11:20, 34.02s/it] 50%|█████     | 19/38 [11:10<10:45, 33.98s/it] 53%|█████▎    | 20/38 [11:43<10:05, 33.63s/it]                                                53%|█████▎    | 20/38 [11:43<10:05, 33.63s/it] 55%|█████▌    | 21/38 [12:16<09:26, 33.30s/it] 58%|█████▊    | 22/38 [12:45<08:31, 31.98s/it] 61%|██████    | 23/38 [13:12<07:38, 30.56s/it] 63%|██████▎   | 24/38 [13:44<07:15, 31.13s/it] 66%|██████▌   | 25/38 [14:24<07:17, 33.64s/it]                                                66%|██████▌   | 25/38 [14:24<07:17, 33.64s/it] 68%|██████▊   | 26/38 [14:42<05:48, 29.02s/it] 71%|███████   | 27/38 [15:07<05:06, 27.90s/it] 74%|███████▎  | 28/38 [15:35<04:39, 27.90s/it] 76%|███████▋  | 29/38 [15:52<03:39, 24.42s/it] 79%|███████▉  | 30/38 [16:09<02:58, 22.31s/it]                                                79%|███████▉  | 30/38 [16:09<02:58, 22.31s/it] 82%|████████▏ | 31/38 [16:19<02:09, 18.48s/it] 84%|████████▍ | 32/38 [16:35<01:47, 17.88s/it] 87%|████████▋ | 33/38 [16:54<01:30, 18.09s/it] 89%|████████▉ | 34/38 [17:28<01:32, 23.07s/it] 92%|█████████▏| 35/38 [17:49<01:06, 22.30s/it]                                                92%|█████████▏| 35/38 [17:49<01:06, 22.30s/it] 95%|█████████▍| 36/38 [18:03<00:39, 19.80s/it] 97%|█████████▋| 37/38 [18:25<00:20, 20.43s/it]100%|██████████| 38/38 [18:36<00:00, 17.59s/it]{'loss': 0.6945, 'grad_norm': 5.225516319274902, 'learning_rate': 5e-06, 'entropy': 2.487784644961357, 'num_tokens': 17784.0, 'logits/chosen': -5.528149842719632, 'logits/rejected': -5.400502882264285, 'mean_token_accuracy': 0.44681864567101004, 'rewards/chosen': -0.009254188853083179, 'rewards/rejected': -0.006778583728009835, 'rewards/accuracies': 0.3, 'rewards/margins': -0.002475605148356408, 'logps/chosen': -341.17015476226806, 'logps/rejected': -302.65917282104493, 'epoch': 0.13}
+{'loss': 0.6868, 'grad_norm': 4.453446865081787, 'learning_rate': 4.264705882352942e-06, 'entropy': 2.532358917593956, 'num_tokens': 34019.0, 'logits/chosen': -5.487166913858578, 'logits/rejected': -5.585012751995732, 'mean_token_accuracy': 0.4403280446305871, 'rewards/chosen': 0.003653106698766351, 'rewards/rejected': -0.009644966581549851, 'rewards/accuracies': 0.6, 'rewards/margins': 0.013298073643818497, 'logps/chosen': -341.0892902374268, 'logps/rejected': -219.5438035964966, 'epoch': 0.27}
+{'loss': 0.689, 'grad_norm': 4.323924541473389, 'learning_rate': 3.529411764705883e-06, 'entropy': 2.460411748290062, 'num_tokens': 51840.0, 'logits/chosen': -5.302571271948121, 'logits/rejected': -5.550387246738411, 'mean_token_accuracy': 0.4639132391661406, 'rewards/chosen': 0.013882637011192855, 'rewards/rejected': 0.004780244851053795, 'rewards/accuracies': 0.625, 'rewards/margins': 0.009102392219938337, 'logps/chosen': -331.5777309417725, 'logps/rejected': -282.1682810783386, 'epoch': 0.4}
+{'loss': 0.6933, 'grad_norm': 4.494383811950684, 'learning_rate': 2.7941176470588237e-06, 'entropy': 2.4763846546411514, 'num_tokens': 69431.0, 'logits/chosen': -5.428650572374304, 'logits/rejected': -5.527941083260634, 'mean_token_accuracy': 0.44579578936100006, 'rewards/chosen': -1.773853291524574e-05, 'rewards/rejected': -0.0005694773109098606, 'rewards/accuracies': 0.475, 'rewards/margins': 0.0005517385317943991, 'logps/chosen': -443.3505527496338, 'logps/rejected': -227.2173583984375, 'epoch': 0.53}
+{'loss': 0.6903, 'grad_norm': 3.9737234115600586, 'learning_rate': 2.058823529411765e-06, 'entropy': 2.5640861064195635, 'num_tokens': 84594.0, 'logits/chosen': -5.281122065870795, 'logits/rejected': -5.533877319209312, 'mean_token_accuracy': 0.4417745977640152, 'rewards/chosen': -0.005084076257480774, 'rewards/rejected': -0.011209993332158774, 'rewards/accuracies': 0.475, 'rewards/margins': 0.006125916948076337, 'logps/chosen': -316.07901973724364, 'logps/rejected': -255.19385118484496, 'epoch': 0.67}
+{'loss': 0.6965, 'grad_norm': 4.551909446716309, 'learning_rate': 1.323529411764706e-06, 'entropy': 2.5489838123321533, 'num_tokens': 102200.0, 'logits/chosen': -5.391800078754078, 'logits/rejected': -5.569691865498838, 'mean_token_accuracy': 0.46474551409482956, 'rewards/chosen': -0.0053861428779782726, 'rewards/rejected': 0.0009062576020369307, 'rewards/accuracies': 0.45, 'rewards/margins': -0.00629240048583597, 'logps/chosen': -288.08403997421266, 'logps/rejected': -279.26332874298095, 'epoch': 0.8}
+{'loss': 0.6948, 'grad_norm': 4.385120868682861, 'learning_rate': 5.882352941176471e-07, 'entropy': 2.37273431122303, 'num_tokens': 119248.0, 'logits/chosen': -5.258348969332486, 'logits/rejected': -5.378659363844247, 'mean_token_accuracy': 0.4738661959767342, 'rewards/chosen': -0.004244451516433401, 'rewards/rejected': -0.001684246257354971, 'rewards/accuracies': 0.6, 'rewards/margins': -0.0025602053967304526, 'logps/chosen': -350.93923864364626, 'logps/rejected': -245.03182640075684, 'epoch': 0.93}
+
+  0%|          | 0/300 [00:00<?, ?it/s][A
+  1%|          | 2/300 [00:00<00:17, 17.01it/s][A
+  1%|▏         | 4/300 [00:00<00:27, 10.90it/s][A
+  2%|▏         | 6/300 [00:00<00:30,  9.78it/s][A
+  3%|▎         | 8/300 [00:00<00:31,  9.36it/s][A
+  3%|▎         | 9/300 [00:00<00:31,  9.25it/s][A
+  3%|▎         | 10/300 [00:01<00:31,  9.10it/s][A
+  4%|▎         | 11/300 [00:01<00:31,  9.04it/s][A
+  4%|▍         | 12/300 [00:01<00:32,  8.98it/s][A
+  4%|▍         | 13/300 [00:01<00:32,  8.94it/s][A
+  5%|▍         | 14/300 [00:01<00:32,  8.91it/s][A
+  5%|▌         | 15/300 [00:01<00:32,  8.87it/s][A
+  5%|▌         | 16/300 [00:01<00:32,  8.85it/s][A
+  6%|▌         | 17/300 [00:01<00:32,  8.84it/s][A
+  6%|▌         | 18/300 [00:01<00:31,  8.84it/s][A
+  6%|▋         | 19/300 [00:02<00:32,  8.77it/s][A
+  7%|▋         | 20/300 [00:02<00:31,  8.79it/s][A
+  7%|▋         | 21/300 [00:02<00:31,  8.81it/s][A
+  7%|▋         | 22/300 [00:02<00:31,  8.80it/s][A
+  8%|▊         | 23/300 [00:02<00:31,  8.82it/s][A
+  8%|▊         | 24/300 [00:02<00:31,  8.81it/s][A
+  8%|▊         | 25/300 [00:02<00:31,  8.79it/s][A
+  9%|▊         | 26/300 [00:02<00:31,  8.75it/s][A
+  9%|▉         | 27/300 [00:02<00:31,  8.76it/s][A
+  9%|▉         | 28/300 [00:03<00:31,  8.74it/s][A
+ 10%|▉         | 29/300 [00:03<00:30,  8.75it/s][A
+ 10%|█         | 30/300 [00:03<00:30,  8.73it/s][A
+ 10%|█         | 31/300 [00:03<00:30,  8.77it/s][A
+ 11%|█         | 32/300 [00:03<00:30,  8.81it/s][A
+ 11%|█         | 33/300 [00:03<00:30,  8.81it/s][A
+ 11%|█▏        | 34/300 [00:03<00:30,  8.81it/s][A
+ 12%|█▏        | 35/300 [00:03<00:29,  8.84it/s][A
+ 12%|█▏        | 36/300 [00:03<00:30,  8.80it/s][A
+ 12%|█▏        | 37/300 [00:04<00:29,  8.78it/s][A
+ 13%|█▎        | 38/300 [00:04<00:28,  9.07it/s][A
+ 13%|█▎        | 39/300 [00:04<00:29,  8.98it/s][A
+ 13%|█▎        | 40/300 [00:04<00:29,  8.88it/s][A
+ 14%|█▎        | 41/300 [00:04<00:29,  8.85it/s][A
+ 14%|█▍        | 42/300 [00:04<00:29,  8.82it/s][A
+ 14%|█▍        | 43/300 [00:04<00:28,  9.10it/s][A
+ 15%|█▍        | 44/300 [00:04<00:28,  8.99it/s][A
+ 15%|█▌        | 45/300 [00:04<00:28,  8.90it/s][A
+ 15%|█▌        | 46/300 [00:05<00:28,  8.85it/s][A
+ 16%|█▌        | 47/300 [00:05<00:28,  8.83it/s][A
+ 16%|█▌        | 48/300 [00:05<00:28,  8.80it/s][A
+ 16%|█▋        | 49/300 [00:05<00:28,  8.80it/s][A
+ 17%|█▋        | 50/300 [00:05<00:28,  8.75it/s][A
+ 17%|█▋        | 51/300 [00:05<00:28,  8.71it/s][A
+ 17%|█▋        | 52/300 [00:05<00:28,  8.75it/s][A
+ 18%|█▊        | 53/300 [00:05<00:28,  8.77it/s][A
+ 18%|█▊        | 54/300 [00:06<00:28,  8.75it/s][A
+ 18%|█▊        | 55/300 [00:06<00:28,  8.74it/s][A
+ 19%|█▊        | 56/300 [00:06<00:27,  8.72it/s][A
+ 19%|█▉        | 57/300 [00:06<00:27,  8.97it/s][A
+ 19%|█▉        | 58/300 [00:06<00:27,  8.90it/s][A
+ 20%|█▉        | 59/300 [00:06<00:27,  8.81it/s][A
+ 20%|██        | 60/300 [00:06<00:27,  8.78it/s][A
+ 20%|██        | 61/300 [00:06<00:27,  8.74it/s][A
+ 21%|██        | 62/300 [00:06<00:27,  8.74it/s][A
+ 21%|██        | 63/300 [00:07<00:27,  8.73it/s][A
+ 21%|██▏       | 64/300 [00:07<00:27,  8.73it/s][A
+ 22%|██▏       | 65/300 [00:07<00:26,  8.72it/s][A
+ 22%|██▏       | 66/300 [00:07<00:26,  8.75it/s][A
+ 22%|██▏       | 67/300 [00:07<00:26,  8.76it/s][A
+ 23%|██▎       | 68/300 [00:07<00:26,  8.72it/s][A
+ 23%|██▎       | 69/300 [00:07<00:26,  8.71it/s][A
+ 23%|██▎       | 70/300 [00:07<00:26,  8.73it/s][A
+ 24%|██▎       | 71/300 [00:07<00:26,  8.70it/s][A
+ 24%|██▍       | 72/300 [00:08<00:26,  8.63it/s][A
+ 24%|██▍       | 73/300 [00:08<00:26,  8.64it/s][A
+ 25%|██▍       | 74/300 [00:08<00:34,  6.52it/s][A
+ 25%|██▌       | 75/300 [00:08<00:31,  7.05it/s][A
+ 25%|██▌       | 76/300 [00:08<00:30,  7.36it/s][A
+ 26%|██▌       | 77/300 [00:08<00:29,  7.63it/s][A
+ 26%|██▌       | 78/300 [00:08<00:28,  7.92it/s][A
+ 26%|██▋       | 79/300 [00:09<00:27,  8.14it/s][A
+ 27%|██▋       | 80/300 [00:09<00:26,  8.30it/s][A
+ 27%|██▋       | 81/300 [00:09<00:25,  8.42it/s][A
+ 27%|██▋       | 82/300 [00:09<00:25,  8.52it/s][A
+ 28%|██▊       | 83/300 [00:09<00:25,  8.60it/s][A
+ 28%|██▊       | 84/300 [00:09<00:25,  8.63it/s][A
+ 28%|██▊       | 85/300 [00:09<00:24,  8.65it/s][A
+ 29%|██▊       | 86/300 [00:09<00:24,  8.70it/s][A
+ 29%|██▉       | 87/300 [00:09<00:24,  8.70it/s][A
+ 29%|██▉       | 88/300 [00:10<00:24,  8.66it/s][A
+ 30%|██▉       | 89/300 [00:10<00:24,  8.71it/s][A
+ 30%|███       | 90/300 [00:10<00:23,  8.77it/s][A
+ 30%|███       | 91/300 [00:10<00:23,  8.79it/s][A
+ 31%|███       | 92/300 [00:10<00:23,  8.79it/s][A
+ 31%|███       | 93/300 [00:10<00:23,  8.77it/s][A
+ 31%|███▏      | 94/300 [00:10<00:23,  8.72it/s][A
+ 32%|███▏      | 95/300 [00:10<00:23,  8.68it/s][A
+ 32%|███▏      | 96/300 [00:10<00:23,  8.64it/s][A
+ 32%|███▏      | 97/300 [00:11<00:23,  8.61it/s][A
+ 33%|███▎      | 98/300 [00:11<00:23,  8.62it/s][A
+ 33%|███▎      | 99/300 [00:11<00:23,  8.64it/s][A
+ 33%|███▎      | 100/300 [00:11<00:23,  8.59it/s][A
+ 34%|███▎      | 101/300 [00:11<00:23,  8.58it/s][A
+ 34%|███▍      | 102/300 [00:11<00:23,  8.58it/s][A
+ 34%|███▍      | 103/300 [00:11<00:22,  8.60it/s][A
+ 35%|███▍      | 104/300 [00:11<00:22,  8.62it/s][A
+ 35%|███▌      | 105/300 [00:12<00:22,  8.62it/s][A
+ 35%|███▌      | 106/300 [00:12<00:22,  8.63it/s][A
+ 36%|███▌      | 107/300 [00:12<00:22,  8.66it/s][A
+ 36%|███▌      | 108/300 [00:12<00:22,  8.68it/s][A
+ 36%|███▋      | 109/300 [00:12<00:21,  8.72it/s][A
+ 37%|███▋      | 110/300 [00:12<00:21,  8.72it/s][A
+ 37%|███▋      | 111/300 [00:12<00:21,  8.71it/s][A
+ 37%|███▋      | 112/300 [00:12<00:21,  8.73it/s][A
+ 38%|███▊      | 113/300 [00:12<00:21,  8.77it/s][A
+ 38%|███▊      | 114/300 [00:13<00:21,  8.75it/s][A
+ 38%|███▊      | 115/300 [00:13<00:21,  8.79it/s][A
+ 39%|███▊      | 116/300 [00:13<00:20,  8.82it/s][A
+ 39%|███▉      | 117/300 [00:13<00:20,  8.81it/s][A
+ 39%|███▉      | 118/300 [00:13<00:20,  8.83it/s][A
+ 40%|███▉      | 119/300 [00:13<00:20,  8.82it/s][A
+ 40%|████      | 120/300 [00:13<00:20,  8.77it/s][A
+ 40%|████      | 121/300 [00:13<00:20,  8.78it/s][A
+ 41%|████      | 122/300 [00:13<00:20,  8.81it/s][A
+ 41%|████      | 123/300 [00:14<00:20,  8.75it/s][A
+ 41%|████▏     | 124/300 [00:14<00:20,  8.75it/s][A
+ 42%|████▏     | 125/300 [00:14<00:19,  8.78it/s][A
+ 42%|████▏     | 126/300 [00:14<00:19,  8.76it/s][A
+ 42%|████▏     | 127/300 [00:14<00:19,  8.78it/s][A
+ 43%|████▎     | 128/300 [00:14<00:19,  8.75it/s][A
+ 43%|████▎     | 129/300 [00:14<00:19,  8.76it/s][A
+ 43%|████▎     | 130/300 [00:14<00:19,  8.79it/s][A
+ 44%|████▎     | 131/300 [00:14<00:19,  8.78it/s][A
+ 44%|████▍     | 132/300 [00:15<00:19,  8.79it/s][A
+ 44%|████▍     | 133/300 [00:15<00:18,  8.81it/s][A
+ 45%|████▍     | 134/300 [00:15<00:18,  9.03it/s][A
+ 45%|████▌     | 135/300 [00:15<00:18,  8.97it/s][A
+ 45%|████▌     | 136/300 [00:15<00:18,  8.93it/s][A
+ 46%|████▌     | 137/300 [00:15<00:18,  8.85it/s][A
+ 46%|████▌     | 138/300 [00:15<00:18,  8.81it/s][A
+ 46%|████▋     | 139/300 [00:15<00:18,  8.80it/s][A
+ 47%|████▋     | 140/300 [00:16<00:18,  8.79it/s][A
+ 47%|████▋     | 141/300 [00:16<00:18,  8.80it/s][A
+ 47%|████▋     | 142/300 [00:16<00:17,  8.82it/s][A
+ 48%|████▊     | 143/300 [00:16<00:17,  8.80it/s][A
+ 48%|████▊     | 144/300 [00:16<00:17,  8.82it/s][A
+ 48%|████▊     | 145/300 [00:16<00:17,  8.84it/s][A
+ 49%|████▊     | 146/300 [00:16<00:17,  8.82it/s][A
+ 49%|████▉     | 147/300 [00:16<00:17,  8.78it/s][A
+ 49%|████▉     | 148/300 [00:16<00:17,  8.77it/s][A
+ 50%|████▉     | 149/300 [00:17<00:17,  8.73it/s][A
+ 50%|█████     | 150/300 [00:17<00:17,  8.71it/s][A
+ 50%|█████     | 151/300 [00:17<00:17,  8.73it/s][A
+ 51%|█████     | 152/300 [00:17<00:16,  8.77it/s][A
+ 51%|█████     | 153/300 [00:17<00:16,  8.79it/s][A
+ 51%|█████▏    | 154/300 [00:17<00:16,  8.80it/s][A
+ 52%|█████▏    | 155/300 [00:17<00:16,  8.77it/s][A
+ 52%|█████▏    | 156/300 [00:17<00:16,  8.79it/s][A
+ 52%|█████▏    | 157/300 [00:17<00:16,  8.80it/s][A
+ 53%|█████▎    | 158/300 [00:18<00:16,  8.77it/s][A
+ 53%|█████▎    | 159/300 [00:18<00:16,  8.72it/s][A
+ 53%|█████▎    | 160/300 [00:18<00:16,  8.70it/s][A
+ 54%|█████▎    | 161/300 [00:18<00:15,  8.71it/s][A
+ 54%|█████▍    | 162/300 [00:18<00:15,  8.75it/s][A
+ 54%|█████▍    | 163/300 [00:18<00:15,  8.76it/s][A
+ 55%|█████▍    | 164/300 [00:18<00:15,  8.76it/s][A
+ 55%|█████▌    | 165/300 [00:18<00:15,  8.76it/s][A
+ 55%|█████▌    | 166/300 [00:18<00:15,  8.73it/s][A
+ 56%|█████▌    | 167/300 [00:19<00:15,  8.71it/s][A
+ 56%|█████▌    | 168/300 [00:19<00:15,  8.76it/s][A
+ 56%|█████▋    | 169/300 [00:19<00:14,  8.80it/s][A
+ 57%|█████▋    | 170/300 [00:19<00:14,  8.79it/s][A
+ 57%|█████▋    | 171/300 [00:19<00:14,  8.79it/s][A
+ 57%|█████▋    | 172/300 [00:19<00:14,  8.78it/s][A
+ 58%|█████▊    | 173/300 [00:19<00:14,  8.76it/s][A
+ 58%|█████▊    | 174/300 [00:19<00:14,  8.79it/s][A
+ 58%|█████▊    | 175/300 [00:19<00:14,  8.77it/s][A
+ 59%|█████▊    | 176/300 [00:20<00:14,  8.80it/s][A
+ 59%|█████▉    | 177/300 [00:20<00:13,  8.81it/s][A
+ 59%|█████▉    | 178/300 [00:20<00:13,  8.81it/s][A
+ 60%|█████▉    | 179/300 [00:20<00:13,  8.83it/s][A
+ 60%|██████    | 180/300 [00:20<00:13,  8.83it/s][A
+ 60%|██████    | 181/300 [00:20<00:13,  8.74it/s][A
+ 61%|██████    | 182/300 [00:20<00:13,  8.75it/s][A
+ 61%|██████    | 183/300 [00:20<00:13,  8.76it/s][A
+ 61%|██████▏   | 184/300 [00:21<00:13,  8.72it/s][A
+ 62%|██████▏   | 185/300 [00:21<00:13,  8.70it/s][A
+ 62%|██████▏   | 186/300 [00:21<00:13,  8.74it/s][A
+ 62%|██████▏   | 187/300 [00:21<00:12,  8.74it/s][A
+ 63%|██████▎   | 188/300 [00:21<00:12,  8.75it/s][A
+ 63%|██████▎   | 189/300 [00:21<00:12,  8.77it/s][A
+ 63%|██████▎   | 190/300 [00:21<00:12,  8.76it/s][A
+ 64%|██████▎   | 191/300 [00:21<00:12,  8.77it/s][A
+ 64%|██████▍   | 192/300 [00:21<00:12,  8.76it/s][A
+ 64%|██████▍   | 193/300 [00:22<00:12,  8.74it/s][A
+ 65%|██████▍   | 194/300 [00:22<00:12,  8.77it/s][A
+ 65%|██████▌   | 195/300 [00:22<00:11,  8.79it/s][A
+ 65%|██████▌   | 196/300 [00:22<00:11,  8.81it/s][A
+ 66%|██████▌   | 197/300 [00:22<00:11,  8.78it/s][A
+ 66%|██████▌   | 198/300 [00:22<00:11,  8.76it/s][A
+ 66%|██████▋   | 199/300 [00:22<00:11,  8.74it/s][A
+ 67%|██████▋   | 200/300 [00:22<00:11,  8.73it/s][A
+ 67%|██████▋   | 201/300 [00:22<00:11,  8.71it/s][A
+ 67%|██████▋   | 202/300 [00:23<00:11,  8.69it/s][A
+ 68%|██████▊   | 203/300 [00:23<00:11,  8.74it/s][A
+ 68%|██████▊   | 204/300 [00:23<00:10,  8.80it/s][A
+ 68%|██████▊   | 205/300 [00:23<00:10,  8.78it/s][A
+ 69%|██████▊   | 206/300 [00:23<00:10,  8.79it/s][A
+ 69%|██████▉   | 207/300 [00:23<00:10,  8.75it/s][A
+ 69%|██████▉   | 208/300 [00:23<00:10,  8.76it/s][A
+ 70%|██████▉   | 209/300 [00:23<00:10,  8.79it/s][A
+ 70%|███████   | 210/300 [00:23<00:10,  8.75it/s][A
+ 70%|███████   | 211/300 [00:24<00:10,  8.73it/s][A
+ 71%|███████   | 212/300 [00:24<00:10,  8.72it/s][A
+ 71%|███████   | 213/300 [00:24<00:09,  8.98it/s][A
+ 71%|███████▏  | 214/300 [00:24<00:09,  8.92it/s][A
+ 72%|███████▏  | 215/300 [00:24<00:09,  9.18it/s][A
+ 72%|███████▏  | 216/300 [00:24<00:09,  9.00it/s][A
+ 72%|███████▏  | 217/300 [00:24<00:09,  8.93it/s][A
+ 73%|███████▎  | 218/300 [00:24<00:09,  8.88it/s][A
+ 73%|███████▎  | 219/300 [00:24<00:09,  8.82it/s][A
+ 73%|███████▎  | 220/300 [00:25<00:09,  8.75it/s][A
+ 74%|███████▎  | 221/300 [00:25<00:09,  8.76it/s][A
+ 74%|███████▍  | 222/300 [00:25<00:08,  8.79it/s][A
+ 74%|███████▍  | 223/300 [00:25<00:08,  8.81it/s][A
+ 75%|███████▍  | 224/300 [00:25<00:08,  8.80it/s][A
+ 75%|███████▌  | 225/300 [00:25<00:08,  8.75it/s][A
+ 75%|███████▌  | 226/300 [00:25<00:08,  8.77it/s][A
+ 76%|███████▌  | 227/300 [00:25<00:08,  8.79it/s][A
+ 76%|███████▌  | 228/300 [00:26<00:08,  8.76it/s][A
+ 76%|███████▋  | 229/300 [00:26<00:08,  8.76it/s][A
+ 77%|███████▋  | 230/300 [00:26<00:07,  8.75it/s][A
+ 77%|███████▋  | 231/300 [00:26<00:07,  8.77it/s][A
+ 77%|███████▋  | 232/300 [00:26<00:07,  8.75it/s][A
+ 78%|███████▊  | 233/300 [00:26<00:07,  8.72it/s][A
+ 78%|███████▊  | 234/300 [00:26<00:07,  8.73it/s][A
+ 78%|███████▊  | 235/300 [00:26<00:07,  8.76it/s][A
+ 79%|███████▊  | 236/300 [00:26<00:07,  8.72it/s][A
+ 79%|███████▉  | 237/300 [00:27<00:07,  8.94it/s][A
+ 79%|███████▉  | 238/300 [00:27<00:06,  8.92it/s][A
+ 80%|███████▉  | 239/300 [00:27<00:06,  8.91it/s][A
+ 80%|████████  | 240/300 [00:27<00:06,  8.87it/s][A
+ 80%|████████  | 241/300 [00:27<00:06,  8.85it/s][A
+ 81%|████████  | 242/300 [00:27<00:06,  8.79it/s][A
+ 81%|████████  | 243/300 [00:27<00:06,  8.75it/s][A
+ 81%|████████▏ | 244/300 [00:27<00:06,  8.78it/s][A
+ 82%|████████▏ | 245/300 [00:27<00:06,  8.75it/s][A
+ 82%|████████▏ | 246/300 [00:28<00:06,  8.75it/s][A
+ 82%|████████▏ | 247/300 [00:28<00:06,  8.75it/s][A
+ 83%|████████▎ | 248/300 [00:28<00:05,  8.74it/s][A
+ 83%|████████▎ | 249/300 [00:28<00:05,  8.74it/s][A
+ 83%|████████▎ | 250/300 [00:28<00:05,  8.75it/s][A
+ 84%|████████▎ | 251/300 [00:28<00:05,  8.72it/s][A
+ 84%|████████▍ | 252/300 [00:28<00:05,  8.70it/s][A
+ 84%|████████▍ | 253/300 [00:28<00:05,  8.71it/s][A
+ 85%|████████▍ | 254/300 [00:28<00:05,  8.72it/s][A
+ 85%|████████▌ | 255/300 [00:29<00:05,  8.68it/s][A
+ 85%|████████▌ | 256/300 [00:29<00:05,  8.68it/s][A
+ 86%|████████▌ | 257/300 [00:29<00:04,  8.68it/s][A
+ 86%|████████▌ | 258/300 [00:29<00:04,  8.74it/s][A
+ 86%|████████▋ | 259/300 [00:29<00:04,  8.76it/s][A
+ 87%|████████▋ | 260/300 [00:29<00:04,  8.75it/s][A
+ 87%|████████▋ | 261/300 [00:29<00:04,  8.74it/s][A
+ 87%|████████▋ | 262/300 [00:29<00:04,  8.74it/s][A
+ 88%|████████▊ | 263/300 [00:30<00:04,  8.72it/s][A
+ 88%|████████▊ | 264/300 [00:30<00:04,  8.73it/s][A
+ 88%|████████▊ | 265/300 [00:30<00:03,  8.76it/s][A
+ 89%|████████▊ | 266/300 [00:30<00:03,  8.78it/s][A
+ 89%|████████▉ | 267/300 [00:30<00:03,  8.80it/s][A
+ 89%|████████▉ | 268/300 [00:30<00:03,  8.77it/s][A
+ 90%|████████▉ | 269/300 [00:30<00:03,  8.76it/s][A
+ 90%|█████████ | 270/300 [00:30<00:03,  8.80it/s][A
+ 90%|█████████ | 271/300 [00:30<00:03,  8.80it/s][A
+ 91%|█████████ | 272/300 [00:31<00:03,  8.76it/s][A
+ 91%|█████████ | 273/300 [00:31<00:03,  8.75it/s][A
+ 91%|█████████▏| 274/300 [00:31<00:02,  8.77it/s][A
+ 92%|█████████▏| 275/300 [00:31<00:02,  8.80it/s][A
+ 92%|█████████▏| 276/300 [00:31<00:02,  8.79it/s][A
+ 92%|█████████▏| 277/300 [00:31<00:02,  8.75it/s][A
+ 93%|█████████▎| 278/300 [00:31<00:02,  8.74it/s][A
+ 93%|█████████▎| 279/300 [00:31<00:02,  8.75it/s][A
+ 93%|█████████▎| 280/300 [00:31<00:02,  8.77it/s][A
+ 94%|█████████▎| 281/300 [00:32<00:02,  8.75it/s][A
+ 94%|█████████▍| 282/300 [00:32<00:02,  8.74it/s][A
+ 94%|█████████▍| 283/300 [00:32<00:01,  8.76it/s][A
+ 95%|█████████▍| 284/300 [00:32<00:01,  8.77it/s][A
+ 95%|█████████▌| 285/300 [00:32<00:01,  8.77it/s][A
+ 95%|█████████▌| 286/300 [00:32<00:01,  8.74it/s][A
+ 96%|█████████▌| 287/300 [00:32<00:01,  8.69it/s][A
+ 96%|█████████▌| 288/300 [00:32<00:01,  8.68it/s][A
+ 96%|█████████▋| 289/300 [00:32<00:01,  8.70it/s][A
+ 97%|█████████▋| 290/300 [00:33<00:01,  8.67it/s][A
+ 97%|█████████▋| 291/300 [00:33<00:01,  8.72it/s][A
+ 97%|█████████▋| 292/300 [00:33<00:00,  8.76it/s][A
+ 98%|█████████▊| 293/300 [00:33<00:00,  8.75it/s][A
+ 98%|█████████▊| 294/300 [00:33<00:00,  8.79it/s][A
+ 98%|█████████▊| 295/300 [00:33<00:00,  8.78it/s][A
+ 99%|█████████▊| 296/300 [00:33<00:00,  8.77it/s][A
+ 99%|█████████▉| 297/300 [00:33<00:00,  8.75it/s][A
+ 99%|█████████▉| 298/300 [00:34<00:00,  8.73it/s][A
+100%|█████████▉| 299/300 [00:34<00:00,  8.73it/s][A
+100%|██████████| 300/300 [00:34<00:00,  8.75it/s][A                                               
+                                                 [A100%|██████████| 38/38 [19:10<00:00, 17.59s/it]
+100%|██████████| 300/300 [00:34<00:00,  8.75it/s][A
+                                                 [A                                               100%|██████████| 38/38 [19:11<00:00, 17.59s/it]100%|██████████| 38/38 [19:11<00:00, 30.29s/it]
+{'eval_loss': 0.6888667941093445, 'eval_runtime': 34.375, 'eval_samples_per_second': 8.727, 'eval_steps_per_second': 8.727, 'eval_entropy': 2.4904725730419157, 'eval_num_tokens': 127412.0, 'eval_logits/chosen': -5.383992631568659, 'eval_logits/rejected': -5.521246118472596, 'eval_mean_token_accuracy': 0.4535601346194744, 'eval_rewards/chosen': 0.0020890986158216642, 'eval_rewards/rejected': -0.0073095526437585556, 'eval_rewards/accuracies': 0.5733333333333334, 'eval_rewards/margins': 0.009398651399339238, 'eval_logps/chosen': -344.3925935745239, 'eval_logps/rejected': -257.89255566914875, 'epoch': 1.0}
+{'train_runtime': 1151.0717, 'train_samples_per_second': 0.261, 'train_steps_per_second': 0.033, 'train_loss': 0.6925331856075087, 'epoch': 1.0}
+
+Peak GPU memory allocated: 10.89 GB | reserved: 14.29 GB
+
+DPO model saved to: chapter08/runs/val_dpo_lora

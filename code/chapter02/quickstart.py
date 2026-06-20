@@ -1,7 +1,7 @@
 """Chapter 2 quickstart: the shape of a LoRA fine-tune in five steps.
 
 Trains a small LoRA adapter on Qwen3-4B-Instruct-2507 using a 40-example
-subset of Databricks Dolly 15K. Runs for max_steps=20 (about 10 to 20 minutes
+slice of the book's IT support dataset. Runs for max_steps=20 (about 10 to 20 minutes
 on a 12 GB GPU). The point of this script is to give the reader the shape
 of the recipe before chapter 5 explains every knob.
 
@@ -37,10 +37,29 @@ from typing import Any, Dict, List
 
 import torch
 from datasets import Dataset as HFDataset
-from datasets import load_dataset
 from peft import LoraConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from trl import SFTConfig, SFTTrainer
+
+
+def _has_mps() -> bool:
+    """True on Apple Silicon (Metal/MPS) builds of PyTorch."""
+    return bool(getattr(torch.backends, "mps", None) and torch.backends.mps.is_available())
+
+
+def _resolve_device_map():
+    """Pin placement so the 4B model is never offloaded to meta/CPU.
+
+    device_map="auto" offloads layers on a memory-constrained or non-CUDA box;
+    on Apple Silicon that offload is what corrupts LoRA training (NaN gradients,
+    or a backward device-mismatch error). Pinning to a single device avoids it.
+    Same pattern as chapter05/modeling.py.
+    """
+    if torch.cuda.is_available():
+        return "auto"            # a single 24 GB+ CUDA card fits the 4B with no offload
+    if _has_mps():
+        return {"": "mps"}
+    return {"": "cpu"}
 
 
 # Defaults match chapter 5. See chapter05/__init__.py and chapter05/modeling.py.
@@ -68,46 +87,26 @@ TARGET_MODULES = [
 
 
 def step1_prepare_dataset() -> tuple[HFDataset, HFDataset, List[Dict[str, Any]]]:
-    """Step 1: download Dolly 15K and keep 40 train + 5 valid + 3 demo examples.
+    """Step 1: load the book's IT-support dataset, 40 train + 5 valid + 3 demo.
 
-    Same filter and seed as chapter 5's listing_5_1_prepare_dataset.py, just a
-    smaller slice so the run finishes in minutes.
+    The full dataset (real Stack Exchange IT Q&A normalized to a house format,
+    plus a small Dolly general-capability slice) is built by
+    scripts/build_it_support_dataset.py; here we take a small slice so the
+    preview run finishes in minutes.
     """
     print("Step 1: prepare dataset")
-    ds = load_dataset("databricks/databricks-dolly-15k", split="train")
+    from common.jsonl import read_jsonl
+    trows = list(read_jsonl("data/it_support_fmt/train.jsonl"))
+    vrows = list(read_jsonl("data/it_support/valid.jsonl"))
 
-    rng = random.Random(SEED)
-    # Length filter: the 20-character floor drops empty or degenerate rows (a
-    # bare one-word instruction with no real content); the 2000 ceiling keeps
-    # examples short enough for the 512-token preview.
-    examples: List[Dict[str, Any]] = []
-    for row in ds:
-        instruction = row.get("instruction", "")
-        context = row.get("context", "") or ""
-        response = row.get("response", "")
-        total_length = len(instruction) + len(context) + len(response)
-        if 20 <= total_length <= 2000:
-            examples.append(row)
-    print(f"  {len(examples)} of {len(ds)} examples pass the length filter")
-    rng.shuffle(examples)
+    def role_of(row: Dict[str, Any], role: str) -> str:
+        return next(m["content"] for m in row["messages"] if m["role"] == role)
 
-    def to_messages(row: Dict[str, Any]) -> Dict[str, Any]:
-        ctx = row.get("context", "") or ""
-        user = f"{ctx}\n\n{row['instruction']}" if ctx.strip() else row["instruction"]
-        return {
-            "messages": [
-                {"role": "system", "content": SYSTEM_PROMPT},
-                {"role": "user", "content": user},
-                {"role": "assistant", "content": row["response"]},
-            ]
-        }
-
-    train_rows = [to_messages(r) for r in examples[:TRAIN_SIZE]]
-    valid_rows = [to_messages(r) for r in examples[TRAIN_SIZE : TRAIN_SIZE + VALID_SIZE]]
-    demo_rows = examples[TRAIN_SIZE + VALID_SIZE : TRAIN_SIZE + VALID_SIZE + 3]
-
-    train_ds = HFDataset.from_list(train_rows)
-    valid_ds = HFDataset.from_list(valid_rows)
+    train_ds = HFDataset.from_list([{"messages": r["messages"]} for r in trows[:TRAIN_SIZE]])
+    valid_ds = HFDataset.from_list([{"messages": r["messages"]} for r in vrows[:VALID_SIZE]])
+    demo_rows = [{"instruction": role_of(r, "user"), "context": "",
+                  "response": role_of(r, "assistant")}
+                 for r in vrows[VALID_SIZE : VALID_SIZE + 3]]
     print(f"  train={len(train_ds)} valid={len(valid_ds)} demo={len(demo_rows)}")
     return train_ds, valid_ds, demo_rows
 
@@ -124,10 +123,15 @@ def step2_load_model_and_lora():
         tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"
 
+    # Pin the model to one device (_resolve_device_map): device_map="auto" offloads
+    # layers on a 16 GB Mac, and that offload is what makes MPS LoRA training go NaN.
+    # bf16 fits a 16 GB Mac (fp32 4B would not); the trainer also autocasts in bf16
+    # (step 3). fp32 only as a CPU fallback.
+    load_dtype = torch.bfloat16 if (torch.cuda.is_available() or _has_mps()) else torch.float32
     model = AutoModelForCausalLM.from_pretrained(
         BASE_MODEL,
-        device_map="auto",
-        dtype="auto",
+        device_map=_resolve_device_map(),
+        dtype=load_dtype,
         trust_remote_code=True,
     )
     model.gradient_checkpointing_enable()
@@ -172,8 +176,22 @@ def step3_train(model, tokenizer, lora_config, train_ds, valid_ds) -> SFTTrainer
     print(f"Step 3: train for {MAX_STEPS} steps")
     OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 
-    use_bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
-    use_fp16 = torch.cuda.is_available() and not use_bf16
+    # Autocast in bf16 on CUDA (when supported) AND on Apple MPS. On MPS this is
+    # essential: without it the bf16 base model's logits overflow and grad_norm
+    # becomes NaN. fp16 only on older CUDA cards that lack bf16.
+    cuda_bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
+    use_bf16 = cuda_bf16 or _has_mps()
+    use_fp16 = torch.cuda.is_available() and not cuda_bf16
+
+    # Apple MPS has ~16 GB of unified memory and no fp32 master-weight headroom, so
+    # the IT-support examples (long Stack Exchange answers) at 512 tokens push a 4B
+    # model into OOM around the first eval, and a cold-start step can overflow bf16
+    # into NaN. On MPS we shorten the sequence and skip the in-training eval (the
+    # memory spike); CUDA keeps the full settings. A short warmup steadies the start
+    # on every device.
+    mps = _has_mps()
+    max_len = 256 if mps else 512
+    eval_strategy = "no" if mps else "steps"
 
     config = SFTConfig(
         output_dir=str(OUTPUT_DIR),
@@ -181,9 +199,11 @@ def step3_train(model, tokenizer, lora_config, train_ds, valid_ds) -> SFTTrainer
         per_device_train_batch_size=1,
         gradient_accumulation_steps=8,
         learning_rate=2e-4,
-        max_length=512,
+        warmup_ratio=0.1,
+        max_length=max_len,
+        max_grad_norm=1.0,  # clip; cheap insurance against a stray exploding step
         logging_steps=5,
-        eval_strategy="steps",
+        eval_strategy=eval_strategy,
         eval_steps=10,
         save_strategy="no",
         bf16=use_bf16,
@@ -217,16 +237,21 @@ def step4_compare(model, tokenizer, demo_rows: List[Dict[str, Any]]) -> List[Dic
     for row in demo_rows:
         ctx = row.get("context", "") or ""
         prompt = f"{ctx}\n\n{row['instruction']}" if ctx.strip() else row["instruction"]
-        out = generate(model, tokenizer, prompt)
+        # "Before" = base model (adapter disabled); "after" = base + LoRA adapter.
+        with model.disable_adapter():
+            before = generate(model, tokenizer, prompt)
+        after = generate(model, tokenizer, prompt)
         samples.append(
             {
                 "instruction": row["instruction"],
                 "reference": row["response"],
-                "adapter_output": out,
+                "before": before,
+                "after": after,
             }
         )
         print(f"\n  Q: {row['instruction'][:80]}")
-        print(f"  A: {out[:200]}")
+        print(f"  BEFORE: {before[:160]}")
+        print(f"  AFTER : {after[:200]}")
     return samples
 
 
@@ -237,7 +262,7 @@ def step5_save(trainer: SFTTrainer, tokenizer, samples: List[Dict[str, str]]) ->
     tokenizer.save_pretrained(str(OUTPUT_DIR))
     manifest = {
         "base_model": BASE_MODEL,
-        "dataset": "databricks/databricks-dolly-15k",
+        "dataset": "it_support (Stack Exchange IT + Dolly mix-in)",
         "train_size": TRAIN_SIZE,
         "valid_size": VALID_SIZE,
         "max_steps": MAX_STEPS,

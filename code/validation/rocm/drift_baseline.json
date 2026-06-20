@@ -1,0 +1,63 @@
+{
+  "centroid_similarity": 0.8141,
+  "drift_score": 0.1859,
+  "min_prompt_similarity": 0.0933,
+  "mean_prompt_similarity": 0.2126,
+  "alert_level": "yellow",
+  "num_reference": 450,
+  "num_production": 50,
+  "vocab_size": 5488,
+  "top_drift_terms": [
+    {
+      "term": "battery",
+      "production_weight": 0.0195,
+      "reference_weight": 0.0015,
+      "delta": 0.018
+    },
+    {
+      "term": "server",
+      "production_weight": 0.0289,
+      "reference_weight": 0.012,
+      "delta": 0.0168
+    },
+    {
+      "term": "io",
+      "production_weight": 0.0141,
+      "reference_weight": 0.0,
+      "delta": 0.0141
+    },
+    {
+      "term": "find",
+      "production_weight": 0.02,
+      "reference_weight": 0.0066,
+      "delta": 0.0134
+    },
+    {
+      "term": "data",
+      "production_weight": 0.0181,
+      "reference_weight": 0.0051,
+      "delta": 0.0129
+    },
+    {
+      "term": "virus",
+      "production_weight": 0.0135,
+      "reference_weight": 0.0014,
+      "delta": 0.0122
+    },
+    {
+      "term": "like",
+      "production_weight": 0.0255,
+      "reference_weight": 0.0135,
+      "delta": 0.0121
+    },
+    {
+      "term": "process",
+      "production_weight": 0.0168,
+      "reference_weight": 0.0049,
+      "delta": 0.0119
+    }
+  ],
+  "timestamp": "2026-06-18T22:40:33Z",
+  "reference_path": "data/it_support/train.jsonl",
+  "production_path": "data/it_support/valid.jsonl"
+}

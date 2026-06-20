@@ -25,13 +25,15 @@ Or run as a script directly:
 
 Optional flags:
 
-    --lora_dir   path to a LoRA adapter directory (default: chapter05/runs/dolly_lora)
+    --lora_dir   path to a LoRA adapter directory (default: chapter05/runs/it_lora)
     --sft_dir    path to a full SFT model directory (default: chapter06/runs/sft_run1)
     --output     where to save the JSON outputs (default: chapter01/sidebar_outputs.json)
     --base_only  skip LoRA and SFT runs even if their directories exist
 """
 from __future__ import annotations
-import argparse, gc, json, os, sys
+import argparse
+import gc
+import json
 from pathlib import Path
 
 import torch
@@ -93,7 +95,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     repo_code = Path(__file__).resolve().parent.parent
     parser.add_argument("--lora_dir", type=Path,
-                        default=repo_code / "chapter05" / "runs" / "dolly_lora",
+                        default=repo_code / "chapter05" / "runs" / "it_lora",
                         help="Path to a LoRA adapter directory.")
     parser.add_argument("--sft_dir", type=Path,
                         default=repo_code / "chapter06" / "runs" / "sft_run1",
@@ -129,7 +131,7 @@ def main():
         results["lora"] = None
     elif not lora_present:
         print(f"\n[skip] LoRA adapter not found at {args.lora_dir}.")
-        print( "       Run Chapter 5 first to produce dolly_lora, or pass --lora_dir.")
+        print( "       Run Chapter 5 first to produce it_lora, or pass --lora_dir.")
         results["lora"] = None
     else:
         print(f"\n[load] LoRA adapter on top of base: {args.lora_dir}")

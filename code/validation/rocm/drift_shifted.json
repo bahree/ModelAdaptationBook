@@ -1,0 +1,63 @@
+{
+  "centroid_similarity": 0.3145,
+  "drift_score": 0.6855,
+  "min_prompt_similarity": 0.0165,
+  "mean_prompt_similarity": 0.0881,
+  "alert_level": "red",
+  "num_reference": 450,
+  "num_production": 50,
+  "vocab_size": 5341,
+  "top_drift_terms": [
+    {
+      "term": "sso",
+      "production_weight": 0.0761,
+      "reference_weight": 0.0,
+      "delta": 0.0761
+    },
+    {
+      "term": "kubernetes",
+      "production_weight": 0.0626,
+      "reference_weight": 0.0,
+      "delta": 0.0626
+    },
+    {
+      "term": "deployment",
+      "production_weight": 0.0522,
+      "reference_weight": 0.0002,
+      "delta": 0.052
+    },
+    {
+      "term": "container",
+      "production_weight": 0.0513,
+      "reference_weight": 0.0,
+      "delta": 0.0513
+    },
+    {
+      "term": "configure",
+      "production_weight": 0.0409,
+      "reference_weight": 0.0013,
+      "delta": 0.0397
+    },
+    {
+      "term": "pod",
+      "production_weight": 0.0383,
+      "reference_weight": 0.0,
+      "delta": 0.0383
+    },
+    {
+      "term": "pods",
+      "production_weight": 0.033,
+      "reference_weight": 0.0,
+      "delta": 0.033
+    },
+    {
+      "term": "cloud",
+      "production_weight": 0.0318,
+      "reference_weight": 0.0,
+      "delta": 0.0318
+    }
+  ],
+  "timestamp": "2026-06-18T22:40:33Z",
+  "reference_path": "data/it_support/train.jsonl",
+  "production_path": "chapter09/data/shifted_production.jsonl"
+}

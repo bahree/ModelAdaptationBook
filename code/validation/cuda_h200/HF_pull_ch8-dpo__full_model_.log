@@ -1,0 +1,13 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading DPO model from bahree/ModelAdaptationBook#ch8-dpo
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files:  50%|█████     | 1/2 [00:25<00:25, 25.08s/it]Fetching 2 files: 100%|██████████| 2/2 [00:25<00:00, 12.54s/it]
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.15it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.47it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.41it/s]
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+Prompt:   How do I clear the DNS cache?
+Response: **Summary:** Clear the DNS cache by running `ipconfig /flushdns` in Command Prompt.
+
+**Steps:**
+1. Open Command Prompt (Start > Run > `cmd`)
+2. Type `ipconfig /flushdns` and press Enter
+3. The command will flush the DNS cache and return a message indicating success

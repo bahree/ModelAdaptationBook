@@ -1,0 +1,14 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading model from bahree/ModelAdaptationBook#ch6-sft
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.26it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.61it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.55it/s]
+The following generation flags are not valid and may be ignored: ['top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+Prompt:   How do I map a network drive on Windows?
+Response: **Summary:** Map a network drive by opening File Explorer, right-clicking the network location, selecting "Map Network Drive," choosing a drive letter, and clicking "Finish."
+
+**Steps:**
+1. Open File Explorer
+2. Right-click the network location you want to map
+3. Select "Map Network Drive"
+4. Choose a drive letter from the dropdown menu
+5. Click "Finish"

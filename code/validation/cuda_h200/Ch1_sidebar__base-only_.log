@@ -1,0 +1,37 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+[load] base model Qwen/Qwen3-4B-Instruct-2507
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.58it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.57it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.33it/s]
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+=== BASE Qwen3-4B-Instruct-2507 ===
+If you've forgotten your Outlook password, here’s what you should do — depending on your situation:
+
+---
+
+### 🔐 **1. Try to Reset Your Password Using Microsoft 365 (Outlook)**
+Most Outlook accounts are part of a Microsoft 365 (formerly Office 365) environment. You can reset your password using the official Microsoft login page.
+
+**Steps:**
+1. Go to [https://account.microsoft.com](https://account.microsoft.com)
+2. Sign in with your Microsoft account (the one used for Outlook).
+3. Click on **"Password"** under your profile.
+4. Choose **"Change password"**.
+5. Follow the prompts to create a new password.
+
+> ✅ This works if you're using a personal Microsoft account (e.g., @outlook.com or @hotmail.com).
+
+---
+
+### 🏢 **2. If You’re Using a Work or School Account (Corporate Outlook)**
+If your Outlook is tied to a company or school email (e.g., @company.com), the password reset process may be more restricted.
+
+**What to do:**
+- **Contact your IT department or system administrator.**  
+  They have the authority to reset your password or unlock your account.
+- Do not attempt to
+
+[skip] --base_only set; skipping LoRA run.
+
+[skip] --base_only set; skipping SFT run.
+
+[saved] ~/FTBook-pvt/code/chapter01/sidebar_outputs.json
