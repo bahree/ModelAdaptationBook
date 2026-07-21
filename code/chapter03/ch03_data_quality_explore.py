@@ -24,7 +24,7 @@ from collections import Counter
 
 warnings.filterwarnings("ignore", category=FutureWarning)
 
-from chapter03.ch03_data_quality_helpers import (
+from chapter03.ch03_data_quality_helpers import (  # noqa: E402  (import after warnings filter, by design)
     load_phrasebank_split,
     inject_label_noise,
     estimate_kappa,
@@ -33,7 +33,6 @@ from chapter03.ch03_data_quality_helpers import (
     print_results_table,
     save_results_json,
     save_accuracy_chart,
-    LABEL_SET,
 )
 
 # ── Experiment parameters ──────────────────────────────────────────────────────
@@ -62,10 +61,10 @@ OUTPUT_DIR  = "./ch03_quality_experiment"
 print("=" * 60)
 print("Chapter 3.1 — Data Quality Impact Experiment")
 print("=" * 60)
-print(f"\nExperiment design:")
+print("\nExperiment design:")
 print(f"  Volume  : {TRAIN_N} training examples per condition (identical)")
 print(f"  Test set: {TEST_N} examples from AllAgree (shared gold standard)")
-print(f"  Variable: data quality only\n")
+print("  Variable: data quality only\n")
 
 
 # ── Load all four PhraseBank splits ───────────────────────────────────────────

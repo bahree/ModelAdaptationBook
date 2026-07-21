@@ -5,16 +5,17 @@ iterations" section, using the Contoso IT-support assistant. Each is a single
 training row in the same `messages` format produced by
 `scripts/listing_5_1_prepare_dataset.py` (see `dolly_to_messages`).
 
-> **These rows are illustrative.** The Dolly 15K subset used in this chapter
-> contains no refusals and no tone tags, so these are examples of what you would
-> *add* for an internal assistant. They are not part of the committed
-> `data/dolly_subset/`, and adding them would change the training mix and the
-> eval numbers, so the pipeline is left as-is.
+> **These rows are illustrative.** The IT support dataset used in this chapter
+> is helpful-only: it contains no refusals and no tone tags, so these are examples
+> of what you would *add* for an internal assistant. They are not part of the
+> committed `data/it_support/`, and adding them would change the training mix and
+> the eval numbers, so the pipeline is left as-is.
 
 ## Refusal (decline, then redirect)
 
-A response type Dolly never contains. Teaching it explicitly is one fix for the
-safety-refusal regression discussed in the Results section.
+A response type the helpful-only IT support data never contains. Teaching it
+explicitly is one fix for the safety-refusal regression discussed in the Results
+section.
 
 ```json
 {"messages": [

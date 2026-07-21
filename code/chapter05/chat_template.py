@@ -12,7 +12,7 @@ evaluation (eval.py), and inference (generate.py).
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Dict, List, Optional, Tuple
+from typing import Dict, List
 
 
 DEFAULT_SYSTEM_PROMPT = "You are a helpful assistant."

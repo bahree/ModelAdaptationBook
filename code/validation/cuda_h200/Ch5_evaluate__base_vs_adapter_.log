@@ -1,0 +1,30 @@
+
+Step 1/4: Loading base model...
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.49it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.48it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.20it/s]
+✓ Base model loaded
+
+Step 2/4: Evaluating base model...
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+  Evaluating examples... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+  Evaluating toy test set... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+  Running safety checks... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+✓ Base evaluation complete
+
+Step 3/4: Loading adapter from chapter05/runs/val_lora_smoke...
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.58it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.57it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.32it/s]
+✓ Adapter loaded
+
+Step 4/4: Evaluating fine-tuned model...
+  Evaluating examples... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+  Evaluating toy test set... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+  Running safety checks... ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ 100%
+✓ Fine-tuned evaluation complete
+
+
+Writing evaluation reports...
+
+✓ Evaluation complete!
+✓ JSON report: chapter05/runs/eval_report/report.json
+✓ Markdown summary: chapter05/runs/eval_report/report.md
+
+→ View the markdown report for a human-readable summary

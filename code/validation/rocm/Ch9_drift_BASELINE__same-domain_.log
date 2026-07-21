@@ -1,0 +1,20 @@
+Reference prompts: 450
+Production prompts: 50
+
+Drift score:         0.1859
+Centroid similarity: 0.8141
+Alert level:         YELLOW
+
+Top drift terms (prominent in production, weak in reference):
+  battery              delta=+0.0180
+  server               delta=+0.0168
+  io                   delta=+0.0141
+  find                 delta=+0.0134
+  data                 delta=+0.0129
+  virus                delta=+0.0122
+  like                 delta=+0.0121
+  process              delta=+0.0119
+
+Moderate drift detected -- investigate recent inputs.
+
+Report saved to validate_logs/drift_baseline.json

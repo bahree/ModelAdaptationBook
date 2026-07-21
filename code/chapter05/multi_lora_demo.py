@@ -6,14 +6,13 @@ discussed in Section 5.8 (Multi-LoRA).
 
 Usage:
     python -m chapter05.multi_lora_demo \\
-        --adapter_a chapter05/runs/dolly_lora \\
-        --adapter_b chapter05/runs/dolly_lora_r8 \\
+        --adapter_a chapter05/runs/it_lora \\
+        --adapter_b chapter05/runs/it_lora_r8 \\
         --prompt "Explain how photosynthesis works in simple terms."
 """
 from __future__ import annotations
 
 import argparse
-from pathlib import Path
 
 import torch
 from peft import PeftModel

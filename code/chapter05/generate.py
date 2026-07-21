@@ -9,12 +9,12 @@ Usage (base model only):
 
 Usage (with LoRA adapter):
     python -m chapter05.generate --base Qwen/Qwen3-4B-Instruct-2507 \\
-        --adapter chapter05/runs/dolly_lora \\
+        --adapter chapter05/runs/it_lora \\
         --prompt "Explain how photosynthesis works in simple terms."
 
 Usage (with QLoRA adapter -- must use --quantized_4bit):
     python -m chapter05.generate --base Qwen/Qwen3-4B-Instruct-2507 \\
-        --adapter chapter05/runs/dolly_qlora --quantized_4bit \\
+        --adapter chapter05/runs/it_qlora --quantized_4bit \\
         --prompt "Explain how photosynthesis works in simple terms."
 
 See Chapter 5, Section 5.1 (Step 4) and the README for full details.
@@ -26,7 +26,8 @@ from pathlib import Path
 
 import torch
 from peft import PeftModel
-from transformers import AutoModelForCausalLM
+
+from common.hub import split_ref, subfolder_kwargs
 
 from chapter05 import DEFAULT_MODEL_NAME
 from chapter05.chat_template import DEFAULT_SYSTEM_PROMPT, build_prompt_text
@@ -41,8 +42,18 @@ def parse_args() -> argparse.Namespace:
         and optional merge/quantization flags.
     """
     ap = argparse.ArgumentParser()
-    ap.add_argument("--base", default=DEFAULT_MODEL_NAME)
-    ap.add_argument("--adapter", default=None, help="Path to LoRA/QLoRA adapter folder")
+    ap.add_argument(
+        "--base",
+        default=DEFAULT_MODEL_NAME,
+        help="Base model: accepts a local path, an HF repo id, or 'repo#subfolder' "
+        "(e.g. bahree/ModelAdaptationBook#ch6-sft)",
+    )
+    ap.add_argument(
+        "--adapter",
+        default=None,
+        help="LoRA/QLoRA adapter: accepts a local path, an HF repo id, or "
+        "'repo#subfolder' (e.g. bahree/ModelAdaptationBook#ch5-lora)",
+    )
     ap.add_argument("--prompt", required=True, help="User prompt")
     ap.add_argument("--system_prompt", default=DEFAULT_SYSTEM_PROMPT)
     ap.add_argument("--max_new_tokens", type=int, default=128)
@@ -67,7 +78,8 @@ def main() -> None:
         model = load_base_model_lora(args.base, gradient_checkpointing=False)
 
     if args.adapter:
-        model = PeftModel.from_pretrained(model, args.adapter)
+        ap_path, ap_sub = split_ref(args.adapter)
+        model = PeftModel.from_pretrained(model, ap_path, **subfolder_kwargs(ap_sub))
         if args.merge_adapter:
             # merge_and_unload() permanently folds LoRA weights into the base.
             # This loses modularity (can't swap adapters) but can be faster

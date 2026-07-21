@@ -1,0 +1,5 @@
+torch 2.11.0+cu126
+platform Linux-6.8.0-124-generic-x86_64-with-glibc2.39
+cuda True
+hip None
+mps False

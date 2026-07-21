@@ -36,7 +36,7 @@ def main() -> None:
     ]
     missing = [str(p) for p in required_files if not p.exists()]
     if missing:
-        raise SystemExit(f"Missing required files:\n- " + "\n- ".join(missing))
+        raise SystemExit("Missing required files:\n- " + "\n- ".join(missing))
     print("- Datasets: OK")
 
     # Torch availability
@@ -45,7 +45,7 @@ def main() -> None:
 
         print(f"- Torch: {torch.__version__}")
         print(f"- CUDA available: {torch.cuda.is_available()}")
-    except Exception as e:
+    except Exception:
         print("- Torch: not available yet")
         print("  Install PyTorch first, then re-run this script.")
         return

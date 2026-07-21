@@ -1,0 +1,53 @@
+Failed to load ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so
+Step 1: prepare dataset
+  train=40 valid=5 demo=3
+Step 2: load base model and configure LoRA
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.61it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.57it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.32it/s]
+Step 3: train for 20 steps
+Tokenizing train dataset:   0%|          | 0/40 [00:00<?, ? examples/s]Tokenizing train dataset: 100%|██████████| 40/40 [00:00<00:00, 861.47 examples/s]
+Tokenizing eval dataset:   0%|          | 0/5 [00:00<?, ? examples/s]Tokenizing eval dataset: 100%|██████████| 5/5 [00:00<00:00, 718.15 examples/s]
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+  0%|          | 0/20 [00:00<?, ?it/s]  5%|▌         | 1/20 [00:04<01:30,  4.75s/it] 10%|█         | 2/20 [00:09<01:27,  4.85s/it] 15%|█▌        | 3/20 [00:13<01:18,  4.59s/it] 20%|██        | 4/20 [00:18<01:13,  4.61s/it] 25%|██▌       | 5/20 [00:22<01:07,  4.51s/it]                                               25%|██▌       | 5/20 [00:22<01:07,  4.51s/it] 30%|███       | 6/20 [00:27<01:02,  4.49s/it] 35%|███▌      | 7/20 [00:31<00:56,  4.34s/it] 40%|████      | 8/20 [00:35<00:51,  4.32s/it] 45%|████▌     | 9/20 [00:39<00:47,  4.31s/it] 50%|█████     | 10/20 [00:44<00:45,  4.52s/it]                                                50%|█████     | 10/20 [00:44<00:45,  4.52s/it]{'loss': 2.6036, 'grad_norm': 1.2397887706756592, 'learning_rate': 0.00016, 'entropy': 1.451100343465805, 'num_tokens': 9922.0, 'mean_token_accuracy': 0.5085062310099602, 'epoch': 1.0}
+{'loss': 1.8863, 'grad_norm': 0.46350276470184326, 'learning_rate': 0.00011000000000000002, 'entropy': 1.8421266600489616, 'num_tokens': 19844.0, 'mean_token_accuracy': 0.5859248973429203, 'epoch': 2.0}
+
+  0%|          | 0/1 [00:00<?, ?it/s][A                                               
+                                     [A 50%|█████     | 10/20 [00:45<00:45,  4.52s/it]
+100%|██████████| 1/1 [00:00<00:00, 1150.07it/s][A
+                                               [A 55%|█████▌    | 11/20 [00:49<00:41,  4.61s/it] 60%|██████    | 12/20 [00:54<00:36,  4.53s/it] 65%|██████▌   | 13/20 [00:58<00:30,  4.43s/it] 70%|███████   | 14/20 [01:02<00:26,  4.41s/it] 75%|███████▌  | 15/20 [01:06<00:21,  4.33s/it]                                                75%|███████▌  | 15/20 [01:06<00:21,  4.33s/it] 80%|████████  | 16/20 [01:10<00:16,  4.25s/it] 85%|████████▌ | 17/20 [01:14<00:12,  4.12s/it] 90%|█████████ | 18/20 [01:18<00:08,  4.03s/it] 95%|█████████▌| 19/20 [01:22<00:04,  4.05s/it]100%|██████████| 20/20 [01:26<00:00,  4.08s/it]                                               100%|██████████| 20/20 [01:26<00:00,  4.08s/it]{'eval_loss': 2.3940281867980957, 'eval_runtime': 0.5858, 'eval_samples_per_second': 8.535, 'eval_steps_per_second': 1.707, 'eval_entropy': 2.3972902297973633, 'eval_num_tokens': 19844.0, 'eval_mean_token_accuracy': 0.48028674721717834, 'epoch': 2.0}
+{'loss': 1.7281, 'grad_norm': 0.4584428369998932, 'learning_rate': 6e-05, 'entropy': 1.8618426203727723, 'num_tokens': 29766.0, 'mean_token_accuracy': 0.6116830907762051, 'epoch': 3.0}
+{'loss': 1.6518, 'grad_norm': 0.41710183024406433, 'learning_rate': 1e-05, 'entropy': 1.7835281491279602, 'num_tokens': 39688.0, 'mean_token_accuracy': 0.6238955102860928, 'epoch': 4.0}
+
+  0%|          | 0/1 [00:00<?, ?it/s][A                                               
+                                     [A100%|██████████| 20/20 [01:27<00:00,  4.08s/it]
+100%|██████████| 1/1 [00:00<00:00, 2833.99it/s][A
+                                               [A                                               100%|██████████| 20/20 [01:27<00:00,  4.08s/it]100%|██████████| 20/20 [01:27<00:00,  4.36s/it]
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+{'eval_loss': 2.391721725463867, 'eval_runtime': 0.5033, 'eval_samples_per_second': 9.935, 'eval_steps_per_second': 1.987, 'eval_entropy': 2.3841958045959473, 'eval_num_tokens': 39688.0, 'eval_mean_token_accuracy': 0.4817204177379608, 'epoch': 4.0}
+{'train_runtime': 87.2857, 'train_samples_per_second': 1.833, 'train_steps_per_second': 0.229, 'train_loss': 1.9674574851989746, 'epoch': 4.0}
+  train wall time: 87.6s
+Step 4: compare outputs on held-out prompts
+
+  Q: I am currently preparing to deploy a JBoss AS into production for the first time
+  BEFORE: You're absolutely right to be cautious about automated package managers when deploying a production Java application server like JBoss AS 5 — especially since J
+  AFTER : **Summary:** For JBoss AS 5 deployment on Ubuntu 8.10, use the default directory structure, place logs in `/var/log/jboss`, create a custom startup script, and follow security best practices.
+
+**Steps
+
+  Q: I know that Wubi is slower in disk IO, but I can't find anything about it online
+  BEFORE: You're absolutely right that Wubi (Windows in Ubuntu) is often mentioned as being slower in disk I/O, especially in terms of disk seeks and overall performance 
+  AFTER : **Summary:** Wubi's performance difference is negligible, and the performance difference between Wubi and other Linux distributions is not significant.
+
+**Steps:**
+1. Wubi's performance difference is 
+
+  Q: I have a server with a RAID 1 config. The data on the RAID is in a critical stat
+  BEFORE: You're dealing with a **critical RAID 1 state**, and your symptoms — especially the "Delay Write Failed" error during file copying — are serious indicators of u
+  AFTER : **Summary:** RAID 1 rebuilds are generally safe, but data corruption can occur during the process. Use `smartctl` to check drive health, and consider using `ddrescue` for data recovery.
+
+**Steps:**
+1.
+Step 5: save adapter to chapter02/runs/ch2_quickstart
+
+Done. The adapter is in chapter02/runs/ch2_quickstart/.
+Chapter 5 walks the same recipe with full training, evaluation, and analysis.

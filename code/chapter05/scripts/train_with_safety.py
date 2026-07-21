@@ -3,7 +3,7 @@
 Train LoRA adapter with mixed safety data to prevent safety regression.
 
 This script:
-1. Loads your task training data (Dolly examples)
+1. Loads your task training data (the IT support examples)
 2. Loads safety examples (refusal responses)
 3. Mixes them (e.g., 80% task, 20% safety)
 4. Trains LoRA adapter on the mixed dataset
@@ -11,10 +11,10 @@ This script:
 
 Usage:
     python chapter05/scripts/train_with_safety.py \
-        --task_data chapter05/data/dolly_subset/train.jsonl \
+        --task_data data/it_support_fmt/train.jsonl \
         --safety_data chapter05/data/safety_examples.jsonl \
         --safety_ratio 0.2 \
-        --out chapter05/runs/dolly_lora_with_safety
+        --out chapter05/runs/it_lora_with_safety
 """
 
 import argparse
@@ -55,7 +55,7 @@ def mix_datasets(
     n_task = int(total * (1 - safety_ratio))
     n_safety = int(total * safety_ratio)
     
-    print(f"Dataset composition:")
+    print("Dataset composition:")
     print(f"  Task examples: {n_task} ({(1-safety_ratio)*100:.0f}%)")
     print(f"  Safety examples: {n_safety} ({safety_ratio*100:.0f}%)")
     print(f"  Total: {n_task + n_safety}")
@@ -85,7 +85,7 @@ def main():
         "--task_data",
         type=str,
         required=True,
-        help="Path to task training data (e.g., Dolly examples)"
+        help="Path to task training data (e.g., the IT support examples)"
     )
     parser.add_argument(
         "--safety_data",
@@ -137,13 +137,13 @@ def main():
             f.write(json.dumps(ex, ensure_ascii=False) + "\n")
     
     print(f"\n✓ Saved mixed dataset to: {mixed_path}")
-    print(f"\nNext: Train with this mixed dataset using train_lora.py")
-    print(f"\nCommand:")
-    print(f"  python -m chapter05.train_lora \\")
+    print("\nNext: Train with this mixed dataset using train_lora.py")
+    print("\nCommand:")
+    print("  python -m chapter05.train_lora \\")
     print(f"    --train {mixed_path} \\")
-    print(f"    --valid chapter05/data/dolly_subset/valid.jsonl \\")
+    print("    --valid data/it_support/valid.jsonl \\")
     print(f"    --out {out_dir / 'adapter'} \\")
-    print(f"    --epochs 3")
+    print("    --epochs 3")
 
 
 if __name__ == "__main__":

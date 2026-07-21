@@ -13,10 +13,8 @@ from __future__ import annotations
 
 import json
 import math
-from collections import Counter
-from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, Iterable, List, Optional, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from .chat_template import build_prompt_text
 from .metrics import exact_match, is_refusal, token_f1
@@ -73,7 +71,6 @@ def generate_completion(
 
 def compute_token_level_loss(model, batch) -> Tuple[float, int]:
     """Return (sum_loss, token_count) for this batch, using labels and ignoring -100."""
-    import torch
     import torch.nn.functional as F
 
     outputs = model(
@@ -394,13 +391,15 @@ def load_model_variant(
         Tuple of (model, tokenizer).
     """
     from peft import PeftModel
+    from common.hub import split_ref, subfolder_kwargs
     from .modeling import load_base_model_lora, load_tokenizer
 
     tokenizer = load_tokenizer(base_model)
     # gradient_checkpointing=False because we only run forward passes for eval.
     model = load_base_model_lora(base_model, gradient_checkpointing=False)
     if adapter:
-        model = PeftModel.from_pretrained(model, adapter)
+        ap_path, ap_sub = split_ref(adapter)
+        model = PeftModel.from_pretrained(model, ap_path, **subfolder_kwargs(ap_sub))
     return model, tokenizer
 
 

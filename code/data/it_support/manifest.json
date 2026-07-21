@@ -1,0 +1,52 @@
+{
+  "created_utc": "2026-06-14T02:00:53.598371Z",
+  "seed": 42,
+  "sources": {
+    "it_core": {
+      "dataset": "HuggingFaceH4/stack-exchange-preferences",
+      "sites": [
+        "superuser.com",
+        "askubuntu.com",
+        "serverfault.com"
+      ],
+      "license": "CC-BY-SA-4.0"
+    },
+    "general_mixin": {
+      "dataset": "databricks/databricks-dolly-15k",
+      "license": "CC-BY-SA-3.0"
+    }
+  },
+  "mix": {
+    "it_train": 360,
+    "dolly_train": 90,
+    "dolly_frac": 0.2
+  },
+  "counts": {
+    "train": 450,
+    "valid": 50,
+    "preferences": 300,
+    "it_sft_pool": 10864,
+    "pref_pool": 7379
+  },
+  "per_site_sft_candidates": {
+    "superuser.com": 3771,
+    "askubuntu.com": 3536,
+    "serverfault.com": 3557
+  },
+  "train_topic_distribution": {
+    "general": 144,
+    "software": 51,
+    "networking": 51,
+    "security": 51,
+    "linux": 51,
+    "hardware": 51,
+    "windows": 51
+  },
+  "filters": {
+    "min_q": 30,
+    "max_q": 1200,
+    "min_a": 50,
+    "max_a": 2000
+  },
+  "attribution_note": "Stack Exchange content is CC-BY-SA-4.0; see attribution.jsonl for source URLs."
+}

@@ -1,0 +1,35 @@
+Failed to load ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: ~/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so
+`torch_dtype` is deprecated! Use `dtype` instead!
+[load] base model Qwen/Qwen3-4B-Instruct-2507
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.57it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.56it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.31it/s]
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+
+=== BASE Qwen3-4B-Instruct-2507 ===
+If you've forgotten your Outlook password, here’s what you should do — depending on whether you're using **Outlook on a desktop**, **Outlook Web App (OWA)**, or **a corporate email system**:
+
+---
+
+### 🔐 1. **Try to Reset Your Password via the Email Provider**
+Most corporate or organization-managed Outlook accounts (like Microsoft 365) allow password reset through the email login page.
+
+#### Steps:
+1. Go to [https://outlook.com](https://outlook.com) or your organization's email portal.
+2. Click on **"Forgot password?"** (usually at the bottom of the login screen).
+3. Enter your **email address** associated with the account.
+4. Follow the instructions sent to your email (usually a link to reset the password).
+5. Create a new, secure password and confirm it.
+
+> ⚠️ Note: If you don’t receive the email, check your spam folder or contact your IT department.
+
+---
+
+### 🖥️ 2. **If You’re Using Outlook Desktop (e.g., Outlook for Windows/Mac)**
+- The password is tied to your email account.
+- If you can't log in, you’ll need to reset it via the web or through
+
+[skip] --base_only set; skipping LoRA run.
+
+[skip] --base_only set; skipping SFT run.
+
+[saved] ~/FTBook-pvt/code/chapter01/sidebar_outputs.json

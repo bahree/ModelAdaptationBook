@@ -1,0 +1,50 @@
+{
+ "base": {
+  "token_f1": 0.143,
+  "format_adherence": 0.0,
+  "judge_correctness": 2.037,
+  "judge_actionability": 1.889,
+  "judge_format": 3.519,
+  "token_f1_by_category": {
+   "windows": 0.1521,
+   "linux": 0.1789,
+   "networking": 0.1529,
+   "hardware": 0.1664,
+   "software": 0.1238,
+   "general": 0.1322,
+   "security": 0.0963
+  }
+ },
+ "lora": {
+  "token_f1": 0.1517,
+  "format_adherence": 1.0,
+  "judge_correctness": 1.818,
+  "judge_actionability": 2.023,
+  "judge_format": 4.0,
+  "token_f1_by_category": {
+   "windows": 0.1729,
+   "linux": 0.1384,
+   "networking": 0.1674,
+   "hardware": 0.2086,
+   "software": 0.1131,
+   "general": 0.1379,
+   "security": 0.1258
+  }
+ },
+ "sft": {
+  "token_f1": 0.1466,
+  "format_adherence": 1.0,
+  "judge_correctness": 1.894,
+  "judge_actionability": 1.957,
+  "judge_format": 3.872,
+  "token_f1_by_category": {
+   "windows": 0.1313,
+   "linux": 0.1358,
+   "networking": 0.175,
+   "hardware": 0.2001,
+   "software": 0.1184,
+   "general": 0.1407,
+   "security": 0.1257
+  }
+ }
+}

@@ -1,154 +1,148 @@
 # Chapter 5 Evaluation Report: r=16 vs r=8 Comparison
 
-**Date:** January 25, 2026  
-**Purpose:** Compare LoRA rank 16 vs rank 8 to test safety regression fix hypothesis
+**Purpose:** Compare LoRA rank 16 vs rank 8 to test whether a smaller rank preserves safety.
 
-**Result:** Unexpected! r=8 improved task performance but worsened safety.
+**Result:** Dropping the rank to r=8 helped neither task performance nor safety.
 
 ---
 
 - Base model: `Qwen/Qwen3-4B-Instruct-2507`
 - System prompt: `You are a helpful assistant.`
-- Dolly test set: `chapter05/data/dolly_subset/test.jsonl`
-- Adapter: `chapter05/runs/dolly_lora` (r=16)
-- Adapter (alt): `chapter05/runs/dolly_lora_r8` (r=8)
+- Eval set: `data/it_support/valid.jsonl`
+- Adapter: `chapter05/runs/it_lora` (r=16)
+- Adapter (alt): `chapter05/runs/it_lora_r8` (r=8)
 
 ## base
-### Dolly Test Set (Instruction-Following)
+### IT Support Eval Set (Instruction-Following)
 - **Overall exact match**: 0.0%
-- **Overall token-F1**: 0.212
+- **Overall token-F1**: 0.158
 - **Test examples**: 50
 
 **Per-Category Accuracy:**
-- brainstorming: EM=0.0%, F1=0.143 (n=8)
-- classification: EM=0.0%, F1=0.111 (n=7)
-- closed_qa: EM=0.0%, F1=0.303 (n=6)
-- creative_writing: EM=0.0%, F1=0.243 (n=1)
-- general_qa: EM=0.0%, F1=0.249 (n=6)
-- information_extraction: EM=0.0%, F1=0.377 (n=3)
-- open_qa: EM=0.0%, F1=0.173 (n=16)
-- summarization: EM=0.0%, F1=0.408 (n=3)
+- general: EM=0.0%, F1=0.140 (n=8)
+- hardware: EM=0.0%, F1=0.198 (n=7)
+- linux: EM=0.0%, F1=0.198 (n=7)
+- networking: EM=0.0%, F1=0.148 (n=7)
+- security: EM=0.0%, F1=0.120 (n=7)
+- software: EM=0.0%, F1=0.141 (n=7)
+- windows: EM=0.0%, F1=0.162 (n=7)
 
 - **Safety refusal rate**: 100.0%
 - **Toy exact match**: 0.0%
 - **Toy token-F1**: 0.170
 
 ## adapter (r=16)
-### Dolly Test Set (Instruction-Following)
+### IT Support Eval Set (Instruction-Following)
 - **Overall exact match**: 0.0%
-- **Overall token-F1**: 0.344
+- **Overall token-F1**: 0.156
 - **Test examples**: 50
 
 **Per-Category Accuracy:**
-- brainstorming: EM=0.0%, F1=0.119 (n=8)
-- classification: EM=0.0%, F1=0.596 (n=7)
-- closed_qa: EM=0.0%, F1=0.348 (n=6)
-- creative_writing: EM=0.0%, F1=0.163 (n=1)
-- general_qa: EM=0.0%, F1=0.180 (n=6)
-- information_extraction: EM=0.0%, F1=0.449 (n=3)
-- open_qa: EM=0.0%, F1=0.331 (n=16)
-- summarization: EM=0.0%, F1=0.702 (n=3)
+- general: EM=0.0%, F1=0.158 (n=8)
+- hardware: EM=0.0%, F1=0.209 (n=7)
+- linux: EM=0.0%, F1=0.133 (n=7)
+- networking: EM=0.0%, F1=0.178 (n=7)
+- security: EM=0.0%, F1=0.114 (n=7)
+- software: EM=0.0%, F1=0.155 (n=7)
+- windows: EM=0.0%, F1=0.149 (n=7)
 
 - **Safety refusal rate**: 60.0%
 - **Toy exact match**: 0.0%
-- **Toy token-F1**: 0.258
+- **Toy token-F1**: 0.191
 
 ## adapter_alt (r=8)
-### Dolly Test Set (Instruction-Following)
+### IT Support Eval Set (Instruction-Following)
 - **Overall exact match**: 0.0%
-- **Overall token-F1**: 0.370 ← BETTER than r=16!
+- **Overall token-F1**: 0.146
 - **Test examples**: 50
 
 **Per-Category Accuracy:**
-- brainstorming: EM=0.0%, F1=0.162 (n=8)
-- classification: EM=0.0%, F1=0.594 (n=7)
-- closed_qa: EM=0.0%, F1=0.365 (n=6)
-- creative_writing: EM=0.0%, F1=0.208 (n=1)
-- general_qa: EM=0.0%, F1=0.283 (n=6)
-- information_extraction: EM=0.0%, F1=0.400 (n=3)
-- open_qa: EM=0.0%, F1=0.353 (n=16)
-- summarization: EM=0.0%, F1=0.702 (n=3)
+- general: EM=0.0%, F1=0.139 (n=8)
+- hardware: EM=0.0%, F1=0.212 (n=7)
+- linux: EM=0.0%, F1=0.144 (n=7)
+- networking: EM=0.0%, F1=0.147 (n=7)
+- security: EM=0.0%, F1=0.117 (n=7)
+- software: EM=0.0%, F1=0.114 (n=7)
+- windows: EM=0.0%, F1=0.149 (n=7)
 
-- **Safety refusal rate**: 40.0% ← WORSE than r=16!
+- **Safety refusal rate**: 60.0%
 - **Toy exact match**: 0.0%
-- **Toy token-F1**: 0.275
+- **Toy token-F1**: 0.241
 
 ## adapter (r=16) vs Base
-### Dolly Test Set Improvements
+### IT Support Eval Set Improvements
 - **Overall exact match Δ**: +0.0%
-- **Overall token-F1 Δ**: +0.1321
+- **Overall token-F1 Δ**: -0.0014
 
 **Per-Category Improvements:**
-- brainstorming: EM Δ=+0.0%, F1 Δ=-0.0235
-- classification: EM Δ=+0.0%, F1 Δ=+0.4851
-- closed_qa: EM Δ=+0.0%, F1 Δ=+0.0450
-- creative_writing: EM Δ=+0.0%, F1 Δ=-0.0805
-- general_qa: EM Δ=+0.0%, F1 Δ=-0.0687
-- information_extraction: EM Δ=+0.0%, F1 Δ=+0.0715
-- open_qa: EM Δ=+0.0%, F1 Δ=+0.1576
-- summarization: EM Δ=+0.0%, F1 Δ=+0.2945
+- general: EM Δ=+0.0%, F1 Δ=+0.0172
+- hardware: EM Δ=+0.0%, F1 Δ=+0.0112
+- linux: EM Δ=+0.0%, F1 Δ=-0.0644
+- networking: EM Δ=+0.0%, F1 Δ=+0.0299
+- security: EM Δ=+0.0%, F1 Δ=-0.0063
+- software: EM Δ=+0.0%, F1 Δ=+0.0138
+- windows: EM Δ=+0.0%, F1 Δ=-0.0137
 
 - **Safety refusal rate Δ**: -40.0%
 - **Toy exact match Δ**: +0.0%
-- **Toy token-F1 Δ**: +0.0879
+- **Toy token-F1 Δ**: +0.0211
 
 ## adapter_alt (r=8) vs Base
-### Dolly Test Set Improvements
+### IT Support Eval Set Improvements
 - **Overall exact match Δ**: +0.0%
-- **Overall token-F1 Δ**: +0.1579 ← BEST performance!
+- **Overall token-F1 Δ**: -0.0118
 
 **Per-Category Improvements:**
-- brainstorming: EM Δ=+0.0%, F1 Δ=+0.0187 ← IMPROVED (was negative with r=16)
-- classification: EM Δ=+0.0%, F1 Δ=+0.4829
-- closed_qa: EM Δ=+0.0%, F1 Δ=+0.0618
-- creative_writing: EM Δ=+0.0%, F1 Δ=-0.0355
-- general_qa: EM Δ=+0.0%, F1 Δ=+0.0342 ← IMPROVED (was negative with r=16)
-- information_extraction: EM Δ=+0.0%, F1 Δ=+0.0229
-- open_qa: EM Δ=+0.0%, F1 Δ=+0.1795
-- summarization: EM Δ=+0.0%, F1 Δ=+0.2945
+- general: EM Δ=+0.0%, F1 Δ=-0.0010
+- hardware: EM Δ=+0.0%, F1 Δ=+0.0145
+- linux: EM Δ=+0.0%, F1 Δ=-0.0532
+- networking: EM Δ=+0.0%, F1 Δ=-0.0013
+- security: EM Δ=+0.0%, F1 Δ=-0.0036
+- software: EM Δ=+0.0%, F1 Δ=-0.0270
+- windows: EM Δ=+0.0%, F1 Δ=-0.0130
 
-- **Safety refusal rate Δ**: -60.0% ← WORST safety!
+- **Safety refusal rate Δ**: -40.0%
 - **Toy exact match Δ**: +0.0%
-- **Toy token-F1 Δ**: +0.1045
+- **Toy token-F1 Δ**: +0.0704
 
 ---
 
-## Analysis: Why r=8 Didn't Fix Safety
+## Analysis: Why r=8 Didn't Help
 
-### What We Expected:
+### What we expected
 - r=8 would preserve more base model behavior
-- Safety would improve (60% → 80-90%)
-- Task performance would drop slightly
+- Safety refusal rate would recover (60% -> higher)
+- Task performance might dip slightly
 
-### What Actually Happened:
-- ✅ r=8 performed BETTER on tasks (0.344 → 0.370)
-- ❌ Safety got WORSE (60% → 40%)
-- ✅ Generalization improved (brainstorming, general_qa no longer regressed)
+### What actually happened
+- Token-F1 went the wrong way: r=16 was 0.156, r=8 was 0.146 (both below base 0.158).
+- Safety did not recover: r=8 stayed at 60%, the same regression as r=16.
+- Per-category swings are small and mostly within noise for 7-8 examples per topic.
 
-### Why:
-1. **No safety data** — Training still had 0 refusal examples
-2. **Rank reduction alone can't fix data problems** — The issue isn't model capacity, it's dataset composition
-3. **r=8 might be the sweet spot** for 400 examples — Better generalization, less overfitting
-4. **Small test set variance** — 10 safety prompts means high variability
+### Why
+1. **No safety data** — Neither run had refusal examples in training, so neither could relearn refusals.
+2. **Rank reduction can't fix a data problem** — The issue is dataset composition (helpful-only), not model capacity.
+3. **Token-F1 is the wrong lens** — On long generative IT answers, token overlap with a single reference barely separates the variants. Use format-adherence checks and an LLM judge for the real quality signal.
+4. **Small eval set variance** — 50 examples, with five safety prompts, means individual swings are noisy.
 
-### Key Lesson:
-**You can't parameter-tune your way out of a data problem.** To fix safety, you MUST add safety examples to training data.
+### Key lesson
+**You can't parameter-tune your way out of a data problem.** To restore safety, add explicit refusal examples to the training data.
 
-### The Real Fix:
-1. Add 50-100 safety examples (harmful prompts + refusals)
-2. Make them 10-20% of training data
-3. Retrain and validate
-4. Only then can you trust the model's safety
+### The real fix
+1. Add safety examples (harmful prompts paired with refusals).
+2. Make them 10-20% of the training mix.
+3. Retrain and re-evaluate the refusal rate.
+4. Only then can you trust the model's safety behavior.
 
 ---
 
-## Pedagogical Value
+## Pedagogical value
 
-This unexpected result is **MORE valuable** than if r=8 had worked as predicted because it teaches:
+This null result is **more instructive** than a tidy win, because it teaches:
 
-1. ✅ **Validate empirically** — Don't assume solutions will work
-2. ✅ **Data trumps parameters** — Fix data problems with data, not hyperparameters
-3. ✅ **Unexpected results happen** — Real research involves surprises
-4. ✅ **Safety requires explicit training** — It won't emerge from parameter tuning
+1. **Validate empirically** — Don't assume a smaller rank will preserve safety.
+2. **Data trumps parameters** — Fix data problems with data, not hyperparameters.
+3. **Pick the right metric** — Token-F1 hides the real story on long generative answers.
+4. **Safety needs explicit training** — It won't re-emerge from rank tuning.
 
-This is a honest, realistic look at model fine-tuning that will help readers avoid the same mistakes.
+This is an honest look at fine-tuning that helps readers avoid the same mistake.
