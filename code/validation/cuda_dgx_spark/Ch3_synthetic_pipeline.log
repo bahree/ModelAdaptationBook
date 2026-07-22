@@ -1,0 +1,58 @@
+============================================================
+Chapter 3.9 — Synthetic Data Generation Pipeline
+============================================================
+Step 1: Loading seeds from Financial PhraseBank (AllAgree split)...
+  Loaded 60 seeds across 3 labels
+    positive : 20 examples
+    negative : 20 examples
+    neutral  : 20 examples
+
+  Sample seed (this style will anchor generation):
+    [neutral ] Tielinja generated net sales of 7.5 mln euro $ 9.6 mln in 2005 .
+
+Step 2: Building generation prompt (positive category sample)...
+  Prompt preview (first 300 chars):
+  You are building training data for a financial language model.
+
+TASK: Generate new financial sentiment examples for the "positive" category.
+
+STYLE REFERENCE — match the vocabulary, length, and tone of these real examples exactly:
+  Sentence: "Via the move , the company aims annual savings of some E...
+
+Step 3: Generating candidates (15 per category)...
+  [positive] Calling teacher model... parsed 15 candidates
+  [negative] Calling teacher model... parsed 15 candidates
+  [neutral] Calling teacher model... parsed 15 candidates
+  Total candidates: 45
+
+  Sample candidate (before quality gate):
+    [positive] 15 March 2012 - Swedish telecommunications equipment maker Ericsson AB STO : ERI
+
+Step 4: Quality gate — scoring 45 candidates...
+  Scored 10/45...  Scored 20/45...  Scored 30/45...  Scored 40/45...
+  Passed: 45 (100%)
+  Failed: 0 (0%)
+
+  Sample PASSED example:
+    [positive] 15 March 2012 - Swedish telecommunications equipment maker Ericsson AB STO : ERI
+    Scores: {'fidelity': 5, 'format': 5, 'domain_safety': 5, 'pass': True}
+
+Step 5: Distribution alignment check...
+  Loading sentence encoder (all-MiniLM-L6-v2)...
+  Centroid cosine similarity: 0.876  (safe to mix)
+Saving the dataset (0/1 shards):   0%|          | 0/85 [00:00<?, ? examples/s]Saving the dataset (1/1 shards): 100%|██████████| 85/85 [00:00<00:00, 71661.48 examples/s]Saving the dataset (1/1 shards): 100%|██████████| 85/85 [00:00<00:00, 67920.72 examples/s]
+Saving the dataset (0/1 shards):   0%|          | 0/6 [00:00<?, ? examples/s]Saving the dataset (1/1 shards): 100%|██████████| 6/6 [00:00<00:00, 6938.47 examples/s]Saving the dataset (1/1 shards): 100%|██████████| 6/6 [00:00<00:00, 6581.02 examples/s]
+
+Step 6: Mixed dataset saved to ./ch03_synthetic_output/
+  Real        : 60
+  Synthetic   : 25  (29% of total)
+  Train       : 85
+  Eval        : 6  (real only)
+  SHA-256     : 700823eca9e7ed372ce38c2a...
+
+  Next step: pass ./ch03_synthetic_output/train to SFTTrainer
+  Dataset manifest: ./ch03_synthetic_output/manifest.json
+
+============================================================
+Pipeline complete.
+============================================================

@@ -1,0 +1,26 @@
+Indexed 12 chunks from 8 documents (backend=hash)
+Evaluating 10 labelled queries at k=3
+
+========================================================
+RAG RETRIEVAL EVAL
+========================================================
+  k                       3
+  queries                 10
+  mean Precision@k        0.367
+  mean Recall@k           0.900
+  mean Hit@1              0.800
+  wall seconds            0.00
+
+Per-query (showing misses first):
+  [MISS] expected=doc_billing_001          top1=doc_security_001         P@k=0.00  query='How long does a customer have to request a refund?'
+  [  ok] expected=doc_billing_001          top1=doc_login_001            P@k=0.67  query='Can I get a refund on an annual plan if I cancel mid-year?'
+  [  ok] expected=doc_billing_002          top1=doc_billing_002          P@k=0.33  query='What payment methods does the platform support for enterpris'
+  [  ok] expected=doc_login_001            top1=doc_login_001            P@k=0.33  query='How long does a password reset link stay valid?'
+  [  ok] expected=doc_login_001            top1=doc_login_001            P@k=0.33  query="Why can't an Okta user reset their password through the stan"
+  [  ok] expected=doc_login_002            top1=doc_login_002            P@k=0.33  query='Which 2FA methods are supported and which is preferred?'
+  [  ok] expected=doc_integrations_001     top1=doc_integrations_001     P@k=0.67  query='How often does the Salesforce integration sync contacts?'
+  [  ok] expected=doc_security_001         top1=doc_security_001         P@k=0.33  query='Are customer documents encrypted at rest, and with what algo'
+  [  ok] expected=doc_api_001              top1=doc_api_001              P@k=0.33  query='What is the rate limit for API keys on the Standard tier?'
+  [  ok] expected=doc_api_002              top1=doc_api_002              P@k=0.33  query='Is there a grace period after I rotate my API key?'
+
+Report: chapter04/runs/rag_eval.json

@@ -1,0 +1,50 @@
+Step 1: prepare dataset
+  train=40 valid=5 demo=3
+Step 2: load base model and configure LoRA
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:19<00:39, 19.70s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:43<00:21, 21.97s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:43<00:00, 12.22s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:43<00:00, 14.62s/it]
+Step 3: train for 20 steps
+Tokenizing train dataset:   0%|          | 0/40 [00:00<?, ? examples/s]Tokenizing train dataset: 100%|██████████| 40/40 [00:00<00:00, 1523.01 examples/s]
+Building labels for train dataset:   0%|          | 0/40 [00:00<?, ? examples/s]Building labels for train dataset: 100%|██████████| 40/40 [00:00<00:00, 6666.09 examples/s]
+Truncating train dataset:   0%|          | 0/40 [00:00<?, ? examples/s]Truncating train dataset: 100%|██████████| 40/40 [00:00<00:00, 6194.97 examples/s]
+Tokenizing eval dataset:   0%|          | 0/5 [00:00<?, ? examples/s]Tokenizing eval dataset: 100%|██████████| 5/5 [00:00<00:00, 1127.32 examples/s]
+Building labels for eval dataset:   0%|          | 0/5 [00:00<?, ? examples/s]Building labels for eval dataset: 100%|██████████| 5/5 [00:00<00:00, 2867.31 examples/s]
+Truncating eval dataset:   0%|          | 0/5 [00:00<?, ? examples/s]Truncating eval dataset: 100%|██████████| 5/5 [00:00<00:00, 2778.79 examples/s]
+The model is already on multiple devices. Skipping the move to device specified in `args`.
+The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'bos_token_id': None, 'pad_token_id': 151643}.
+  0%|          | 0/20 [00:00<?, ?it/s]  5%|▌         | 1/20 [00:04<01:25,  4.51s/it] 10%|█         | 2/20 [00:08<01:12,  4.01s/it] 15%|█▌        | 3/20 [00:11<01:04,  3.78s/it] 20%|██        | 4/20 [00:15<00:59,  3.70s/it] 25%|██▌       | 5/20 [00:18<00:54,  3.61s/it]                                               25%|██▌       | 5/20 [00:18<00:54,  3.61s/it] 30%|███       | 6/20 [00:22<00:51,  3.64s/it] 35%|███▌      | 7/20 [00:25<00:45,  3.48s/it] 40%|████      | 8/20 [00:29<00:42,  3.55s/it] 45%|████▌     | 9/20 [00:32<00:38,  3.54s/it] 50%|█████     | 10/20 [00:36<00:36,  3.66s/it]                                                50%|█████     | 10/20 [00:36<00:36,  3.66s/it]{'loss': 2.9435, 'grad_norm': 1.667905569076538, 'learning_rate': 0.00017777777777777779, 'entropy': 1.3220712542533875, 'num_tokens': 9922.0, 'mean_token_accuracy': 0.4858028322458267, 'epoch': 1.0}
+{'loss': 1.9814, 'grad_norm': 0.4557558000087738, 'learning_rate': 0.00012222222222222224, 'entropy': 1.7976638227701187, 'num_tokens': 19844.0, 'mean_token_accuracy': 0.5674900121986866, 'epoch': 2.0}
+
+  0%|          | 0/1 [00:00<?, ?it/s][A                                               
+                                     [A 50%|█████     | 10/20 [00:37<00:36,  3.66s/it]
+100%|██████████| 1/1 [00:00<00:00, 3587.94it/s][A
+                                               [A 55%|█████▌    | 11/20 [00:41<00:36,  4.05s/it] 60%|██████    | 12/20 [00:44<00:29,  3.69s/it] 65%|██████▌   | 13/20 [00:48<00:25,  3.65s/it] 70%|███████   | 14/20 [00:51<00:21,  3.64s/it] 75%|███████▌  | 15/20 [00:55<00:18,  3.69s/it]                                                75%|███████▌  | 15/20 [00:55<00:18,  3.69s/it] 80%|████████  | 16/20 [00:59<00:14,  3.66s/it] 85%|████████▌ | 17/20 [01:02<00:10,  3.56s/it] 90%|█████████ | 18/20 [01:06<00:07,  3.58s/it] 95%|█████████▌| 19/20 [01:09<00:03,  3.54s/it]100%|██████████| 20/20 [01:13<00:00,  3.59s/it]                                               100%|██████████| 20/20 [01:13<00:00,  3.59s/it]{'eval_loss': 2.3956613540649414, 'eval_runtime': 1.0078, 'eval_samples_per_second': 4.961, 'eval_steps_per_second': 0.992, 'eval_entropy': 2.34818696975708, 'eval_num_tokens': 19844.0, 'eval_mean_token_accuracy': 0.48028674721717834, 'epoch': 2.0}
+{'loss': 1.7809, 'grad_norm': 0.5248974561691284, 'learning_rate': 6.666666666666667e-05, 'entropy': 1.9057701721787452, 'num_tokens': 29766.0, 'mean_token_accuracy': 0.6016246505081654, 'epoch': 3.0}
+{'loss': 1.6863, 'grad_norm': 0.4217677116394043, 'learning_rate': 1.1111111111111112e-05, 'entropy': 1.8308574110269547, 'num_tokens': 39688.0, 'mean_token_accuracy': 0.6181641861796379, 'epoch': 4.0}
+
+  0%|          | 0/1 [00:00<?, ?it/s][A                                               
+                                     [A100%|██████████| 20/20 [01:14<00:00,  3.59s/it]
+100%|██████████| 1/1 [00:00<00:00, 3949.44it/s][A
+                                               [A                                               100%|██████████| 20/20 [01:14<00:00,  3.59s/it]100%|██████████| 20/20 [01:14<00:00,  3.71s/it]
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+{'eval_loss': 2.389235019683838, 'eval_runtime': 0.9986, 'eval_samples_per_second': 5.007, 'eval_steps_per_second': 1.001, 'eval_entropy': 2.3971164226531982, 'eval_num_tokens': 39688.0, 'eval_mean_token_accuracy': 0.4795698821544647, 'epoch': 4.0}
+{'train_runtime': 74.1778, 'train_samples_per_second': 2.157, 'train_steps_per_second': 0.27, 'train_loss': 2.0980011940002443, 'epoch': 4.0}
+  train wall time: 74.3s
+Step 4: compare outputs on held-out prompts
+
+  Q: I am currently preparing to deploy a JBoss AS into production for the first time
+  BEFORE: You're absolutely right to be cautious about automated package managers when deploying a production Java application server like JBoss AS 5 — especially since J
+  AFTER : **Summary:** For JBoss AS 5 deployment on Ubuntu 8.10, use the default directory structure, place logs in `/var/log/jboss`, and use the provided startup scripts. Security concerns are minimal for a st
+
+  Q: I know that Wubi is slower in disk IO, but I can't find anything about it online
+  BEFORE: You're absolutely right that Wubi (Windows in Ubuntu) is often mentioned as being slower in disk I/O, especially in terms of disk seeks and overall performance,
+  AFTER : **Summary:** Wubi is not significantly slower than other filesystems in terms of disk I/O, and the performance difference is negligible in practice.
+
+**Explanation:** The performance difference betwee
+
+  Q: I have a server with a RAID 1 config. The data on the RAID is in a critical stat
+  BEFORE: You're dealing with a **critical RAID 1 state**, and your symptoms — especially the "Delay Write Failed" error during file copying — are serious indicators of u
+  AFTER : **Summary:** RAID 1 is a mirror, so if one drive fails, the other drive has all the data. If both drives fail, the data is lost. The "Delay Write Failed" error is not a RAID error but a Windows error 
+Step 5: save adapter to chapter02/runs/ch2_quickstart
+
+Done. The adapter is in chapter02/runs/ch2_quickstart/.
+Chapter 5 walks the same recipe with full training, evaluation, and analysis.

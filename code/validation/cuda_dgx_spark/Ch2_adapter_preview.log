@@ -1,0 +1,48 @@
+Loading base model: Qwen/Qwen3-4B-Instruct-2507
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:19<00:39, 19.80s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:42<00:21, 21.45s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:42<00:00, 11.91s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:42<00:00, 14.32s/it]
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Attaching adapter from Hugging Face Hub (bahree/qwen3-4b-it-lora-ch5): bahree/qwen3-4b-it-lora-ch5
+
+=== Prompt 1 ===
+Q: Which of the following are deciduous trees?
+
+Base (no adapter):
+  Deciduous trees are those that shed their leaves annually, typically in the fall. Coniferous trees (like pines) are evergreen and retain their leaves (or needles) year-round.
+
+Let's go through the list:
+
+1. **Abies concolor** – *Concolor fir*  
+   → This is a **conifer** (fir tree), **evergreen** → **Not deciduous**
+
+2. **Acer rubrum** – *Red maple
+
+Adapter:
+  Deciduous trees are trees that shed their leaves annually. The following are deciduous trees:
+
+Acer rubrum
+Acer saccharinum
+Cornus florida
+
+=== Prompt 2 ===
+Q: What are the words of House Wendwater?
+
+Base (no adapter):
+  There are no official or canonical "words of House Wendwater" in the context of *Game of Thrones* or *A Song of Ice and Fire* by George R.R. Martin. House Wendwater does not appear in the official books or the television series.
+
+It's possible you may be confusing the name with another house, such as **House Winter** (a major house in Westeros), or
+
+Adapter:
+  House Wendwater is a noble house in the world of Westeros in the A Song of Ice and Fire series. The words of House Wendwater are "Honor, Loyalty, and Courage".
+
+=== Prompt 3 ===
+Q: What is the difference between love and affection?
+
+Base (no adapter):
+  Great question! While *love* and *affection* are often used interchangeably, they have distinct meanings and emotional depths:
+
+### **Love**
+- **Definition**: A deep, enduring emotional connection that involves commitment, care, respect, and often a sense of belonging or partnership.
+- **Scope**: Broader and more profound. It can include romantic l
+
+Adapter:
+  Love and affection are two different things. Affection is a feeling of fondness or liking for someone. Love is a strong feeling of deep affection for someone.

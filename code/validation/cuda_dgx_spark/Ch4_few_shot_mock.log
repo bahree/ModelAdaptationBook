@@ -1,0 +1,6 @@
+Running few-shot (8 shots) on 18 test cases
+Backend: mock
+
+Top-1 accuracy: 77.78% (14/18)
+Report:  chapter04/runs/few_shot_mock_dgx.json
+Details: chapter04/runs/few_shot_details.jsonl

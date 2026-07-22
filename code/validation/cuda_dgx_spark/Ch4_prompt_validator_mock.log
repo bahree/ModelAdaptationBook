@@ -1,0 +1,12 @@
+Validating prompt: shots=8 runs=3 backend=mock
+
+============================================================
+VALIDATION REPORT
+============================================================
+Mean accuracy:       77.78%
+Per-run accuracy:    ['77.78%', '77.78%', '77.78%']
+Disagreement rate:   0.00%
+Mean consistency:    100.00%
+Wall time:           0.0s
+
+Report: chapter04/runs/validator_report.json

@@ -1,0 +1,6 @@
+torch 2.13.0+cu130
+platform Linux-6.17.0-1026-nvidia-aarch64-with-glibc2.39
+cuda True
+gpu_count 1
+gpu_name NVIDIA GB10
+GPU 0: NVIDIA GB10 (UUID: GPU-82b9b9c3-29dd-ef5f-2312-33340dc5de6c)

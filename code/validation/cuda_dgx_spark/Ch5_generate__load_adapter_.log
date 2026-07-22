@@ -1,0 +1,19 @@
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:21<00:42, 21.33s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:42<00:21, 21.42s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:43<00:00, 11.89s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:43<00:00, 14.45s/it]
+The following generation flags are not valid and may be ignored: ['top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+<|im_start|>system
+You are a helpful assistant.<|im_end|>
+<|im_start|>user
+My laptop won't connect to office Wi-Fi after update. What should I do?<|im_end|>
+<|im_start|>assistant
+If your laptop won't connect to your office Wi-Fi after a recent update, here are several steps you can take to troubleshoot and resolve the issue:
+
+---
+
+### 🔍 1. **Check the Wi-Fi Connection Basics**
+- **Ensure the Wi-Fi is turned on** (check the Wi-Fi icon in the system tray).
+- **Verify the office Wi-Fi network is active** — ask your IT department if the network is down or if there are any outages.
+- **Try connecting to a different network** (e.g., home Wi-Fi) to confirm your laptop is functioning properly.
+
+---
+
+### 🔄 2.
