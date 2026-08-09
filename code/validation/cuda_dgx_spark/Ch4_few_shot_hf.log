@@ -1,0 +1,9 @@
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:19<00:39, 19.70s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:42<00:21, 21.56s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:43<00:00, 12.00s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:43<00:00, 14.40s/it]
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+Running few-shot (8 shots) on 18 test cases
+Backend: hf
+
+Top-1 accuracy: 61.11% (11/18)
+Report:  chapter04/runs/few_shot_hf_dgx.json
+Details: chapter04/runs/few_shot_details.jsonl

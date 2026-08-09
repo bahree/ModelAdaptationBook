@@ -33,6 +33,7 @@ chapters but is impractical for training.
 ## Which accelerator do I need?
 
 - **Any NVIDIA GPU with enough VRAM** runs everything; this is the reference path.
+- **DGX Spark (GB10)** is validated for chapters 1 to 5 with the chapter recipe in this repo. Use a `cu130` (or newer) PyTorch wheel on GB10; older CUDA wheel indices may detect CUDA but lack `sm_121` kernels.
 - **An AMD GPU on Linux (ROCm)** also runs everything, including QLoRA and the full-parameter chapters. Best on datacenter (MI-series) cards; consumer RDNA support varies by GPU generation.
 - **A Mac (Apple Silicon)** is great for chapters 1 through 5's LoRA path and chapter 9, but cannot *train* QLoRA or the full-parameter chapters (6, 7, 8). For training those, use a cloud GPU.
 - **No GPU, or a Mac/small card?** You can still follow chapters 5 through 8 by pulling the trained model from Hugging Face and running inference or evaluation, without training it. See [Running without training](#running-without-training-pull-the-model-from-hugging-face).
@@ -105,6 +106,7 @@ The code is not pinned to one accelerator. The table records the exact machines 
 
 | Accelerator | Machine | OS | Driver / runtime | PyTorch | Coverage |
 |---|---|---|---|---|---|
+| NVIDIA CUDA | DGX Spark (GB10) | Linux (aarch64) | driver 580.159.03, CUDA 13.0 | 2.13.0+cu130 | Chapters 1 to 5 validated end-to-end with chapter-oriented recipe (`smoke`, `ch1` ... `ch5`, `all`), including chapter 2 quickstart training, chapter 3 synthetic pipeline, chapter 4 HF backend, and chapter 5 LoRA smoke + eval |
 | NVIDIA CUDA | A30 (24 GB) | Linux | CUDA 12.x | 2.11+cu126 | All chapters (reference platform for the book's published numbers) |
 | NVIDIA CUDA | H200 (140 GB) | Ubuntu (Nebius) | driver 580.159.04 | 2.12.1+cu126 | Full book end-to-end via validate_all.sh (25/25, incl. all training) |
 | NVIDIA CUDA | B200 (179 GB, Blackwell) | Ubuntu (Nebius) | driver 580.159.04 | 2.11.0+cu128 | Full book end-to-end via validate_all.sh (25/25); needs the cu128 wheel for sm_100, and 4-bit QLoRA is slow on current Blackwell kernels (see below) |
@@ -112,9 +114,33 @@ The code is not pinned to one accelerator. The table records the exact machines 
 | AMD ROCm | Instinct MI300X (192 GB) | Ubuntu 24.04 | ROCm 7.x, HIP 7.0.51831 | 2.10.0+rocm7.0 | Full book end-to-end, including Ch5 QLoRA (4-bit) and full-parameter Ch6/7/8 |
 | AMD ROCm | Instinct MI300X (192 GB) | Ubuntu (RunPod) | ROCm 6.1, HIP 6.1.40091 | 2.6.0+rocm6.1 | Full book except Ch5 QLoRA via validate_all.sh (24/25); QLoRA needs ROCm 6.2+ (no `bitsandbytes` 6.1 kernel, see AMD notes) |
 
+## DGX Spark (GB10) run details (chapters 1 to 5)
+
+We validated the DGX Spark chapter recipe end-to-end, including each target
+(`smoke`, `ch1`, `ch2`, `ch3`, `ch4`, `ch5`) and the umbrella `all` target.
+Run artifacts are in `code/validation/cuda_dgx_spark/`.
+
+Key points from the run:
+
+- **Use cu130 wheels on GB10.** A cu126 wheel detects CUDA but warns that
+  kernels are not built for `sm_121` (compute capability 12.1). The tested-good
+  setup is PyTorch `2.13.0+cu130`.
+- **Recipe fix landed during validation.** The chapter 2 data prep path
+  originally called `reformat_it_answers.py` without required flags. The recipe
+  now passes:
+  `python scripts/reformat_it_answers.py --in data/it_support/train.jsonl --out data/it_support_fmt/train.jsonl`.
+- **Optional OpenRouter warnings are non-fatal.** If `OPENROUTER_API_KEY` is
+  unset, the reformat step logs warnings and keeps passthrough rows; the run
+  still completes.
+- **Known warning noise remains non-blocking.** Some scripts emit
+  `torch_dtype` deprecation and generation-config warnings (`top_p`/`top_k`);
+  execution and outputs are unaffected.
+
 ## Dependency versions
 
 All accelerators run the same code on **Python 3.12** with `transformers` 4.57.6, `peft` 0.17.1, `trl` 1.5.x, `bitsandbytes` 0.49.2 (CUDA and ROCm only). The package pins `transformers>=4.47.0,<5.0`: transformers 5.x removes a symbol that `peft` imports, so a fresh install without the upper bound resolves to 5.x and breaks `import peft`. The per-accelerator PyTorch install command is in the [README Quick start](README.md#quick-start).
+
+For **DGX Spark (GB10)** specifically, prefer a `cu130` (or newer) PyTorch wheel. The `cu126` wheel can report CUDA available but still miss `sm_121` kernels.
 
 ## Performance across GPUs
 
@@ -141,9 +167,23 @@ All three GPUs do a full end-to-end pass (every chapter, real 1-epoch training) 
 
 The A30 (Ampere, 2020) is roughly 2x the datacenter cards on training and ~2.5-3x on the generation-heavy eval steps. The H200 and MI300X are close to each other; a 4B model on small datasets does not stress either, so the gap between them would only open up with larger models, longer context, or bigger batches.
 
+**DGX Spark note:** our DGX Spark validation was chapter-recipe scoped (chapters 1 to 5), not a full-book benchmark like the table above. So we do not include DGX Spark in this full-book timing matrix to avoid apples-to-oranges comparisons.
+
+Representative recipe-scope timings observed on DGX Spark GB10:
+
+| DGX Spark recipe step | Observed wall time |
+|---|---:|
+| Ch2 quickstart training | ~74 s |
+| Ch5 tiny LoRA smoke training (`validate_chapter05.py`) | ~1.4 s (training runtime, after model load) |
+| Typical Qwen3-4B checkpoint load (ch1-ch5 runs) | ~44 to 46 s |
+
+Raw logs for these timings are in `code/validation/cuda_dgx_spark/Recipe_ch2.log`, `code/validation/cuda_dgx_spark/Recipe_ch5.log`, and `code/validation/cuda_dgx_spark/Recipe_all.log`.
+
 ## Cross-accelerator validation pass (validate_all.sh)
 
 We ran the full code path on every accelerator with one harness, `docs/overview/validate_all.sh --full` (raw scrubbed logs are in `code/validation/<accel>/`). Every box produced **identical functional results**: drift baseline 0.1859 (YELLOW) and a deliberately topic-shifted 0.6855 (RED) with `kubernetes` as the top drift term, the same bias_fairness safety alert, and a clean LoRA adapter load with no offload error. So the code reproduces across Ampere, Hopper, and Blackwell (and on Apple Silicon for the inference paths). Per-step training wall time, in seconds:
+
+DGX Spark results in this repo are tracked separately under `code/validation/cuda_dgx_spark/` because the validation scope there is chapters 1 to 5 via recipe targets rather than the full `validate_all.sh --full` matrix. Those artifacts include per-target logs (`Recipe_smoke.log`, `Recipe_ch1.log` ... `Recipe_ch5.log`, `Recipe_all.log`) and a run summary (`code/validation/cuda_dgx_spark/README.md`).
 
 | Step | A30 (Ampere) | H200 (Hopper) | B200 (Blackwell) |
 |---|---:|---:|---:|
