@@ -1,3 +1,5 @@
+
+
 # LLM Customization and Fine-Tuning: Adaptation, Distillation, and Alignment
 
 <table border="0"><tr>
@@ -106,7 +108,7 @@ Every chapter ships with runnable code. The hands-on chapters (4 through 9) repr
 
 ```bash
 python scripts/build_it_support_dataset.py   # -> data/it_support/  (train, valid, preferences, manifest, attribution)
-python scripts/reformat_it_answers.py        # -> data/it_support_fmt/train.jsonl  (house answer style)
+python scripts/reformat_it_answers.py --in data/it_support/train.jsonl --out data/it_support_fmt/train.jsonl   # -> data/it_support_fmt/train.jsonl  (house answer style)
 ```
 
 The builder needs `beautifulsoup4` and `datasets` (both in the base install). Per-example source URLs and the source licenses are in [License and data attribution](#license-and-data-attribution).
