@@ -6,7 +6,7 @@ weights. The base model is frozen; only the small LoRA matrices are updated.
 Usage:
     python -m chapter05.train_lora \\
         --train data/it_support_fmt/train.jsonl \\
-        --valid data/it_support/valid.jsonl \\
+        --valid data/it_support_fmt/valid.jsonl \\
         --out chapter05/runs/it_lora
 
 See Chapter 5, Section 5.1 (Step 2) and the README for full details.
@@ -26,6 +26,7 @@ from chapter05.data import load_chat_jsonl
 from chapter05.dataset import prepare_dataset_for_sft
 from chapter05.modeling import create_lora_config, load_base_model_lora, load_tokenizer
 from common.env import resolve_report_to
+from common.gpu import report_peak_gpu_memory
 from common.seed import seed_everything
 
 
@@ -149,6 +150,7 @@ def main() -> None:
         processing_class=tokenizer,
     )
     trainer.train()
+    report_peak_gpu_memory("LoRA training")  # measured: ~9 GiB on an A30 at r=16
 
     # Save only the adapter weights (small, ~tens of MB) and the tokenizer.
     # The base model is NOT duplicated -- load it separately at inference time.

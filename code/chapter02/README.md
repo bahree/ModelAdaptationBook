@@ -38,8 +38,8 @@ The quickstart trains on the book's **IT-support dataset**: real Stack Exchange 
 # 1. Build the dataset -> data/it_support/ (train.jsonl, valid.jsonl, preferences.jsonl, manifest.json, attribution.jsonl)
 python scripts/build_it_support_dataset.py
 
-# 2. Reformat answers into the house style -> data/it_support_fmt/train.jsonl
-python scripts/reformat_it_answers.py
+# 2. Reformat answers into the house style -> data/it_support_fmt/{train,valid}.jsonl
+python scripts/reformat_it_answers.py   # (needs OPENROUTER_API_KEY; the output file is already committed, so this step is optional unless you rebuild from source)
 ```
 
 The builder depends on `beautifulsoup4` (to clean the Stack Exchange HTML) and `datasets`, both part of the base install. Per-example source URLs for the Stack Exchange content are written to `data/it_support/attribution.jsonl`. The quickstart then loads `data/it_support_fmt/train.jsonl` and `data/it_support/valid.jsonl`.
@@ -57,7 +57,7 @@ pip install -e ".[dev]"
 
 # Build the IT-support dataset once (see "Preparing the data" above)
 python scripts/build_it_support_dataset.py
-python scripts/reformat_it_answers.py
+python scripts/reformat_it_answers.py   # (needs OPENROUTER_API_KEY; the output file is already committed, so this step is optional unless you rebuild from source)
 
 # Run the five-step LoRA fine-tune
 python -m chapter02.quickstart
@@ -70,7 +70,7 @@ Step 1: prepare dataset
   train=40 valid=5 demo=3
 Step 2: load base model and configure LoRA
 Step 3: train for 20 steps
-  train wall time: ~56s on A30
+  train wall time: ~78s on A30 (peak GPU memory about 9 GB)
 Step 4: compare outputs on held-out prompts
   ...
 Step 5: save adapter to chapter02/runs/ch2_quickstart

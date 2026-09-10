@@ -10,7 +10,7 @@ house format by ``scripts/reformat_it_answers.py``. Prepare the data with:
 
 Then train/evaluate against:
   --train data/it_support_fmt/train.jsonl
-  --valid data/it_support/valid.jsonl
+  --valid data/it_support_fmt/valid.jsonl
 
 This module is retained only because earlier drafts referenced it and the
 ``dolly_to_messages`` helper below documents the original Dolly format. Running
@@ -92,7 +92,7 @@ def main() -> None:
     print()
     print("Then train and evaluate against:")
     print("  --train data/it_support_fmt/train.jsonl")
-    print("  --valid data/it_support/valid.jsonl")
+    print("  --valid data/it_support_fmt/valid.jsonl")
 
 
 if __name__ == "__main__":

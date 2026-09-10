@@ -148,13 +148,13 @@ Build the IT support dataset, then reformat the answers into the house style. Ru
 ```bash
 # From code/chapter05/ (venv active)
 python scripts/build_it_support_dataset.py
-python scripts/reformat_it_answers.py
+python scripts/reformat_it_answers.py   # (needs OPENROUTER_API_KEY; the output file is already committed, so this step is optional unless you rebuild from source)
 ```
 
 **Windows (PowerShell/CMD):**
 ```powershell
 python scripts\build_it_support_dataset.py
-python scripts\reformat_it_answers.py
+python scripts\reformat_it_answers.py   # (needs OPENROUTER_API_KEY; the output file is already committed, so this step is optional unless you rebuild from source)
 ```
 
 This will:
@@ -164,7 +164,7 @@ This will:
 - Write a `manifest.json` and an `attribution.jsonl` recording the per-example source URL and license
 - Save to `data/it_support/` (`train.jsonl`, `valid.jsonl`, `preferences.jsonl`, `manifest.json`, `attribution.jsonl`)
 
-The second script (`reformat_it_answers.py`) rewrites the answers into the chapter's house format and writes `data/it_support_fmt/train.jsonl`, the file you train on.
+The second script (`reformat_it_answers.py`) rewrites the answers into the chapter's house format and writes `data/it_support_fmt/train.jsonl` (the file you train on) and `data/it_support_fmt/valid.jsonl` (the training-time validation split, processed the same way so eval loss is comparable to training loss). The raw `data/it_support/valid.jsonl` stays the held-out test set for the evaluation scripts, so token-F1 is still scored against the original human answers.
 
 **Resulting files:**
 ```
@@ -190,7 +190,7 @@ Train a LoRA adapter using TRL's SFTTrainer:
 ```bash
 python -m chapter05.train_lora \
   --train data/it_support_fmt/train.jsonl \
-  --valid data/it_support/valid.jsonl \
+  --valid data/it_support_fmt/valid.jsonl \
   --out chapter05/runs/it_lora
 ```
 
@@ -198,7 +198,7 @@ python -m chapter05.train_lora \
 ```powershell
 python -m chapter05.train_lora ^
   --train data/it_support_fmt/train.jsonl ^
-  --valid data/it_support/valid.jsonl ^
+  --valid data/it_support_fmt/valid.jsonl ^
   --out chapter05/runs/it_lora
 ```
 
@@ -278,7 +278,7 @@ QLoRA uses 4-bit quantization, enabling training on smaller GPUs. (You already i
 ```bash
 python -m chapter05.train_qlora \
   --train data/it_support_fmt/train.jsonl \
-  --valid data/it_support/valid.jsonl \
+  --valid data/it_support_fmt/valid.jsonl \
   --out chapter05/runs/it_qlora
 ```
 
@@ -286,7 +286,7 @@ python -m chapter05.train_qlora \
 ```powershell
 python -m chapter05.train_qlora ^
   --train data/it_support_fmt/train.jsonl ^
-  --valid data/it_support/valid.jsonl ^
+  --valid data/it_support_fmt/valid.jsonl ^
   --out chapter05/runs/it_qlora
 ```
 
@@ -409,7 +409,7 @@ The evaluation also runs a safety suite to ensure fine-tuning didn't weaken safe
 
 ### **"Dataset not found"**
 - **Run `build_it_support_dataset.py` then `reformat_it_answers.py` first** (Step 1)
-- Check that files exist: `data/it_support_fmt/train.jsonl` and `data/it_support/valid.jsonl`
+- Check that files exist: `data/it_support_fmt/train.jsonl`, `data/it_support_fmt/valid.jsonl` (training), and `data/it_support/valid.jsonl` (evaluation)
 
 ### "TRL not installed"
 - Install: `pip install trl>=0.9.0`

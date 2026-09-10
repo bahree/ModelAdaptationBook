@@ -7,7 +7,7 @@ This file captures a typical run of `train_qlora` for the Chapter 5 IT support d
 ```bash
 python -m chapter05.train_qlora \
   --train data/it_support_fmt/train.jsonl \
-  --valid data/it_support/valid.jsonl \
+  --valid data/it_support_fmt/valid.jsonl \
   --out chapter05/runs/it_qlora
 ```
 

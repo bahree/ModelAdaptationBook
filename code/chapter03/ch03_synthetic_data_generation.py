@@ -549,10 +549,13 @@ def check_distribution_alignment(
 # narrows and the model underperforms on low-frequency inputs — exactly the
 # rare-but-important examples that fine-tuning is supposed to improve.
 #
-# The formula: n_synth = n_real × 0.30 / (1 - 0.30)
-#   = n_real × 0.4286
-# Solving for n_synth given n_real ensures the synthetic proportion stays
-# at exactly 30% after mixing, regardless of how many passed the quality gate.
+# The formula: n_synth = n_train_real × 0.30 / (1 - 0.30)
+#   = n_train_real × 0.4286
+# Solving for n_synth given the real count ensures the synthetic proportion
+# stays at exactly 30% after mixing, regardless of how many passed the gate.
+# Note the input is the real count *in the train split*, after the eval
+# examples have been held out; synthetic data never enters the eval split,
+# so sizing the cap against the full real pool would overshoot 30%.
 #
 # The manifest records the SHA-256 hash of the full mixed dataset. Any future
 # change to the data — even a single character — will produce a different hash,
@@ -572,6 +575,10 @@ def mix_and_save(
     This ensures the evaluation benchmark measures against ground truth,
     not against the teacher model's preferred outputs.
 
+    The eval examples are held out FIRST and never enter the train split.
+    Train and eval must stay strictly disjoint, otherwise the eval score
+    measures memorization rather than generalization.
+
     Args:
         real_examples:      Real seed examples (the full available pool)
         synthetic_examples: Verified synthetic examples from Step 4
@@ -585,12 +592,22 @@ def mix_and_save(
     import os
     os.makedirs(output_dir, exist_ok=True)
 
-    n_real       = len(real_examples)
-    # Cap synthetic count to enforce the 30% ratio
-    n_synth_max  = int(n_real * max_synth_ratio / (1 - max_synth_ratio))
-    n_synth      = min(n_synth_max, len(synthetic_examples))
+    rng      = random.Random(seed)
+    n_real   = len(real_examples)
 
-    rng = random.Random(seed)
+    # Hold the eval examples out FIRST, before anything is mixed. Everything
+    # that lands in eval is removed from the real pool, so no eval example
+    # can reach the train split.
+    n_eval        = min(max(5, n_real // 10), n_real)
+    real_shuffled = list(real_examples)
+    rng.shuffle(real_shuffled)
+    eval_real     = real_shuffled[:n_eval]
+    train_real    = real_shuffled[n_eval:]
+
+    # Cap synthetic count to enforce the 30% ratio inside the train split,
+    # the only split synthetic data is allowed into.
+    n_synth_max  = int(len(train_real) * max_synth_ratio / (1 - max_synth_ratio))
+    n_synth      = min(n_synth_max, len(synthetic_examples))
     synth_sample = rng.sample(synthetic_examples, n_synth)
 
     # Convert to ChatML format for training
@@ -608,14 +625,15 @@ def mix_and_save(
             "label":    ex["label"],
         }
 
-    all_rows = [to_chatml(ex) for ex in real_examples] + \
-               [to_chatml(ex) for ex in synth_sample]
-    rng.shuffle(all_rows)
+    # Train gets the remaining real examples plus the capped synthetic sample.
+    # Eval gets the held-out real examples only. The two are disjoint by
+    # construction, because eval_real was removed from the pool above.
+    train_rows = [to_chatml(ex) for ex in train_real] + \
+                 [to_chatml(ex) for ex in synth_sample]
+    eval_rows  = [to_chatml(ex) for ex in eval_real]
+    rng.shuffle(train_rows)
 
-    # 90/10 train/eval split — eval uses only real examples
-    n_eval    = max(5, len(real_examples) // 10)
-    eval_rows = [to_chatml(ex) for ex in rng.sample(real_examples, n_eval)]
-    train_rows = all_rows
+    all_rows = train_rows + eval_rows   # full dataset, for the manifest hash
 
     # Save as HuggingFace Datasets
     Dataset.from_list(train_rows).save_to_disk(f"{output_dir}/train")
@@ -635,7 +653,7 @@ def mix_and_save(
             "eval":      len(eval_rows),
             "real":      n_real,
             "synthetic": n_synth,
-            "synth_pct": round(n_synth / len(all_rows), 3),
+            "synth_pct": round(n_synth / max(len(train_rows), 1), 3),
         },
         "synthetic_cap":  max_synth_ratio,
         "trained_models": [],   # populated after training with checkpoint info
@@ -646,9 +664,9 @@ def mix_and_save(
 
     print(f"\nStep 6: Mixed dataset saved to {output_dir}/")
     print(f"  Real        : {n_real}")
-    print(f"  Synthetic   : {n_synth}  ({manifest['composition']['synth_pct']:.0%} of total)")
+    print(f"  Synthetic   : {n_synth}  ({manifest['composition']['synth_pct']:.0%} of train)")
     print(f"  Train       : {len(train_rows)}")
-    print(f"  Eval        : {len(eval_rows)}  (real only)")
+    print(f"  Eval        : {len(eval_rows)}  (real only, held out of train)")
     print(f"  SHA-256     : {sha256[:24]}...")
 
     return manifest

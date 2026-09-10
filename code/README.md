@@ -51,13 +51,15 @@ python3 --version
 
 **If your version is below 3.12**, install a newer Python version before proceeding.
 
+**If your version is the newest Python release** (for example 3.14 in the months after it shipped) and the PyTorch install step later fails with `No matching distribution found for torch`, PyTorch has not published wheels for that interpreter yet. Use Python 3.12, which is what the book's code is validated on: `python3.12 -m venv .venv`.
+
 ### Ubuntu/Debian Prerequisites
 
 **If you're on Ubuntu/Debian**, install the `venv` package first:
 
 ```bash
 sudo apt update
-sudo apt install python3.12-venv  # or python3.10-venv, python3.11-venv depending on your version
+sudo apt install python3.12-venv  # match your Python 3.12+ version, e.g. python3.13-venv
 ```
 
 ### Create Virtual Environment
@@ -262,6 +264,12 @@ echo 'export HF_TOKEN="hf_..."' >> ~/.bashrc
 
 **Note:** If you don't set a token, downloads still work but you may see warnings about unauthenticated requests. This is harmless.
 
+### Download troubleshooting
+
+- **`Fast download using 'hf_transfer' is enabled but 'hf_transfer' package is not available`**: your environment exports `HF_HUB_ENABLE_HF_TRANSFER=1` (some cloud images and notebooks do) without the package. The book's scripts detect this and fall back to the standard downloader automatically; if you call the Hugging Face libraries yourself, either `pip install hf_transfer` or `unset HF_HUB_ENABLE_HF_TRANSFER`. Nothing in this repo needs hf_transfer.
+- **`An error occurred while downloading using hf_transfer`** (usually behind a proxy or on a flaky connection): `unset HF_HUB_ENABLE_HF_TRANSFER` and retry; the standard downloader resumes partial files.
+- **Slow first download**: the base model is about 8 GB. Set `HF_TOKEN` (above) to lift the anonymous rate limit; the download is cached in `~/.cache/huggingface` and never repeated.
+
 ## API keys (optional)
 
 A few scripts call a hosted LLM API. **None of the core Chapter 1-5 hands-on work (LoRA/QLoRA training, evaluation, inference) needs an API key**, and the IT support dataset is already committed under `data/it_support*`, so you only need a key if you want to *rebuild the data from scratch* or run the optional generation / judging scripts.
@@ -321,8 +329,8 @@ The hands-on chapters train on the book's **IT-support dataset**: real Stack Exc
 # 1. Build the dataset -> data/it_support/ (train.jsonl, valid.jsonl, preferences.jsonl, manifest.json, attribution.jsonl)
 python scripts/build_it_support_dataset.py
 
-# 2. Reformat the answers into the house style -> data/it_support_fmt/train.jsonl
-python scripts/reformat_it_answers.py
+# 2. Reformat the answers into the house style -> data/it_support_fmt/{train,valid}.jsonl
+python scripts/reformat_it_answers.py   # (needs OPENROUTER_API_KEY; the output file is already committed, so this step is optional unless you rebuild from source)
 ```
 
 The builder depends on `beautifulsoup4` (to clean the Stack Exchange HTML) and `datasets`, both pulled in by the base install. Per-example source URLs for the Stack Exchange content are written to `data/it_support/attribution.jsonl` (dataset licenses and redistribution terms are in the [main README](../README.md#license-and-data-attribution)). The chapter 2 quickstart and chapter 5 onward load the prepared data from `data/it_support_fmt` (and `data/it_support/valid.jsonl`).

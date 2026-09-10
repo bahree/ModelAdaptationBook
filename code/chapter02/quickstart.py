@@ -37,6 +37,9 @@ from typing import Any, Dict, List
 
 import torch
 from datasets import Dataset as HFDataset
+
+import common.env  # noqa: F401  loads code/.env and guards Hugging Face download settings
+from common.gpu import report_peak_gpu_memory
 from peft import LoraConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from trl import SFTConfig, SFTTrainer
@@ -96,8 +99,12 @@ def step1_prepare_dataset() -> tuple[HFDataset, HFDataset, List[Dict[str, Any]]]
     """
     print("Step 1: prepare dataset")
     from common.jsonl import read_jsonl
+    # Both files carry answers in the house format (built by scripts/build_it_support_dataset.py,
+    # then scripts/reformat_it_answers.py), so training loss and eval loss score the same style.
+    # The raw answers in data/it_support/valid.jsonl stay the held-out test set the later chapters
+    # evaluate against; the prompts are identical in both files.
     trows = list(read_jsonl("data/it_support_fmt/train.jsonl"))
-    vrows = list(read_jsonl("data/it_support/valid.jsonl"))
+    vrows = list(read_jsonl("data/it_support_fmt/valid.jsonl"))
 
     def role_of(row: Dict[str, Any], role: str) -> str:
         return next(m["content"] for m in row["messages"] if m["role"] == role)
@@ -197,6 +204,7 @@ def step3_train(model, tokenizer, lora_config, train_ds, valid_ds) -> SFTTrainer
         output_dir=str(OUTPUT_DIR),
         max_steps=MAX_STEPS,
         per_device_train_batch_size=1,
+        per_device_eval_batch_size=1,  # match chapter 5; the TRL default of 8 adds ~3 GB at eval time
         gradient_accumulation_steps=8,
         learning_rate=2e-4,
         warmup_ratio=0.1,
@@ -222,6 +230,7 @@ def step3_train(model, tokenizer, lora_config, train_ds, valid_ds) -> SFTTrainer
     t0 = time.time()
     trainer.train()
     print(f"  train wall time: {time.time() - t0:.1f}s")
+    report_peak_gpu_memory("the 20 quickstart steps")
     return trainer
 
 

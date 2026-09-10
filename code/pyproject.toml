@@ -7,6 +7,8 @@ name = "model-adaptation-book"
 version = "0.1.0"
 description = "Runnable code for the book Practical Model Adaptation Techniques for Large Language Models."
 readme = "README.md"
+# Validated on 3.12 (CI matrix). Newer Pythons work once PyTorch ships wheels for them;
+# a reader on 3.14 hit "No matching distribution found for torch" before those wheels existed.
 requires-python = ">=3.12"
 dependencies = [
   "accelerate>=0.30.0",
