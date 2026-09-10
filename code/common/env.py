@@ -10,6 +10,29 @@ _env_path = Path(__file__).resolve().parent.parent / ".env"
 load_dotenv(_env_path, override=False)
 
 
+def _guard_hf_transfer() -> None:
+    """Keep Hugging Face downloads working when HF_HUB_ENABLE_HF_TRANSFER is set
+    (some cloud images and notebooks export it) but the `hf_transfer` package is
+    not installed: huggingface_hub then refuses to download at all. The book's
+    code never needs hf_transfer, so fall back to the standard downloader."""
+    flag = os.environ.get("HF_HUB_ENABLE_HF_TRANSFER", "").strip().lower()
+    if flag not in {"1", "true", "yes", "on"}:
+        return
+    try:
+        import hf_transfer  # noqa: F401
+    except ImportError:
+        os.environ["HF_HUB_ENABLE_HF_TRANSFER"] = "0"
+        import sys
+        consts = sys.modules.get("huggingface_hub.constants")
+        if consts is not None:
+            consts.HF_HUB_ENABLE_HF_TRANSFER = False
+        print("[common.env] HF_HUB_ENABLE_HF_TRANSFER was set but hf_transfer is not installed; "
+              "using the standard downloader (pip install hf_transfer to re-enable).")
+
+
+_guard_hf_transfer()
+
+
 def env_bool(name: str, default: bool = False) -> bool:
     v = os.getenv(name)
     if v is None:

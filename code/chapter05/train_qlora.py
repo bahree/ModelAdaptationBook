@@ -13,7 +13,7 @@ Key differences from LoRA (train_lora.py):
 Usage:
     python -m chapter05.train_qlora \\
         --train data/it_support_fmt/train.jsonl \\
-        --valid data/it_support/valid.jsonl \\
+        --valid data/it_support_fmt/valid.jsonl \\
         --out chapter05/runs/it_qlora
 
 See Chapter 5, Section 5.7 (QLoRA) and Section 5.1 (Step 5) for details.
@@ -33,6 +33,7 @@ from chapter05.data import load_chat_jsonl
 from chapter05.dataset import prepare_dataset_for_sft
 from chapter05.modeling import create_lora_config, load_base_model_qlora, load_tokenizer
 from common.env import resolve_report_to
+from common.gpu import report_peak_gpu_memory
 from common.seed import seed_everything
 
 
@@ -156,6 +157,7 @@ def main() -> None:
         processing_class=tokenizer,
     )
     trainer.train()
+    report_peak_gpu_memory("QLoRA training")  # measured: ~5 GiB on an A30 at r=8
 
     # Save adapter weights and tokenizer. The base model is NOT saved here --
     # at inference time, load the base separately with --quantized_4bit and

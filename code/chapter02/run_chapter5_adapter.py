@@ -11,7 +11,8 @@ scale before they read chapter 5 in depth.
 
 Adapter resolution order (first match wins):
     1. Local copy at chapter05/runs/it_lora/ (if you have already run Ch5)
-    2. Hugging Face Hub at the published location (cached after first use)
+    2. Hugging Face Hub at the published location (public and ungated, so no HF_TOKEN is
+       needed; downloaded once into ~/.cache/huggingface and read from disk after that)
     3. Local chapter 2 quickstart adapter at chapter02/runs/ch2_quickstart/
        (only when --use-quickstart is passed; the quickstart adapter is NOT
        a chapter 5 adapter, the script will say so)
@@ -33,6 +34,8 @@ from typing import Optional
 import torch
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
+
+import common.env  # noqa: F401  loads code/.env and guards Hugging Face download settings
 
 
 BASE_MODEL = "Qwen/Qwen3-4B-Instruct-2507"
@@ -114,11 +117,12 @@ def print_no_adapter_instructions(args: argparse.Namespace) -> None:
     print("  python scripts/reformat_it_answers.py")
     print("  python -m chapter05.train_lora \\")
     print("    --train data/it_support_fmt/train.jsonl \\")
-    print("    --valid data/it_support/valid.jsonl \\")
+    print("    --valid data/it_support_fmt/valid.jsonl \\")
     print(f"    --out {CH5_LOCAL_PATH}")
     print()
-    print("Option B. Pull the published adapter from Hugging Face Hub once it is up:")
-    print(f"  (the script tries {args.hub_repo} automatically when it is published).")
+    print("Option B. Pull the published adapter from Hugging Face Hub (public, no token needed):")
+    print(f"  (the script tries {args.hub_repo} automatically; this message means the Hub was unreachable,")
+    print("   so check your network or proxy, or pass --hub-repo bahree/ModelAdaptationBook#ch5-lora).")
     print()
     print("Option C. Run the chapter 2 quickstart and pass --use-quickstart:")
     print("  python -m chapter02.quickstart")

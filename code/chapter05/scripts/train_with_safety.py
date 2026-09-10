@@ -141,7 +141,7 @@ def main():
     print("\nCommand:")
     print("  python -m chapter05.train_lora \\")
     print(f"    --train {mixed_path} \\")
-    print("    --valid data/it_support/valid.jsonl \\")
+    print("    --valid data/it_support_fmt/valid.jsonl \\")
     print(f"    --out {out_dir / 'adapter'} \\")
     print("    --epochs 3")
 

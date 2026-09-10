@@ -23,9 +23,9 @@ chapters but is impractical for training.
 | 4 - ICL / RAG | ✓ | ✓ | ✓ | CPU-friendly; GPU optional |
 | 5 - LoRA | ✓ | ✓ | ✓ | |
 | 5 - QLoRA (4-bit) | ✓ | ✗ | ✓ | `bitsandbytes` 4-bit is CUDA/ROCm-only; on a Mac use the LoRA path |
-| 6 - full-parameter SFT | ✓ | ✗ | ✓ | Needs ~24 GB; a 16 GB Mac runs out of memory (~18 GB) |
-| 7 - distillation | ✓ | ✗ | ✓ | Hosts the chapter 6 teacher; same memory profile as chapter 6 |
-| 8 - DPO | ✓ | ✗ | ✓ | Full-model preference optimisation; same memory profile |
+| 6 - full-parameter SFT | ✓ | ✗ | ✓ | Needs ~32 GB in total (two 24 GB cards or one 40 GB card); a single 24 GB card and a 16 GB Mac both run out of memory |
+| 7 - distillation | ✓ | ✗ | ✓ | The student is a LoRA adapter (fits one 12 GB card); the teacher-generation stage hosts the chapter 6 model for inference (~10 GB) |
+| 8 - DPO | ✓ | ✗ | ✓ | Full-parameter DPO needs ~54 GB (three 24 GB cards or one 80 GB card); `--lora` fits one 24 GB card |
 | 9 - drift / registry / monitor | ✓ | ✓ | ✓ | Registry, drift detector, and rollback are CPU/stdlib; canary and safety monitor are inference |
 
 ✓ = validated to run. ✗ = does not run on that accelerator for *training* (use NVIDIA, AMD, or a cloud GPU) -- but the trained models for chapters 5 to 8 are published on Hugging Face, so you can still run their inference and evaluation on any machine (see [Running without training](#running-without-training-pull-the-model-from-hugging-face)). On Apple Silicon, training is correct but slower than on a GPU, so give it at least 16 GB of unified memory.
@@ -34,12 +34,12 @@ chapters but is impractical for training.
 
 - **Any NVIDIA GPU with enough VRAM** runs everything; this is the reference path.
 - **An AMD GPU on Linux (ROCm)** also runs everything, including QLoRA and the full-parameter chapters. Best on datacenter (MI-series) cards; consumer RDNA support varies by GPU generation.
-- **A Mac (Apple Silicon)** is great for chapters 1 through 5's LoRA path and chapter 9, but cannot *train* QLoRA or the full-parameter chapters (6, 7, 8). For training those, use a cloud GPU.
+- **A Mac (Apple Silicon)** is great for chapters 1 through 5's LoRA path, chapter 7's LoRA student, and chapter 9, but cannot *train* QLoRA or the full-parameter chapters (6 and 8). For training those, use a cloud GPU.
 - **No GPU, or a Mac/small card?** You can still follow chapters 5 through 8 by pulling the trained model from Hugging Face and running inference or evaluation, without training it. See [Running without training](#running-without-training-pull-the-model-from-hugging-face).
 
 ## Running without training: pull the model from Hugging Face
 
-You do not need a training-capable GPU to follow along. Every chapter's trained artifact is published to a single repo, [`bahree/ModelAdaptationBook`](https://huggingface.co/bahree/ModelAdaptationBook), as a per-chapter subfolder. Training a full-parameter model (chapters 6 to 8) needs a CUDA 24 GB+ card, but **loading the published model and running inference or evaluation fits a single smaller GPU or Apple Silicon (MPS)**. So on a Mac you can pull, for example, the chapter 6 SFT model and run its three-way evaluation without ever training it.
+You do not need a training-capable GPU to follow along. Every chapter's trained artifact is published to a single repo, [`bahree/ModelAdaptationBook`](https://huggingface.co/bahree/ModelAdaptationBook), as a per-chapter subfolder. Training a full-parameter model (chapters 6 and 8) needs about 32 GB and 54 GB of GPU memory respectively (two or three 24 GB cards, or one 40 GB / 80 GB card), but **loading the published model and running inference or evaluation fits a single smaller GPU or Apple Silicon (MPS)**. So on a Mac you can pull, for example, the chapter 6 SFT model and run its three-way evaluation without ever training it.
 
 | Subfolder | Chapter | Artifact | Base |
 | --- | --- | --- | --- |
@@ -55,18 +55,21 @@ Load a full model with `AutoModelForCausalLM.from_pretrained("bahree/ModelAdapta
 
 AMD (ROCm) was validated end-to-end on a datacenter card (Instinct MI300X); VRAM needs match the NVIDIA column, and consumer RDNA support varies by GPU generation. See the [AMD note](#amd-gpu-notes) below.
 
-| Chapter | Minimum NVIDIA GPU | Recommended | AMD (ROCm) | CPU fallback | Apple Silicon (MPS) |
-|---|---|---|---|---|---|
-| 1 (sidebar reproducer) | None for base-only mode; 8 GB+ for the LoRA / SFT branches | 12 GB+ | Yes | Yes (base-only, slow) | Yes (base-only mode, slow on 8 GB unified memory) |
-| 2 (LoRA quick-start) | 6 GB | 12 GB+ | Yes | Yes (slow) | Yes, verified on Apple M4/16 GB (quickstart trains on MPS in ~7 min) |
-| 3 (data-quality experiment) | 8 GB | 12 GB+ | Yes | Synthetic-data pipeline yes; manifest module yes; full experiment slow | Yes, verified (bf16 LoRA on MPS); synthetic-data pipeline and manifest module also yes |
-| 4 (ICL/RAG) | None for mock backends; ~8 GB for the optional Qwen3-4B HF backend | 12 GB+ | Yes | Yes (mock backend / hash embedder) | Yes (mock backends are CPU; HF backend uses MPS, slow on 8 GB) |
-| 5 (LoRA) | 8 GB (RTX 3060/4060+) | 12 GB+ | Yes | Yes, but ~20× slower | Yes (trains on MPS) |
-| 5 (QLoRA) | 6 GB | 8 GB+ | Yes (4-bit works; benign `rocminfo` warning) | Not recommended | **No** (`bitsandbytes` is CUDA-only) |
-| 6 (Full SFT) | 24 GB (A30 / RTX 4090) | A100 40 GB+ | Yes | No | No |
-| 7 (Distillation) | 12 GB (LoRA student) + 24 GB to host the chapter 6 teacher | 24 GB+ | Yes | Not recommended | No |
-| 8 (DPO) | 24 GB | A100 40 GB+ | Yes | No | No |
-| 9 (Drift / Registry / Monitor) | None for the CPU stages (registry, drift detector, rollback demo); ~8 GB for the GPU stages (canary, safety monitor) | 12 GB+ | Yes | Yes for stages 1, 2, and 4 | Yes for stages 1, 2, and 4 |
+| Chapter | Measured peak (A30, repo defaults) | Minimum NVIDIA GPU | Recommended | AMD (ROCm) | CPU fallback | Apple Silicon (MPS) |
+|---|---|---|---|---|---|---|
+| 1 (sidebar reproducer) | inference only (~8 GB to load the 4B model in bf16) | None for base-only mode; 8 GB+ for the LoRA / SFT branches | 12 GB+ | Yes | Yes (base-only, slow) | Yes (base-only mode, slow on 8 GB unified memory) |
+| 2 (LoRA quick-start) | **9.0 GB** allocated (10.9 GB reserved), one card; 40 examples, 20 steps, 77 s on an A30 | 6 GB | 12 GB+ | Yes | Yes (slow) | Yes, verified on Apple M4/16 GB (quickstart trains on MPS in ~7 min) |
+| 3 (data-quality experiment) | same profile as chapter 5 LoRA | 8 GB | 12 GB+ | Yes | Synthetic-data pipeline yes; manifest module yes; full experiment slow | Yes, verified (bf16 LoRA on MPS); synthetic-data pipeline and manifest module also yes |
+| 4 (ICL/RAG) | inference only (~8 GB for the optional HF backend) | None for mock backends; ~8 GB for the optional Qwen3-4B HF backend | 12 GB+ | Yes | Yes (mock backend / hash embedder) | Yes (mock backends are CPU; HF backend uses MPS, slow on 8 GB) |
+| 5 (LoRA, r=16) | **9.0 GB** allocated (10.2 GB reserved), one card | 8 GB (RTX 3060/4060+) | 12 GB+ | Yes | Yes, but ~20× slower | Yes (trains on MPS) |
+| 5 (QLoRA, r=8) | **5.1 GB** allocated (5.4 GB reserved), one card | 6 GB | 8 GB+ | Yes (4-bit works; benign `rocminfo` warning) | Not recommended | **No** (`bitsandbytes` is CUDA-only) |
+| 6 (Full SFT) | **32.5 GB** total (17.2 + 15.3 GB across two A30s); **OOM on one A30** at 23.2 GB during AdamW state init | Two 24 GB cards (A30 / RTX 4090), or one 40 GB card | A100 40 GB+ | Yes | No | No |
+| 7 (Distillation, LoRA student r=16) | **10.5 GB** allocated (15.8 GB reserved, batch 2), one card | 12 GB for the student; the teacher-generation stage loads the chapter 6 model for inference (~10 GB) | 24 GB+ | Yes | Not recommended | Student: yes in principle (LoRA on MPS); teacher generation is slow |
+| 8 (DPO, full-parameter) | **54.3 GB** total (18.4 + 18.6 + 17.3 GB across three A30s); **OOM on two A30s** (23.2 + 22.7 GB) | Three 24 GB cards, or one 80 GB card | A100 80 GB / H100 | Yes | No | No |
+| 8 (DPO, `--lora`, r=16) | **10.6 GB** allocated (14.7 GB reserved), one card | 12 GB | 24 GB | Yes | No | No (`ch8-dpo-lora` inference only) |
+| 9 (Drift / Registry / Monitor) | inference only (~8 GB for the GPU stages) | None for the CPU stages (registry, drift detector, rollback demo); ~8 GB for the GPU stages (canary, safety monitor) | 12 GB+ | Yes | Yes for stages 1, 2, and 4 | Yes for stages 1, 2, and 4 |
+
+**How the measured column was produced (2026-09-10).** Each training script was run for three steps with its defaults (Qwen3-4B-Instruct-2507, `max_length` 512, bf16, gradient checkpointing) on NVIDIA A30 24 GB cards with PyTorch 2.11+cu126, and `torch.cuda.max_memory_allocated()` read per device at the end; "total" sums the devices when `device_map="auto"` sharded the model, which is the number a single card would need. Multi-card totals came from the same box that produced the book's published runs, which is why the chapter 6 and chapter 8 text and earlier versions of this table understated the single-card requirement. Every training script now prints its own peak when training ends, and you can re-measure any chapter on your hardware with `python -m scripts.measure_peak_vram <module> <its args> --max_steps 3` (see `code/scripts/measure_peak_vram.py`). Why the fixed floors: full SFT keeps bf16 weights, bf16 gradients, and two bf16 AdamW moments, 8 bytes per parameter, about 32 GB for 4B parameters before activations; full DPO adds a frozen bf16 reference copy (another 8 GB) and two forward passes per preference pair. Gradient checkpointing trims activations, not these floors. An 8-bit optimizer would bring full SFT to roughly 24 GB plus activations, still not a comfortable single-A30 fit; CPU optimizer offload (not used in the book's scripts) is the only single-24 GB-card route.
 
 **Disk space:** budget about 50 GB free for the Hugging Face model cache plus chapter 6's run directory (full-parameter checkpoints with optimizer state are 22-24 GB each). See `code/chapter06/README.md` for the breakdown.
 

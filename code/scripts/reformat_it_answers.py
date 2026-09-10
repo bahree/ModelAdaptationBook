@@ -12,9 +12,18 @@ House format:
 Dolly retention examples are left untouched (they are the general-capability
 slice, not IT-support answers).
 
-Run from code/:
-    python scripts/reformat_it_answers.py --in data/it_support/train.jsonl \
-        --out data/it_support_fmt/train.jsonl [--limit N]
+Run from code/. With no arguments it processes BOTH splits:
+    data/it_support/train.jsonl -> data/it_support_fmt/train.jsonl   (training targets)
+    data/it_support/valid.jsonl -> data/it_support_fmt/valid.jsonl   (training-time validation)
+The raw data/it_support/valid.jsonl stays the held-out TEST set for the evaluation
+scripts, so a model's eval loss is scored on the same answer style it trains on
+while its token-F1 is still scored against the original human answers.
+
+    python scripts/reformat_it_answers.py                 # both splits
+    python scripts/reformat_it_answers.py --in X --out Y  # one file
+
+Needs OPENROUTER_API_KEY (see code/README.md). Both output files are committed to
+the repo, so you only need to run this if you rebuild the dataset from source.
 """
 from __future__ import annotations
 
@@ -69,16 +78,12 @@ def reformat_one(question: str, answer: str) -> str:
     return (r.get("content") or "").strip()
 
 
-def main():
-    ap = argparse.ArgumentParser()
-    ap.add_argument("--in", dest="inp", required=True)
-    ap.add_argument("--out", required=True)
-    ap.add_argument("--limit", type=int, default=0, help="0 = all")
-    ap.add_argument("--dry", action="store_true", help="print, do not write")
-    ap.add_argument("--workers", type=int, default=8, help="concurrent API calls")
-    args = ap.parse_args()
+SPLITS = [("data/it_support/train.jsonl", "data/it_support_fmt/train.jsonl"),
+          ("data/it_support/valid.jsonl", "data/it_support_fmt/valid.jsonl")]
 
-    rows = list(read_jsonl(args.inp))
+
+def process(inp: str, out: str, limit: int, dry: bool, workers: int) -> None:
+    rows = list(read_jsonl(inp))
 
     def qa(row):
         msgs = row["messages"]
@@ -86,7 +91,7 @@ def main():
         a = next(m["content"] for m in msgs if m["role"] == "assistant")
         return q, a
 
-    if args.dry:
+    if dry:
         shown = 0
         for row in rows:
             if row.get("source") == "dolly":
@@ -96,15 +101,17 @@ def main():
             print(f"--- RAW: {a[:200]}")
             print(f"--- FMT: {reformat_one(q, a)[:400]}")
             shown += 1
-            if shown >= (args.limit or 2):
+            if shown >= (limit or 2):
                 break
         return
 
     # IT rows to reformat (preserve original index for ordered output).
     it_idx = [i for i, r in enumerate(rows) if r.get("source") != "dolly"]
+    if limit:
+        it_idx = it_idx[:limit]
     new_answers = {}
     done = 0
-    with ThreadPoolExecutor(max_workers=args.workers) as ex:
+    with ThreadPoolExecutor(max_workers=workers) as ex:
         futs = {ex.submit(reformat_one, *qa(rows[i])): i for i in it_idx}
         for fut in as_completed(futs):
             i = futs[fut]
@@ -127,10 +134,27 @@ def main():
         else:
             out_rows.append(row)
 
-    Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    write_jsonl(args.out, out_rows)
+    Path(out).parent.mkdir(parents=True, exist_ok=True)
+    write_jsonl(out, out_rows)
     n_ok = sum(1 for v in new_answers.values() if v)
-    print(f"Wrote {args.out}: {len(out_rows)} rows ({n_ok}/{len(it_idx)} IT reformatted, rest passthrough)")
+    print(f"Wrote {out}: {len(out_rows)} rows ({n_ok}/{len(it_idx)} IT reformatted, rest passthrough)")
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--in", dest="inp", default=None,
+                    help="input split from build_it_support_dataset.py; with no --in/--out both the train and "
+                         "valid splits are processed (the default the READMEs rely on)")
+    ap.add_argument("--out", default=None, help="output path (required if --in is given)")
+    ap.add_argument("--limit", type=int, default=0, help="0 = all")
+    ap.add_argument("--dry", action="store_true", help="print, do not write")
+    ap.add_argument("--workers", type=int, default=8, help="concurrent API calls")
+    args = ap.parse_args()
+    if (args.inp is None) != (args.out is None):
+        ap.error("--in and --out must be given together (or neither, to process both default splits)")
+    pairs = [(args.inp, args.out)] if args.inp else SPLITS
+    for inp, out in pairs:
+        process(inp, out, args.limit, args.dry, args.workers)
 
 
 if __name__ == "__main__":

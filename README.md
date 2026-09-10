@@ -60,7 +60,7 @@ You need working Python and comfort at the command line; the book teaches the LL
 
 - **The vendor-neutral, do-it-yourself counterpart to managed fine-tuning.** As the major vendors turn enterprise fine-tuning into a managed service, this book teaches the underlying methods and the operations layer those services abstract away, so you can run them on your own models and your own hardware and weigh build versus buy with real numbers.
 - **The full technique spectrum in one running example.** A single fictitious enterprise (Contoso) and its IT help desk is threaded from prompting all the way through alignment and operations, so you see the same problem solved at every rung, with an explicit cost, latency, privacy, and ROI framework for choosing between the techniques.
-- **Runnable and reproducible on a single GPU.** Every chapter runs on one GPU (LoRA and QLoRA on a modest consumer card; full fine-tuning and DPO on a single 24 GB card) and reproduces the book's published numbers within run-to-run variance. Validated on NVIDIA, AMD, and Apple Silicon.
+- **Runnable and reproducible without a cluster.** LoRA, QLoRA, and the distilled student run on one modest consumer card; full fine-tuning and full-parameter DPO of the 4B model need about 32 GB, so one 40 GB card or two 24 GB cards (the book's runs used two A30s). Every chapter reproduces the book's published numbers within run-to-run variance. Validated on NVIDIA, AMD, and Apple Silicon.
 - **Honest engineering, in the open.** The book shows when a technique does *not* win (for example, where DPO matches SFT on objective accuracy), anchors claims to real cost economics, and runs a safety-regression check at each step. The code, the trained models, and the training and evaluation logs are all public, including the experiments that did not work, so you can verify every result and learn as much from what failed as from what worked.
 - **The operational layer most LLM books skip.** Drift detection, versioning, rollback, and continuous safety monitoring, the part that decides whether a fine-tuned model survives past launch.
 
@@ -71,7 +71,7 @@ It uses a small open-weights model (Qwen3-4B) so every result reproduces on mode
 **The model: `Qwen/Qwen3-4B-Instruct-2507`.** One open-weights model is the spine of every chapter, chosen so the choices are realistic and the results reproduce on accessible hardware:
 
 - **Open-weights.** You own, host, inspect, and fine-tune it; nothing depends on a vendor API. That is the book's whole stance.
-- **4B fits a single GPU.** LoRA and QLoRA train on a modest consumer card; full SFT and DPO fit a single 24 GB card. Every chapter reproduces without a cluster.
+- **4B fits small hardware.** LoRA and QLoRA train on a modest consumer card (9 GB and 5 GB measured); full SFT and full DPO need about 32 GB, which is two 24 GB cards or one 40 GB card, not a cluster. LoRA-DPO fits one 24 GB card.
 - **Already instruction-tuned.** A realistic enterprise starting point, so each technique's effect is meaningful rather than teaching basic instruction-following.
 - **One consistent base across all chapters.** The chapter 5 LoRA, chapter 6 SFT, chapter 7 distilled student, and chapter 8 DPO model all build on the same spine, so the running example chains and the comparisons stay apples-to-apples.
 - **Permissive license and strong quality-for-size**, and the techniques are model-agnostic, so they apply unchanged to larger frontier models.
@@ -161,6 +161,8 @@ python -m pip install -U pip
   pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
   ```
 
+**Python version.** The code is validated on Python 3.12 (also what CI runs). Newer releases work once PyTorch publishes wheels for them, but those wheels lag a new Python by weeks to months, and a reader on Python 3.14 hit `ERROR: No matching distribution found for torch` from the command above. If you see that error, create the virtual environment with Python 3.12 (`python3.12 -m venv .venv`) and rerun the install.
+
 For other CUDA versions (12.1, 11.8) or to confirm the right command for your machine, see the official selector at <https://pytorch.org/get-started/locally/>. `code/README.md` has more detail, including NVIDIA driver install steps for fresh Ubuntu/Proxmox VMs. Not sure which accelerator runs which chapter, or how much GPU memory you need? See **[ACCELERATORS.md](ACCELERATORS.md)**.
 
 **3. Install the book package and smoke-test:**
@@ -183,7 +185,7 @@ The full book runs on NVIDIA (CUDA) and AMD (ROCm) GPUs; most of it also runs on
 
 See also **[LESSONS.md](LESSONS.md)** for the reusable, hard-won gotchas behind these results: pin the model to a device rather than relying on `device_map="auto"`, Hugging Face rate limits on datacenter IPs, and the Apple Silicon, AMD ROCm, and Blackwell notes.
 
-Two common gotchas, both covered there: chapter 5's QLoRA needs an NVIDIA or AMD GPU ([why](ACCELERATORS.md#why-qlora-needs-an-nvidia-or-amd-gpu)), and the full-parameter chapters (6, 7, 8) need ~24 GB so they do not fit a 16 GB Mac.
+Two common gotchas, both covered there: chapter 5's QLoRA needs an NVIDIA or AMD GPU ([why](ACCELERATORS.md#why-qlora-needs-an-nvidia-or-amd-gpu)), and the full-parameter chapters (6 and 8) need about 32 GB of GPU memory (two 24 GB cards or one 40 GB card), so they do not fit a 16 GB Mac or a single 24 GB card; chapter 7's student is LoRA and fits one card.
 
 ## Support
 
