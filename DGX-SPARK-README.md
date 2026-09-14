@@ -71,7 +71,7 @@ Expected:
 
 ```bash
 python scripts/build_it_support_dataset.py
-python scripts/reformat_it_answers.py
+python scripts/reformat_it_answers.py --in data/it_support/train.jsonl --out data/it_support_fmt/train.jsonl
 ```
 
 ## 6. Chapter-by-chapter run sequence (1 to 5)
