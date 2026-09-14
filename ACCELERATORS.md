@@ -129,10 +129,10 @@ Key points from the run:
   kernels are not built for `sm_121` (compute capability 12.1). The tested-good
   setup is PyTorch `2.13.0+cu130`.
 - **Recipe fix landed during validation.** The chapter 2 data prep path
-  originally called `reformat_it_answers.py` without required flags. The recipe
-  now passes:
-  `python scripts/reformat_it_answers.py --input data/it_support/train.jsonl --output data/it_support_fmt/train.jsonl`.
-  (Since 2026-09-10 the script also has defaults, so the bare command processes both splits; the explicit flags still work.)
+  originally called `reformat_it_answers.py` in a way that failed on older script versions. The recipe
+  now uses:
+  `python scripts/reformat_it_answers.py`.
+  (Since 2026-09-10 the script defaults to processing both train and valid splits; explicit file flags still work.)
 - **Optional OpenRouter warnings are non-fatal.** If `OPENROUTER_API_KEY` is
   unset, the reformat step logs warnings and keeps passthrough rows; the run
   still completes.

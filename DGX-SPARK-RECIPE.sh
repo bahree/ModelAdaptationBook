@@ -86,7 +86,7 @@ do_data() {
   ensure_venv
   echo "[data] Building IT-support dataset"
   python scripts/build_it_support_dataset.py
-  python scripts/reformat_it_answers.py --input data/it_support/train.jsonl --output data/it_support_fmt/train.jsonl
+  python scripts/reformat_it_answers.py
 }
 
 do_ch1() {

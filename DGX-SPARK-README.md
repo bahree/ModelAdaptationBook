@@ -71,7 +71,7 @@ Expected:
 
 ```bash
 python scripts/build_it_support_dataset.py
-python scripts/reformat_it_answers.py --input data/it_support/train.jsonl --output data/it_support_fmt/train.jsonl
+python scripts/reformat_it_answers.py
 ```
 
 ## 6. Chapter-by-chapter run sequence (1 to 5)
@@ -239,8 +239,8 @@ The new chapter-oriented recipe was exercised on DGX Spark in this environment:
 
 Recipe fix applied during validation:
 
-- Updated data reformat step to pass required args:
-  `python scripts/reformat_it_answers.py --input data/it_support/train.jsonl --output data/it_support_fmt/train.jsonl`
+- Updated data reformat step to process both train and valid splits by default:
+  `python scripts/reformat_it_answers.py`
 
 If you are trying this on a fresh DGX Spark machine, run `setup` first, then
 `smoke`, then chapter commands (`ch1` ... `ch5`) or `all`.
