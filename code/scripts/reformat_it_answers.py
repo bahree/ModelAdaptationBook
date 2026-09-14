@@ -20,7 +20,7 @@ scripts, so a model's eval loss is scored on the same answer style it trains on
 while its token-F1 is still scored against the original human answers.
 
     python scripts/reformat_it_answers.py                 # both splits
-    python scripts/reformat_it_answers.py --in X --out Y  # one file
+    python scripts/reformat_it_answers.py --input X --output Y  # one file
 
 Needs OPENROUTER_API_KEY (see code/README.md). Both output files are committed to
 the repo, so you only need to run this if you rebuild the dataset from source.
@@ -142,16 +142,16 @@ def process(inp: str, out: str, limit: int, dry: bool, workers: int) -> None:
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--in", dest="inp", default=None,
-                    help="input split from build_it_support_dataset.py; with no --in/--out both the train and "
+    ap.add_argument("--in", "--input", dest="inp", default=None,
+                    help="input split from build_it_support_dataset.py; with no --input/--output both the train and "
                          "valid splits are processed (the default the READMEs rely on)")
-    ap.add_argument("--out", default=None, help="output path (required if --in is given)")
+    ap.add_argument("--out", "--output", dest="out", default=None, help="output path (required if --input is given)")
     ap.add_argument("--limit", type=int, default=0, help="0 = all")
     ap.add_argument("--dry", action="store_true", help="print, do not write")
     ap.add_argument("--workers", type=int, default=8, help="concurrent API calls")
     args = ap.parse_args()
     if (args.inp is None) != (args.out is None):
-        ap.error("--in and --out must be given together (or neither, to process both default splits)")
+        ap.error("--input and --output must be given together (or neither, to process both default splits)")
     pairs = [(args.inp, args.out)] if args.inp else SPLITS
     for inp, out in pairs:
         process(inp, out, args.limit, args.dry, args.workers)
