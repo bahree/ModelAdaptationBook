@@ -1,0 +1,65 @@
+============================================================
+Chapter 3.7 — Data Versioning and Lineage
+============================================================
+
+[1] Creating manifest v1.0.0
+  Version     : 1.0.0
+  Created     : 2026-07-21T04:52:07.193481Z
+  SHA-256     : 2489558d5cc139c36ce00b6c...
+  Examples    : 50 (45 train / 5 eval)
+  Sources     : ['financial_phrasebank', 'sujet_finance']
+  PII scrubbed: True
+  Annotation κ: 0.790
+  Synthetic   : 20%
+  Pass rate   : 88%
+  Retain until: 2028-07-20
+
+  Saved to /tmp/ch03_demo/v1_0_0/manifest.json
+
+[2] Recording training run on v1.0.0
+  Training run recorded:
+  Checkpoint  : ./qwen-open-finance-v1-output
+  Eval scores : sentiment=82%  financial_qa=79%  rag=55%  math=45%
+  Training loss: 0.412
+
+[3] Creating manifest v2.0.0 (with targeted synthetic data)
+  Version     : 2.0.0
+  Created     : 2026-07-21T04:52:07.194036Z
+  SHA-256     : 411f2a9f946d5ee36dce54f7...
+  Examples    : 70 (65 train / 5 eval)
+  Sources     : ['financial_phrasebank', 'sujet_finance', 'synthetic_claude']
+  PII scrubbed: True
+  Annotation κ: 0.790
+  Synthetic   : 30%
+  Pass rate   : 91%
+  Retain until: 2028-07-20
+
+[4] Diff: v1.0.0 → v2.0.0
+  5 fields changed:
+    num_examples        : 50 → 70
+    num_train           : 45 → 65
+    sources             : ['financial_phrasebank', 'sujet_finance'] → ['financial_phrasebank', 'sujet_finance', 'synthetic_claude']
+    synthetic_ratio     : 0.2 → 0.3
+    quality_pass_rate   : 0.88 → 0.91
+    content : changed
+
+[5] Retention status
+  v1.0.0: ACTIVE           729 days remaining  |  No action needed
+  v2.0.0: ACTIVE           729 days remaining  |  No action needed
+
+[6] GDPR deletion request
+  Deletion logged: user_98421  |  3 examples affected
+  Retraining required: True
+  Schedule retraining on v1.0.0 with user_98421 examples removed
+
+[7] Load manifest from disk and verify SHA-256
+  Loaded version : 1.0.0
+  SHA-256 match  : True  (✓ data integrity confirmed)
+
+[8] Key takeaways
+  • A SHA-256 manifest costs 5 lines of code and prevents hours of debugging
+  • Record the training run IN the manifest immediately after saving the model
+  • Set a retention deadline at dataset creation — retrofitting is painful
+  • The manifest is your audit trail: dataset version → model → eval scores
+
+Done.
