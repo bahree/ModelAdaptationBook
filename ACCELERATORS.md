@@ -132,7 +132,6 @@ Key points from the run:
   originally called `reformat_it_answers.py` without required flags. The recipe
   now passes:
   `python scripts/reformat_it_answers.py --in data/it_support/train.jsonl --out data/it_support_fmt/train.jsonl`.
-  (Since 2026-09-10 the script also has defaults, so the bare command processes both splits; the explicit flags still work.)
 - **Optional OpenRouter warnings are non-fatal.** If `OPENROUTER_API_KEY` is
   unset, the reformat step logs warnings and keeps passthrough rows; the run
   still completes.
