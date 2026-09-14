@@ -239,8 +239,8 @@ The new chapter-oriented recipe was exercised on DGX Spark in this environment:
 
 Recipe fix applied during validation:
 
-- Updated data reformat step to pass required args:
-  `python scripts/reformat_it_answers.py --in data/it_support/train.jsonl --out data/it_support_fmt/train.jsonl`
+- Updated data reformat step to process both train and valid splits by default:
+  `python scripts/reformat_it_answers.py`
 
 If you are trying this on a fresh DGX Spark machine, run `setup` first, then
 `smoke`, then chapter commands (`ch1` ... `ch5`) or `all`.
