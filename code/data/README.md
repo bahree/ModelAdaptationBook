@@ -5,7 +5,7 @@ pipeline in chapters 5 to 8 (LoRA, full SFT, distillation, DPO).
 
 | Folder | What it is | Built by | License |
 | --- | --- | --- | --- |
-| `it_support/` | Real Stack Exchange IT Q&A (Super User, Ask Ubuntu, Server Fault) as the domain core, plus a small Databricks Dolly slice for general-capability retention. Holds the train / valid / preference splits, the manifest, and per-example source attribution. | `../scripts/build_it_support_dataset.py` | Stack Exchange CC-BY-SA-4.0; Dolly CC-BY-SA-3.0 |
+| `it_support/` | Real Stack Exchange IT Q&A (Super User, Ask Ubuntu, Server Fault) as the domain core, plus a small Databricks Dolly slice for general-capability retention. Holds the train / valid / test / preference splits, the manifest, and per-example source attribution. | `../scripts/build_it_support_dataset.py` | Stack Exchange CC-BY-SA-4.0; Dolly CC-BY-SA-3.0 |
 | `it_support_fmt/` | The **same `it_support` data, reformatted** into the assistant's house answer style (`**Summary:** ... **Steps:** ...`). `train.jsonl` is the file the SFT actually trains on; `valid.jsonl` is the training-time validation split, processed the same way so eval loss is comparable to training loss. Not a separate dataset, a processed view of `it_support`. | `../scripts/reformat_it_answers.py` | derived from `it_support` |
 
 Build both from the `code/` directory with:
@@ -15,7 +15,7 @@ python scripts/build_it_support_dataset.py   # -> data/it_support/
 python scripts/reformat_it_answers.py         # -> data/it_support_fmt/{train,valid}.jsonl (needs OPENROUTER_API_KEY; both files are committed)
 ```
 
-**Two roles for the validation data.** Training scripts take `--valid data/it_support_fmt/valid.jsonl` so the eval loss they report is measured on the same answer style as the training targets. Evaluation scripts (chapter 5 token-F1 and three-lens eval, chapter 8 three-way comparison, chapter 9 drift) take the raw `data/it_support/valid.jsonl` as the held-out test set, so quality is still judged against the original human answers. The prompts are identical in both files; only the assistant text differs.
+**Three splits, three roles.** Training scripts take `--valid data/it_support_fmt/valid.jsonl` so the eval loss they report is measured on the same answer style as the training targets; the validation split is also what model selection (rank, epochs) looks at. The raw `data/it_support/test.jsonl` (50 questions, written after the train and validation splits and disjoint from both) is the held-out test set the book reports on: the chapter 5 token-F1 eval (`--test`), chapter 6 `eval_sft --split test`, chapter 7 `eval_distillation --eval_file`, and chapter 8 `eval_dpo --split test` all score it against the original human answers. Chapter 9's drift example keeps the validation split as its production sample. The prompts are identical in the raw and reformatted files; only the assistant text differs.
 
 ## Not the same as `code/contoso_qa_demo/`
 

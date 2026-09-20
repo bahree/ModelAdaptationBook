@@ -1,0 +1,95 @@
+{
+ "num_examples": 50,
+ "judge_model": "openai/gpt-5.5",
+ "seed": 42,
+ "models": {
+  "base": {
+   "token_f1": 0.143,
+   "format_adherence": 0.0,
+   "judge_correctness": 2.24,
+   "judge_actionability": 2.06,
+   "judge_format": 3.78,
+   "judge_errors": 0,
+   "token_f1_by_category": {
+    "windows": 0.1521,
+    "linux": 0.1789,
+    "networking": 0.1529,
+    "hardware": 0.1664,
+    "software": 0.1238,
+    "general": 0.1322,
+    "security": 0.0963
+   }
+  },
+  "sft": {
+   "token_f1": 0.1466,
+   "format_adherence": 1.0,
+   "judge_correctness": 1.84,
+   "judge_actionability": 1.94,
+   "judge_format": 3.96,
+   "judge_errors": 0,
+   "token_f1_by_category": {
+    "windows": 0.1313,
+    "linux": 0.1358,
+    "networking": 0.175,
+    "hardware": 0.2001,
+    "software": 0.1184,
+    "general": 0.1407,
+    "security": 0.1257
+   }
+  },
+  "dpo": {
+   "token_f1": 0.149,
+   "format_adherence": 1.0,
+   "judge_correctness": 1.8,
+   "judge_actionability": 1.88,
+   "judge_format": 3.86,
+   "judge_errors": 0,
+   "token_f1_by_category": {
+    "windows": 0.1469,
+    "linux": 0.132,
+    "networking": 0.1723,
+    "hardware": 0.2103,
+    "software": 0.1058,
+    "general": 0.1479,
+    "security": 0.1276
+   }
+  },
+  "lora_dpo": {
+   "token_f1": 0.1507,
+   "format_adherence": 1.0,
+   "judge_correctness": 1.78,
+   "judge_actionability": 1.96,
+   "judge_format": 3.96,
+   "judge_errors": 0,
+   "token_f1_by_category": {
+    "windows": 0.1531,
+    "linux": 0.1297,
+    "networking": 0.1615,
+    "hardware": 0.2001,
+    "software": 0.1093,
+    "general": 0.155,
+    "security": 0.1452
+   }
+  }
+ },
+ "pairwise_lora_dpo_vs_sft": {
+  "lora_dpo_wins": 5,
+  "ties": 31,
+  "sft_wins": 14,
+  "errors": 0,
+  "decided": 50,
+  "lora_dpo_win_rate_incl_ties": 0.1,
+  "lora_dpo_win_rate_excl_ties": 0.2632,
+  "note": "lora_dpo placed in a random A/B slot per question to remove position bias."
+ },
+ "pairwise_lora_dpo_vs_full_dpo": {
+  "lora_dpo_wins": 8,
+  "ties": 26,
+  "dpo_wins": 16,
+  "errors": 0,
+  "decided": 50,
+  "lora_dpo_win_rate_incl_ties": 0.16,
+  "lora_dpo_win_rate_excl_ties": 0.3333,
+  "note": "lora_dpo placed in a random A/B slot per question to remove position bias."
+ }
+}

@@ -1,0 +1,68 @@
+{
+ "num_examples": 50,
+ "judge_model": "openai/gpt-5.5",
+ "seed": 42,
+ "models": {
+  "base": {
+   "token_f1": 0.143,
+   "format_adherence": 0.0,
+   "judge_correctness": 2.14,
+   "judge_actionability": 2.0,
+   "judge_format": 3.76,
+   "judge_errors": 0,
+   "token_f1_by_category": {
+    "windows": 0.1521,
+    "linux": 0.1789,
+    "networking": 0.1529,
+    "hardware": 0.1664,
+    "software": 0.1238,
+    "general": 0.1322,
+    "security": 0.0963
+   }
+  },
+  "sft": {
+   "token_f1": 0.1466,
+   "format_adherence": 1.0,
+   "judge_correctness": 1.84,
+   "judge_actionability": 2.02,
+   "judge_format": 3.92,
+   "judge_errors": 0,
+   "token_f1_by_category": {
+    "windows": 0.1313,
+    "linux": 0.1358,
+    "networking": 0.175,
+    "hardware": 0.2001,
+    "software": 0.1184,
+    "general": 0.1407,
+    "security": 0.1257
+   }
+  },
+  "dpo": {
+   "token_f1": 0.149,
+   "format_adherence": 1.0,
+   "judge_correctness": 1.82,
+   "judge_actionability": 1.94,
+   "judge_format": 3.84,
+   "judge_errors": 0,
+   "token_f1_by_category": {
+    "windows": 0.1469,
+    "linux": 0.132,
+    "networking": 0.1723,
+    "hardware": 0.2103,
+    "software": 0.1058,
+    "general": 0.1479,
+    "security": 0.1276
+   }
+  }
+ },
+ "pairwise_dpo_vs_sft": {
+  "dpo_wins": 10,
+  "ties": 24,
+  "dpo_losses": 16,
+  "errors": 0,
+  "decided": 50,
+  "dpo_win_rate_incl_ties": 0.2,
+  "dpo_win_rate_excl_ties": 0.3846,
+  "note": "DPO placed in a random A/B slot per question to remove position bias; winner mapped back via recorded assignment."
+ }
+}

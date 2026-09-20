@@ -326,7 +326,7 @@ Each chapter README contains:
 The hands-on chapters train on the book's **IT-support dataset**: real Stack Exchange IT Q&A (Super User, Ask Ubuntu, and Server Fault), filtered to genuine support topics, plus a small slice of Databricks Dolly mixed in to preserve general capability. Build it once from this `code/` directory:
 
 ```bash
-# 1. Build the dataset -> data/it_support/ (train.jsonl, valid.jsonl, preferences.jsonl, manifest.json, attribution.jsonl)
+# 1. Build the dataset -> data/it_support/ (train.jsonl, valid.jsonl, test.jsonl, preferences.jsonl, manifest.json, attribution.jsonl)
 python scripts/build_it_support_dataset.py
 
 # 2. Reformat the answers into the house style -> data/it_support_fmt/{train,valid}.jsonl

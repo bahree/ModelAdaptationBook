@@ -2,6 +2,8 @@
 
 This file captures a typical run of `train_qlora` for the Chapter 5 IT support dataset (450 train, 50 valid, 3 epochs). Use it to recognize normal output and interpret the metrics.
 
+> This is the shipped adapter's own log (validated on the raw split, `train_runtime` 852.6 s). The transcript printed in the book is the 2026-09-18 retrain with `--valid data/it_support_fmt/valid.jsonl` (`eval_loss` 1.74 / 1.72 / 1.74, `train_runtime` 896.9 s); the training losses of the two runs agree to the third decimal.
+
 ## Command
 
 ```bash

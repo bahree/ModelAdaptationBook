@@ -1,0 +1,34 @@
+[
+  {
+    "version_tag": "it-support-v1",
+    "technique": "sft",
+    "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+    "data_hash": "data-v1-abc123",
+    "hyperparameters": {},
+    "eval_metrics": {
+      "overall_f1": 0.72,
+      "safety_pass_rate": 1.0
+    },
+    "checkpoint_path": "chapter06/runs/sft_run1",
+    "status": "active",
+    "created_utc": "2026-02-15T19:36:04Z",
+    "notes": "Chapter 6 SFT model -- stable baseline",
+    "promoted_utc": "2026-02-15T19:36:04Z"
+  },
+  {
+    "version_tag": "it-support-v2",
+    "technique": "dpo",
+    "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+    "data_hash": "data-v2-def456",
+    "hyperparameters": {},
+    "eval_metrics": {
+      "overall_f1": 0.58,
+      "safety_pass_rate": 0.75
+    },
+    "checkpoint_path": "chapter08/runs/dpo_run1",
+    "status": "retired",
+    "created_utc": "2026-02-15T19:36:04Z",
+    "notes": "DPO model -- optimized for helpfulness",
+    "promoted_utc": "2026-02-15T19:36:04Z"
+  }
+]

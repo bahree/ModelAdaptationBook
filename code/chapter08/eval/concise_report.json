@@ -1,0 +1,57 @@
+{
+ "num_examples": 50,
+ "judge_model": "openai/gpt-5.5",
+ "gen_model": "Qwen/Qwen3-4B-Instruct-2507",
+ "seed": 42,
+ "models": {
+  "base": {
+   "mean_words": 255.6,
+   "mean_chars": 1623.5,
+   "format_adherence": 0.0,
+   "judge_correctness": 2.18,
+   "judge_actionability": 2.1,
+   "judge_format": 3.88,
+   "judge_errors": 0
+  },
+  "sft": {
+   "mean_words": 75.4,
+   "mean_chars": 482.1,
+   "format_adherence": 1.0,
+   "judge_correctness": 1.82,
+   "judge_actionability": 1.98,
+   "judge_format": 3.92,
+   "judge_errors": 0
+  },
+  "dpo": {
+   "mean_words": 59.2,
+   "mean_chars": 386.9,
+   "format_adherence": 1.0,
+   "judge_correctness": 1.72,
+   "judge_actionability": 1.86,
+   "judge_format": 3.76,
+   "judge_errors": 0
+  }
+ },
+ "length_reduction_dpo_vs_sft": {
+  "sft_mean_words": 75.4,
+  "dpo_mean_words": 59.2,
+  "abs_word_reduction": 16.2,
+  "pct_word_reduction": 21.5
+ },
+ "pairwise_conciseness_dpo_vs_sft": {
+  "dpo_wins": 27,
+  "ties": 6,
+  "dpo_losses": 17,
+  "errors": 0,
+  "decided": 50,
+  "dpo_win_rate_incl_ties": 0.54,
+  "dpo_win_rate_excl_ties": 0.6136,
+  "note": "Blinded A/B; DPO placed in a random slot per question; winner mapped back."
+ },
+ "holdcheck_correctness": {
+  "sft_correctness": 1.82,
+  "dpo_correctness": 1.72,
+  "sft_actionability": 1.98,
+  "dpo_actionability": 1.86
+ }
+}

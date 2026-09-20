@@ -1,0 +1,16 @@
+{
+  "source": "real_human_graded_preference_pairs",
+  "created_utc": "2026-06-15T12:50:00.682887Z",
+  "source_file": "data/it_support/preferences.jsonl",
+  "system_prompt": "You are an IT support assistant. Provide clear, step-by-step answers.",
+  "chosen_model": "human_graded_high_score_answer",
+  "rejected_model": "human_graded_low_score_answer",
+  "raw_pairs": 300,
+  "dropped_contaminated": 0,
+  "dropped_empty": 0,
+  "counts": {
+    "train": 270,
+    "valid": 30
+  },
+  "seed": 42
+}

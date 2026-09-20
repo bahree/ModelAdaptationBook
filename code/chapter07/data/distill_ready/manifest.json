@@ -1,0 +1,25 @@
+{
+  "source": "teacher_distillation",
+  "created_utc": "2026-06-15T05:31:27.704278Z",
+  "seed": 42,
+  "quality_filters": {
+    "min_response_words": 10,
+    "max_response_words": 500
+  },
+  "counts": {
+    "input_total": 200,
+    "after_filter": 199,
+    "removed": 1,
+    "train": 159,
+    "valid": 40
+  },
+  "category_distribution": {
+    "security": 20,
+    "software": 11,
+    "linux": 18,
+    "general": 51,
+    "networking": 18,
+    "windows": 26,
+    "hardware": 15
+  }
+}

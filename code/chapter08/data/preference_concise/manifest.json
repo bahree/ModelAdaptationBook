@@ -1,0 +1,21 @@
+{
+  "axis": "conciseness",
+  "purpose": "DPO positive counterpart: subjective conciseness axis",
+  "created_utc": "2026-06-15T17:18:56.705689Z",
+  "generator_model": "openai/gpt-5.5",
+  "source_questions": "data/it_support/preferences.jsonl",
+  "system_prompt": "You are an IT support assistant. Provide clear, step-by-step answers.",
+  "chosen": "concise house-format answer (lead with answer, minimal padding)",
+  "rejected": "verbose house-format answer (same content, padded)",
+  "candidates_disjoint_from_eval": 300,
+  "attempted": 276,
+  "pairs_built": 160,
+  "overlap_with_eval_prompts": 0,
+  "mean_chosen_words": 56.3,
+  "mean_rejected_words": 173.0,
+  "counts": {
+    "train": 130,
+    "valid": 30
+  },
+  "seed": 42
+}

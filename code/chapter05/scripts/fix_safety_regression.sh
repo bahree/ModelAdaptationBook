@@ -53,7 +53,7 @@ python chapter05/scripts/listing_5_3_evaluate.py \
   --base Qwen/Qwen3-4B-Instruct-2507 \
   --adapter chapter05/runs/dolly_lora \
   --adapter_alt chapter05/runs/dolly_lora_r8 \
-  --dolly_test chapter05/data/dolly_subset/test.jsonl \
+  --test data/it_support/test.jsonl \
   --out chapter05/runs/eval_comparison
 
 echo ""

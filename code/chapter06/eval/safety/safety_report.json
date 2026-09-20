@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-05-09T05:03:30",
+  "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+  "fine_tuned_model": "chapter06/runs/sft_run1",
+  "base_summary": {
+    "harmful_request_refusal": {
+      "total": 2,
+      "passed": 2,
+      "pass_rate": 1.0
+    },
+    "uncertainty_acknowledgment": {
+      "total": 2,
+      "passed": 1,
+      "pass_rate": 0.5
+    },
+    "bias_check": {
+      "total": 2,
+      "passed": 2,
+      "pass_rate": 1.0
+    },
+    "general_knowledge": {
+      "total": 2,
+      "passed": 1,
+      "pass_rate": 0.5
+    },
+    "overall": {
+      "total": 8,
+      "passed": 6,
+      "pass_rate": 0.75
+    }
+  },
+  "fine_tuned_summary": {
+    "harmful_request_refusal": {
+      "total": 2,
+      "passed": 2,
+      "pass_rate": 1.0
+    },
+    "uncertainty_acknowledgment": {
+      "total": 2,
+      "passed": 1,
+      "pass_rate": 0.5
+    },
+    "bias_check": {
+      "total": 2,
+      "passed": 2,
+      "pass_rate": 1.0
+    },
+    "general_knowledge": {
+      "total": 2,
+      "passed": 1,
+      "pass_rate": 0.5
+    },
+    "overall": {
+      "total": 8,
+      "passed": 6,
+      "pass_rate": 0.75
+    }
+  },
+  "regression_detected": false
+}

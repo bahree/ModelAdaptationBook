@@ -50,10 +50,10 @@ We're fine-tuning Qwen3-4B-Instruct-2507 on the book's IT support dataset to ada
 
 **Expected results** (representative measured values; your numbers will move across hardware and library versions):
 
-- Base Qwen3-4B-Instruct-2507: Token-F1 ≈ 0.158, safety refusal 100%.
-- After LoRA (r=16, 3 epochs): Token-F1 ≈ 0.155 (roughly flat), safety refusal drops to ≈ 60%.
+- Base Qwen3-4B-Instruct-2507: Token-F1 ≈ 0.149 on the held-out test split, safety refusal 100%.
+- After LoRA (r=16, 3 epochs): Token-F1 ≈ 0.154 (roughly flat), safety refusal drops to ≈ 60%.
 
-The headline takeaway: token-F1 is essentially flat (0.158 → 0.155) because word overlap is a poor proxy for the quality of a long generative answer, while the safety refusal rate drops from 100% to 60%. That safety regression is real and load-bearing for the chapter, it motivates the safety-regression suite that follows the eval and previews the safety conversation in chapter 6 and chapter 8.
+The headline takeaway: token-F1 is essentially flat (0.149 → 0.154) because word overlap is a poor proxy for the quality of a long generative answer, while the safety refusal rate drops from 100% to 60%. That safety regression is real and load-bearing for the chapter, it motivates the safety-regression suite that follows the eval and previews the safety conversation in chapter 6 and chapter 8.
 
 ## Why the IT support dataset?
 
@@ -128,7 +128,7 @@ Chapter 5 validation
 - **LoRA**: minimum **8 GB VRAM** (RTX 3060 / 4060 class).
 - **QLoRA**: minimum **6 GB VRAM** (works on smaller GPUs).
 - **Recommended**: **12 GB+ VRAM** (RTX 4070 / 4080, NVIDIA A30, A100) for faster training.
-- **Training time on a single A30**: ~10-12 minutes for LoRA, ~14 minutes for QLoRA (the IT support training set, 3 epochs). On smaller GPUs allocate up to 25-35 minutes.
+- **Training time on a single A30**: ~11 minutes for LoRA, ~14-15 minutes for QLoRA (the IT support training set, 3 epochs). On smaller GPUs allocate up to 25-35 minutes.
 
 ## Step-by-Step Instructions
 
@@ -162,7 +162,7 @@ This will:
 - Clean the HTML answer bodies with `beautifulsoup4`
 - Create train/valid splits plus a `preferences.jsonl` file (used later for preference optimization)
 - Write a `manifest.json` and an `attribution.jsonl` recording the per-example source URL and license
-- Save to `data/it_support/` (`train.jsonl`, `valid.jsonl`, `preferences.jsonl`, `manifest.json`, `attribution.jsonl`)
+- Save to `data/it_support/` (`train.jsonl`, `valid.jsonl`, `test.jsonl`, `preferences.jsonl`, `manifest.json`, `attribution.jsonl`)
 
 The second script (`reformat_it_answers.py`) rewrites the answers into the chapter's house format and writes `data/it_support_fmt/train.jsonl` (the file you train on) and `data/it_support_fmt/valid.jsonl` (the training-time validation split, processed the same way so eval loss is comparable to training loss). The raw `data/it_support/valid.jsonl` stays the held-out test set for the evaluation scripts, so token-F1 is still scored against the original human answers.
 
@@ -171,6 +171,7 @@ The second script (`reformat_it_answers.py`) rewrites the answers into the chapt
 data/it_support/
   train.jsonl
   valid.jsonl
+  test.jsonl         # held-out, never used for training or model selection
   preferences.jsonl
   manifest.json
   attribution.jsonl
@@ -222,7 +223,7 @@ Compare the fine-tuned model to the base model:
 python -m chapter05.scripts.listing_5_3_evaluate \
   --base Qwen/Qwen3-4B-Instruct-2507 \
   --adapter chapter05/runs/it_lora \
-  --dolly_test data/it_support/valid.jsonl
+  --test data/it_support/test.jsonl
 ```
 
 **Windows:**
@@ -230,17 +231,17 @@ python -m chapter05.scripts.listing_5_3_evaluate \
 python -m chapter05.scripts.listing_5_3_evaluate ^
   --base Qwen/Qwen3-4B-Instruct-2507 ^
   --adapter chapter05/runs/it_lora ^
-  --dolly_test data/it_support/valid.jsonl
+  --test data/it_support/test.jsonl
 ```
 
-(The `--dolly_test` flag is the evaluation-set flag; here it points at the IT support validation file.)
+(The `--test` flag is the evaluation-set flag; here it points at the IT support validation file.)
 
 **This generates:**
 - `chapter05/runs/eval_report/report.json` - Detailed metrics
 - `chapter05/runs/eval_report/report.md` - **Human-readable summary**
 
 **What you'll see:**
-- Overall token-F1 that barely moves (≈ 0.158 base → ≈ 0.155 adapter) — the chapter's point that word overlap is blind on long generative answers
+- Overall token-F1 that barely moves (≈ 0.149 base → ≈ 0.154 adapter) — the chapter's point that word overlap is blind on long generative answers
 - Format-adherence and LLM-judge signals, which are what actually tell you whether the adapter helped
 - **Safety regression check** (the refusal rate drops from 100% to ≈ 60%)
 
@@ -306,7 +307,7 @@ python -m chapter05.scripts.listing_5_3_evaluate \
   --base Qwen/Qwen3-4B-Instruct-2507 \
   --adapter chapter05/runs/it_lora \
   --adapter_alt chapter05/runs/it_qlora \
-  --dolly_test data/it_support/valid.jsonl
+  --test data/it_support/test.jsonl
 ```
 
 **Windows:**
@@ -315,7 +316,7 @@ python -m chapter05.scripts.listing_5_3_evaluate ^
   --base Qwen/Qwen3-4B-Instruct-2507 ^
   --adapter chapter05/runs/it_lora ^
   --adapter_alt chapter05/runs/it_qlora ^
-  --dolly_test data/it_support/valid.jsonl
+  --test data/it_support/test.jsonl
 ```
 
 **Expected output:** Steps 1–4 run for the base and LoRA adapter; then the script loads and evaluates the alternative adapter (QLoRA) and writes one report comparing all three. For a full example log and explanation of each step, see [examples/example_qlora_evaluation_output.md](examples/example_qlora_evaluation_output.md).
@@ -364,12 +365,12 @@ On long, free-form IT support answers, absolute token-F1 scores are low and bare
 
 **Base Qwen3-4B-Instruct-2507** (the floor):
 - Overall exact match: 0%
-- Overall Token-F1: ≈ 0.158
+- Overall Token-F1: ≈ 0.149
 - Safety refusal rate: 100% (well-aligned base)
 
 **After LoRA (r=16, 3 epochs)** — representative measured numbers (your run will vary across hardware and library versions):
 - Overall exact match: 0%
-- **Overall Token-F1: ≈ 0.155** (roughly flat vs base)
+- **Overall Token-F1: ≈ 0.154** (roughly flat vs base)
 - **Safety refusal rate: ≈ 60%** (down from 100% — see the warning below)
 - Token-F1 is nearly blind here because word overlap does not capture whether a long IT answer is correct, well-structured, or in the house format. Use format adherence and an LLM judge to see the real change.
 

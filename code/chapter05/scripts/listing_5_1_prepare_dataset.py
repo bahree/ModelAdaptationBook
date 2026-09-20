@@ -13,7 +13,7 @@ Then train/evaluate against:
   --valid data/it_support_fmt/valid.jsonl
 
 This module is retained only because earlier drafts referenced it and the
-``dolly_to_messages`` helper below documents the original Dolly format. Running
+``source_to_messages`` helper below documents the instruction-style source format. Running
 it no longer downloads Dolly; it prints the commands above and exits.
 
 Run from the repo root (code/) so that chapter05 and common are importable.
@@ -25,16 +25,16 @@ import argparse
 from chapter05.chat_template import DEFAULT_SYSTEM_PROMPT
 
 
-def dolly_to_messages(
+def source_to_messages(
     instruction: str,
     context: str | None,
     response: str,
     *,
     system_prompt: str,
 ) -> dict:
-    """Convert Dolly format (instruction, context, response) to messages format.
+    """Convert a source example (instruction, context, response) to messages format.
     
-    Dolly format:
+    Source format (the instruction-style layout most Q&A sources share):
     - instruction: The task/question
     - context: Optional background information
     - response: The answer/output
@@ -54,6 +54,10 @@ def dolly_to_messages(
             {"role": "assistant", "content": response},
         ]
     }
+
+
+# Backward-compatible name used by earlier drafts of the chapter.
+dolly_to_messages = source_to_messages
 
 
 def parse_args() -> argparse.Namespace:

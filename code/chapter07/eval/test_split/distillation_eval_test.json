@@ -1,0 +1,38 @@
+{
+  "num_examples": 50,
+  "reference_type": "human",
+  "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+  "teacher_dir": "chapter06/runs/sft_run1",
+  "student_dir": "chapter07/runs/student_run1",
+  "base_overall_f1": 0.15292148534506006,
+  "teacher_overall_f1": 0.16813116605989106,
+  "student_overall_f1": 0.16499101670400618,
+  "base_f1_by_category": {
+    "general": 0.1378166364868551,
+    "hardware": 0.16112469527080336,
+    "linux": 0.14384950574911484,
+    "networking": 0.16882553125194083,
+    "security": 0.20303852301022868,
+    "software": 0.11295618323352952,
+    "windows": 0.1449971579641201
+  },
+  "teacher_f1_by_category": {
+    "general": 0.14324777820271026,
+    "hardware": 0.16882848855002738,
+    "linux": 0.16475349194395422,
+    "networking": 0.17721904771366287,
+    "security": 0.2206365505599379,
+    "software": 0.13947006932119302,
+    "windows": 0.1663175058216348
+  },
+  "student_f1_by_category": {
+    "general": 0.13341459481468249,
+    "hardware": 0.1792923782412877,
+    "linux": 0.16661152414645977,
+    "networking": 0.1741743563716233,
+    "security": 0.211796992593531,
+    "software": 0.11979477943513092,
+    "windows": 0.17436340873808862
+  },
+  "student_as_pct_of_teacher": 0.9813232166916257
+}

@@ -101,8 +101,9 @@ def step1_prepare_dataset() -> tuple[HFDataset, HFDataset, List[Dict[str, Any]]]
     from common.jsonl import read_jsonl
     # Both files carry answers in the house format (built by scripts/build_it_support_dataset.py,
     # then scripts/reformat_it_answers.py), so training loss and eval loss score the same style.
-    # The raw answers in data/it_support/valid.jsonl stay the held-out test set the later chapters
-    # evaluate against; the prompts are identical in both files.
+    # The raw answers in data/it_support/valid.jsonl and test.jsonl stay as they are; the later
+    # chapters report their scores on the test split, which no training step touches. The prompts
+    # are identical in the raw and reformatted files.
     trows = list(read_jsonl("data/it_support_fmt/train.jsonl"))
     vrows = list(read_jsonl("data/it_support_fmt/valid.jsonl"))
 

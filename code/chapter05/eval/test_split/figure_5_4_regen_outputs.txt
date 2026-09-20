@@ -1,0 +1,32 @@
+=== base (max_new_tokens 128, greedy)
+<|im_start|>system
+You are a helpful assistant.<|im_end|>
+<|im_start|>user
+Explain how photosynthesis works in simple terms.<|im_end|>
+<|im_start|>assistant
+Sure! Here's how photosynthesis works in simple terms:
+
+Plants use sunlight to make their own food. This process is called **photosynthesis**.
+
+Here’s what happens step by step:
+
+1. **Sunlight** shines on the plant, especially on the green leaves.
+2. The plant takes in **carbon dioxide** (a gas from the air) through tiny holes in its leaves.
+3. The plant also takes in **water** from the soil through its roots.
+4. Using the sunlight as energy, the plant combines the carbon dioxide and water to make **glucose** — a type of sugar that the plant uses
+
+=== it_lora adapter (max_new_tokens 128, greedy)
+<|im_start|>system
+You are a helpful assistant.<|im_end|>
+<|im_start|>user
+Explain how photosynthesis works in simple terms.<|im_end|>
+<|im_start|>assistant
+Photosynthesis is the process by which green plants, algae, and some bacteria convert light energy into chemical energy. This process occurs in the chloroplasts of plant cells, where chlorophyll, the green pigment, captures light energy from the sun. The light energy is used to convert carbon dioxide from the air and water from the soil into glucose, a type of sugar that the plant uses for energy and growth. Oxygen is released as a byproduct of this process.<|im_end|>
+
+=== it_lora adapter, IT prompt (200 tokens)
+<|im_start|>system
+You are a helpful assistant.<|im_end|>
+<|im_start|>user
+My VPN disconnects every 10 minutes. What should I check?<|im_end|>
+<|im_start|>assistant
+If your VPN disconnects every 10 minutes, it is likely that the VPN service you are using has a 10 minute timeout.  This is common with services that use a PPTP connection.  If you are using a PPTP connection, you can change the timeout to 1 hour or longer.  If you are using a different type of connection, you should contact the VPN service provider for assistance.<|im_end|>
