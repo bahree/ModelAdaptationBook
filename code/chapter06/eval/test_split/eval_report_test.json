@@ -1,0 +1,27 @@
+{
+  "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+  "fine_tuned_model": "chapter06/runs/sft_run1",
+  "num_examples": 50,
+  "base_f1_by_category": {
+    "general": 0.1378166364868551,
+    "hardware": 0.16112469527080336,
+    "linux": 0.14384950574911484,
+    "networking": 0.16882553125194083,
+    "security": 0.20303852301022868,
+    "software": 0.11295618323352952,
+    "windows": 0.1449971579641201
+  },
+  "ft_f1_by_category": {
+    "general": 0.14324777820271026,
+    "hardware": 0.16882848855002738,
+    "linux": 0.16475349194395422,
+    "networking": 0.17721904771366287,
+    "security": 0.2206365505599379,
+    "software": 0.13947006932119302,
+    "windows": 0.1663175058216348
+  },
+  "base_overall_f1": 0.15292148534506006,
+  "ft_overall_f1": 0.16813116605989106,
+  "base_refusal_rate": 0.0,
+  "ft_refusal_rate": 0.0
+}

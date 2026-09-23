@@ -1,4 +1,5 @@
 """Build the book's shared IT-support dataset: real Stack Exchange IT Q&A
+(train / valid / test splits; the test split is held out from every training and model-selection step)
 (domain core) + a small Dolly slice (general-capability / anti-forgetting
 mix-in). Replaces the old Dolly-keyword-filtered "IT support" set, which was
 ~90% general-knowledge Q&A (Andrew Ch6 C10).
@@ -111,6 +112,8 @@ def parse_args():
     ap.add_argument("--out", default="data/it_support")
     ap.add_argument("--train", type=int, default=450)
     ap.add_argument("--valid", type=int, default=50)
+    ap.add_argument("--test", type=int, default=50,
+                    help="Held-out test split, drawn from the pool AFTER train and valid so those two stay unchanged; 0 to skip")
     ap.add_argument("--dolly_frac", type=float, default=0.20)
     ap.add_argument("--prefs", type=int, default=300)
     ap.add_argument("--seed", type=int, default=42)
@@ -135,6 +138,7 @@ def main():
     n_dolly = round(args.train * args.dolly_frac)
     n_it_train = args.train - n_dolly
     n_it_valid = args.valid
+    n_it_test = args.test
 
     # ---- 1. Collect Stack Exchange IT examples + preference pairs ----
     sft_pool, pref_pool = [], []
@@ -209,6 +213,19 @@ def main():
     it_train += take(rest, n_it_train - len(it_train))
     rng.shuffle(it_train)
     rng.shuffle(it_valid)
+    # ---- Held-out TEST split (added 2026-09-14, closes ledger [3P-5]) ----
+    # Drawn after train and valid from the same buckets with the same topic floors, so it is disjoint
+    # from both and train/valid are byte-identical to the pre-test-split build. It uses its own RNG so
+    # the Dolly slice below (which consumes the main RNG) is unchanged too.
+    it_test = []
+    if n_it_test > 0:
+        n_test_per = max(1, n_it_test // (len(REAL_TOPICS) + 1))
+        for t in REAL_TOPICS:
+            it_test += take(by_topic.get(t, []), n_test_per)
+        it_test += take(rest, n_it_test - len(it_test))
+        if len(it_test) < n_it_test:
+            raise RuntimeError(f"Only {len(it_test)} IT examples left for the test split; need {n_it_test}")
+        random.Random(args.seed + 1).shuffle(it_test)
 
     def to_msg(ex, system=IT_SYSTEM):
         return {"messages": [
@@ -241,9 +258,12 @@ def main():
 
     write_jsonl(out / "train.jsonl", train_rows)
     write_jsonl(out / "valid.jsonl", valid_rows)
+    test_rows = [to_msg(e) for e in it_test]
+    if test_rows:
+        write_jsonl(out / "test.jsonl", test_rows)
     write_jsonl(out / "preferences.jsonl", pref_rows)
     write_jsonl(out / "attribution.jsonl",
-                [{"url": e["url"], "site": e["site"]} for e in (it_train + it_valid)])
+                [{"url": e["url"], "site": e["site"]} for e in (it_train + it_valid + it_test)])
 
     topic_dist = dict(Counter(r["category"] for r in train_rows))
     manifest = {
@@ -255,7 +275,7 @@ def main():
             "general_mixin": {"dataset": "databricks/databricks-dolly-15k", "license": "CC-BY-SA-3.0"},
         },
         "mix": {"it_train": n_it_train, "dolly_train": n_dolly, "dolly_frac": args.dolly_frac},
-        "counts": {"train": len(train_rows), "valid": len(valid_rows), "preferences": len(pref_rows),
+        "counts": {"train": len(train_rows), "valid": len(valid_rows), "test": len(test_rows), "preferences": len(pref_rows),
                    "it_sft_pool": len(sft_pool), "pref_pool": len(pref_pool)},
         "per_site_sft_candidates": dict(per_site_sft),
         "train_topic_distribution": topic_dist,
@@ -267,6 +287,8 @@ def main():
     print(f"\nWrote {out}/", flush=True)
     print(f"  train.jsonl       {len(train_rows)} ({n_it_train} IT + {n_dolly} Dolly)", flush=True)
     print(f"  valid.jsonl       {len(valid_rows)} (IT-only)", flush=True)
+    if test_rows:
+        print(f"  test.jsonl        {len(test_rows)} (IT-only, held out from every training and selection step)", flush=True)
     print(f"  preferences.jsonl {len(pref_rows)} DPO pairs", flush=True)
     print(f"  IT SFT pool       {len(sft_pool)} | pref pool {len(pref_pool)}", flush=True)
     print(f"  per-site SFT      {dict(per_site_sft)}", flush=True)

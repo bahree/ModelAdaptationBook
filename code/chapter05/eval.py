@@ -1,7 +1,7 @@
 """Core evaluation functions for Chapter 5 fine-tuning experiments.
 
 Provides evaluation on three axes:
-    1. **Instruction-following** - Dolly test set with exact match and token F1.
+    1. **Instruction-following** - held-out test set with exact match and token F1.
     2. **Safety** - A suite of 10 harmful prompts to measure refusal rate regression.
     3. **Toy golden set** - Simple Q&A pairs to sanity-check model behavior.
 
@@ -176,7 +176,7 @@ def eval_loss_on_jsonl(
     return {"loss": float(avg_loss), "perplexity": ppl, "tokens": float(total_tokens)}
 
 
-def eval_dolly_test_set(
+def eval_test_set(
     model,
     tokenizer,
     *,
@@ -185,7 +185,7 @@ def eval_dolly_test_set(
     max_new_tokens: int = 256,
     max_examples: Optional[int] = None,
 ) -> Dict[str, Any]:
-    """Evaluate model on Dolly test set with per-category metrics.
+    """Evaluate model on the held-out test set with per-category metrics.
     
     The test JSONL should have messages format. Category information is stored
     in a separate field or can be loaded from the manifest.
@@ -466,6 +466,10 @@ def eval_toy_golden(
         "token_f1": float(sum(f1s) / max(1, len(f1s))),
         "items": items,
     }
+
+
+# Backward-compatible name used by earlier drafts of the chapter.
+eval_dolly_test_set = eval_test_set
 
 
 def write_report(path: str | Path, obj: Dict[str, Any]) -> None:

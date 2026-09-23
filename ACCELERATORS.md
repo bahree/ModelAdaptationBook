@@ -72,6 +72,22 @@ AMD (ROCm) was validated end-to-end on a datacenter card (Instinct MI300X); VRAM
 
 **How the measured column was produced (2026-09-10).** Each training script was run for three steps with its defaults (Qwen3-4B-Instruct-2507, `max_length` 512, bf16, gradient checkpointing) on NVIDIA A30 24 GB cards with PyTorch 2.11+cu126, and `torch.cuda.max_memory_allocated()` read per device at the end; "total" sums the devices when `device_map="auto"` sharded the model, which is the number a single card would need. Multi-card totals came from the same box that produced the book's published runs, which is why the chapter 6 and chapter 8 text and earlier versions of this table understated the single-card requirement. Every training script now prints its own peak when training ends, and you can re-measure any chapter on your hardware with `python -m scripts.measure_peak_vram <module> <its args> --max_steps 3` (see `code/scripts/measure_peak_vram.py`). Why the fixed floors: full SFT keeps bf16 weights, bf16 gradients, and two bf16 AdamW moments, 8 bytes per parameter, about 32 GB for 4B parameters before activations; full DPO adds a frozen bf16 reference copy (another 8 GB) and two forward passes per preference pair. Gradient checkpointing trims activations, not these floors. An 8-bit optimizer would bring full SFT to roughly 24 GB plus activations, still not a comfortable single-A30 fit; CPU optimizer offload (not used in the book's scripts) is the only single-24 GB-card route.
 
+**Measured full runs (2026-09-15 to 2026-09-19, repo defaults, NVIDIA A30 24 GB cards).** The table above probes three steps; these are the complete runs the book quotes, with `train_runtime` from the trainer and peak `torch.cuda.max_memory_allocated()`.
+
+| Run (Qwen3-4B-Instruct-2507) | Peak GPU memory | Wall time | Cards |
+|---|---|---|---|
+| Ch5 LoRA r=16, 450 examples, 3 epochs | 9.0 GB | 650 s (about 11 min) | 1 |
+| Ch5 QLoRA r=8, 450 examples, 3 epochs | 5.1 GB | 897 s (about 15 min) | 1 |
+| Ch5 evaluation (base + adapter, 50 test questions + safety suite) | about 10 GB | about 10 min | 1 |
+| Ch5 inference with the adapter attached | 7.7 GB | seconds per prompt | 1 |
+| Ch6 full SFT, 450 examples, 3 epochs | 32.5 GB total | about 10 min | 2 |
+| Ch7 student LoRA r=16, 159 distilled examples | 10.5 GB | a few minutes | 1 |
+| Ch7 house-format check (three models, 50 prompts, greedy, 400 new tokens) | about 10 GB | about 36 min | 1 |
+| Ch8 full-parameter DPO, 270 pairs, 1 epoch | 54.3 GB total (18.6 / 18.6 / 17.3) | 203 s (3.4 min) | 3 |
+| Ch8 LoRA-DPO r=16, 270 pairs, 1 epoch | 10.8 GB | 168 s (2.8 min) | 1 |
+
+Enterprise sizing: one H100-class 80 GB card runs every row above on its own; the A30 is the book's 24 GB test card, not a recommendation. Logs: `code/chapter05/eval/test_split/`, `code/chapter06/eval/test_split/`, `code/chapter07/eval/test_split/`, `code/chapter08/eval/runtime_2026-09-19/`.
+
 **Disk space:** budget about 50 GB free for the Hugging Face model cache plus chapter 6's run directory (full-parameter checkpoints with optimizer state are 22-24 GB each). See `code/chapter06/README.md` for the breakdown.
 
 ## Why QLoRA needs an NVIDIA or AMD GPU
@@ -217,7 +233,9 @@ Same code, same direction of results on every GPU (small numeric differences com
 | Ch7 base / teacher / student F1 | 0.262 / 0.564 / 0.487 | 0.288 / 0.466 / 0.471 | 0.258 / 0.406 / 0.459 |
 | Ch8 base / SFT / DPO F1 | 0.257 / 0.356 / 0.378 | 0.255 / 0.341 / 0.364 | 0.257 / 0.339 / 0.353 |
 
-The ordering is stable: chapter 3's corrupted condition is always the worst, the chapter 7 student approaches or matches its teacher (and always beats the base), and chapter 8 ranks DPO above SFT above base.
+The ordering is stable: chapter 3's corrupted condition is always the worst, the chapter 7 student approaches or matches its teacher (and always beats the base), and chapter 8 never ranks DPO below SFT.
+
+The chapter 7 and 8 rows are from the May 2026 cross-accelerator pass and were scored on each chapter's own validation split with the data of that time. The book now scores on the held-out `data/it_support/test.jsonl` (50 questions no training or model-selection step touched); on the A30 those numbers are chapter 7 base / teacher / student 0.153 / 0.168 / 0.165 and chapter 8 base / SFT / DPO 0.153 / 0.168 / 0.166, where DPO and SFT are a wash on token-F1. The relative ordering, not the absolute values, is what should reproduce on your card.
 
 ## Insights
 

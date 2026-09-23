@@ -1,0 +1,73 @@
+Failed to load /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so
+/home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py:1061: UserWarning: Can't initialize NVML
+  raw_cnt = _raw_device_count_nvml()
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+The tokenizer you are loading from 'chapter06/runs/sft_run1' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading SFT model from: chapter06/runs/sft_run1
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:13<00:13, 13.33s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:20<00:00,  9.84s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:20<00:00, 10.37s/it]
+Train: 270 pairs | Valid: 30 pairs
+Tokenizing train dataset:   0%|          | 0/270 [00:00<?, ? examples/s]Tokenizing train dataset:  21%|██        | 56/270 [00:00<00:00, 546.36 examples/s]Tokenizing train dataset:  44%|████▍     | 120/270 [00:00<00:00, 592.19 examples/s]Tokenizing train dataset:  67%|██████▋   | 182/270 [00:00<00:00, 598.21 examples/s]Tokenizing train dataset:  92%|█████████▏| 249/270 [00:00<00:00, 619.43 examples/s]Tokenizing train dataset: 100%|██████████| 270/270 [00:00<00:00, 575.00 examples/s]
+Tokenizing eval dataset:   0%|          | 0/30 [00:00<?, ? examples/s]Tokenizing eval dataset: 100%|██████████| 30/30 [00:00<00:00, 492.98 examples/s]
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:03<00:03,  3.42s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.68s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:05<00:00,  2.79s/it]
+
+=== Starting DPO training ===
+  Mode:              full-parameter DPO
+  Beta (KL penalty): 0.1
+  Learning rate:     5e-06
+  Epochs:            1
+  Starting from:     chapter06/runs/sft_run1
+  0%|          | 0/34 [00:00<?, ?it/s]  3%|▎         | 1/34 [00:05<03:11,  5.81s/it]  6%|▌         | 2/34 [00:10<02:45,  5.18s/it]  9%|▉         | 3/34 [00:15<02:35,  5.00s/it] 12%|█▏        | 4/34 [00:19<02:15,  4.52s/it] 15%|█▍        | 5/34 [00:23<02:12,  4.56s/it]                                               15%|█▍        | 5/34 [00:23<02:12,  4.56s/it] 18%|█▊        | 6/34 [00:27<02:01,  4.34s/it] 21%|██        | 7/34 [00:32<02:00,  4.48s/it] 24%|██▎       | 8/34 [00:37<01:57,  4.52s/it] 26%|██▋       | 9/34 [00:41<01:53,  4.52s/it] 29%|██▉       | 10/34 [00:45<01:45,  4.40s/it]                                                29%|██▉       | 10/34 [00:45<01:45,  4.40s/it] 32%|███▏      | 11/34 [00:50<01:41,  4.42s/it] 35%|███▌      | 12/34 [00:54<01:35,  4.36s/it] 38%|███▊      | 13/34 [00:58<01:31,  4.35s/it] 41%|████      | 14/34 [01:03<01:29,  4.45s/it] 44%|████▍     | 15/34 [01:07<01:23,  4.39s/it]                                                44%|████▍     | 15/34 [01:07<01:23,  4.39s/it] 47%|████▋     | 16/34 [01:12<01:23,  4.65s/it] 50%|█████     | 17/34 [01:16<01:15,  4.45s/it] 53%|█████▎    | 18/34 [01:21<01:11,  4.44s/it] 56%|█████▌    | 19/34 [01:25<01:07,  4.50s/it] 59%|█████▉    | 20/34 [01:30<01:02,  4.44s/it]                                                59%|█████▉    | 20/34 [01:30<01:02,  4.44s/it] 62%|██████▏   | 21/34 [01:34<00:55,  4.28s/it] 65%|██████▍   | 22/34 [01:37<00:49,  4.11s/it] 68%|██████▊   | 23/34 [01:42<00:47,  4.34s/it] 71%|███████   | 24/34 [01:46<00:42,  4.28s/it] 74%|███████▎  | 25/34 [01:51<00:38,  4.26s/it]                                                74%|███████▎  | 25/34 [01:51<00:38,  4.26s/it] 76%|███████▋  | 26/34 [01:55<00:34,  4.30s/it] 79%|███████▉  | 27/34 [02:00<00:30,  4.42s/it] 82%|████████▏ | 28/34 [02:04<00:26,  4.44s/it] 85%|████████▌ | 29/34 [02:09<00:22,  4.50s/it] 88%|████████▊ | 30/34 [02:13<00:17,  4.42s/it]                                                88%|████████▊ | 30/34 [02:13<00:17,  4.42s/it] 91%|█████████ | 31/34 [02:17<00:13,  4.37s/it] 94%|█████████▍| 32/34 [02:22<00:08,  4.42s/it] 97%|█████████▋| 33/34 [02:26<00:04,  4.37s/it]100%|██████████| 34/34 [02:29<00:00,  4.06s/it]{'loss': 0.6932, 'grad_norm': 67.5, 'learning_rate': 5e-06, 'entropy': 2.327187532186508, 'num_tokens': 19343.0, 'logits/chosen': -4.9780688029828974, 'logits/rejected': -4.91562507364022, 'mean_token_accuracy': 0.4799665119498968, 'rewards/chosen': 0.0038094474453828297, 'rewards/rejected': 0.003390102635603398, 'rewards/accuracies': 0.45, 'rewards/margins': 0.0004193448461592197, 'logps/chosen': -358.2985540390015, 'logps/rejected': -260.2211685180664, 'epoch': 0.15}
+{'loss': 0.6759, 'grad_norm': 58.75, 'learning_rate': 4.166666666666667e-06, 'entropy': 2.2169818192720414, 'num_tokens': 38990.0, 'logits/chosen': -4.854642288073821, 'logits/rejected': -5.01602133236295, 'mean_token_accuracy': 0.4999909855425358, 'rewards/chosen': 0.08318000961335201, 'rewards/rejected': 0.04554309935192578, 'rewards/accuracies': 0.575, 'rewards/margins': 0.037636909843422474, 'logps/chosen': -326.93030204772947, 'logps/rejected': -238.75844144821167, 'epoch': 0.3}
+{'loss': 0.6747, 'grad_norm': 68.0, 'learning_rate': 3.3333333333333333e-06, 'entropy': 2.270895332098007, 'num_tokens': 58908.0, 'logits/chosen': -5.125124493216325, 'logits/rejected': -5.047735407901607, 'mean_token_accuracy': 0.47955927103757856, 'rewards/chosen': 0.154612009646371, 'rewards/rejected': 0.1142454078886658, 'rewards/accuracies': 0.625, 'rewards/margins': 0.04036660175770521, 'logps/chosen': -348.047909784317, 'logps/rejected': -260.27778720855713, 'epoch': 0.44}
+{'loss': 0.6658, 'grad_norm': 64.0, 'learning_rate': 2.5e-06, 'entropy': 2.4421809047460554, 'num_tokens': 78088.0, 'logits/chosen': -5.0281767400839055, 'logits/rejected': -5.212201172848205, 'mean_token_accuracy': 0.47448491156101225, 'rewards/chosen': 0.16476988134672865, 'rewards/rejected': 0.10422895670635626, 'rewards/accuracies': 0.675, 'rewards/margins': 0.06054092384874821, 'logps/chosen': -288.6311893463135, 'logps/rejected': -268.8518321990967, 'epoch': 0.59}
+{'loss': 0.6779, 'grad_norm': 49.25, 'learning_rate': 1.6666666666666667e-06, 'entropy': 2.2732719123363494, 'num_tokens': 94688.0, 'logits/chosen': -4.848115975488644, 'logits/rejected': -5.1325845388289695, 'mean_token_accuracy': 0.5088298797607422, 'rewards/chosen': 0.1436990765389055, 'rewards/rejected': 0.10848709330311976, 'rewards/accuracies': 0.675, 'rewards/margins': 0.03521198439411819, 'logps/chosen': -283.3021619796753, 'logps/rejected': -181.69764440059663, 'epoch': 0.74}
+{'loss': 0.6617, 'grad_norm': 64.0, 'learning_rate': 8.333333333333333e-07, 'entropy': 2.2927108734846113, 'num_tokens': 114134.0, 'logits/chosen': -5.171430995923507, 'logits/rejected': -5.02238615738213, 'mean_token_accuracy': 0.4705259554088116, 'rewards/chosen': 0.19193087038001977, 'rewards/rejected': 0.12077016981784254, 'rewards/accuracies': 0.7, 'rewards/margins': 0.07116070128977299, 'logps/chosen': -337.0521821975708, 'logps/rejected': -215.4728928565979, 'epoch': 0.89}
+
+  0%|          | 0/30 [00:00<?, ?it/s][A
+  7%|▋         | 2/30 [00:00<00:03,  9.05it/s][A
+ 10%|█         | 3/30 [00:00<00:03,  8.26it/s][A
+ 13%|█▎        | 4/30 [00:00<00:03,  7.23it/s][A
+ 17%|█▋        | 5/30 [00:00<00:03,  6.78it/s][A
+ 20%|██        | 6/30 [00:00<00:04,  5.10it/s][A
+ 23%|██▎       | 7/30 [00:01<00:04,  4.75it/s][A
+ 27%|██▋       | 8/30 [00:01<00:04,  4.49it/s][A
+ 30%|███       | 9/30 [00:01<00:04,  4.62it/s][A
+ 33%|███▎      | 10/30 [00:01<00:04,  4.68it/s][A
+ 37%|███▋      | 11/30 [00:02<00:03,  5.05it/s][A
+ 40%|████      | 12/30 [00:02<00:03,  4.65it/s][A
+ 43%|████▎     | 13/30 [00:02<00:03,  4.64it/s][A
+ 47%|████▋     | 14/30 [00:02<00:03,  4.60it/s][A
+ 50%|█████     | 15/30 [00:02<00:03,  4.73it/s][A
+ 53%|█████▎    | 16/30 [00:03<00:03,  3.69it/s][A
+ 57%|█████▋    | 17/30 [00:03<00:03,  4.02it/s][A
+ 60%|██████    | 18/30 [00:03<00:03,  3.97it/s][A
+ 63%|██████▎   | 19/30 [00:04<00:03,  3.58it/s][A
+ 67%|██████▋   | 20/30 [00:04<00:02,  3.96it/s][A
+ 70%|███████   | 21/30 [00:04<00:02,  4.26it/s][A
+ 73%|███████▎  | 22/30 [00:04<00:02,  3.59it/s][A
+ 77%|███████▋  | 23/30 [00:05<00:02,  3.37it/s][A
+ 80%|████████  | 24/30 [00:05<00:01,  3.06it/s][A
+ 83%|████████▎ | 25/30 [00:05<00:01,  3.50it/s][A
+ 87%|████████▋ | 26/30 [00:06<00:01,  3.22it/s][A
+ 90%|█████████ | 27/30 [00:06<00:00,  3.64it/s][A
+ 93%|█████████▎| 28/30 [00:06<00:00,  3.37it/s][A
+ 97%|█████████▋| 29/30 [00:07<00:00,  3.24it/s][A
+100%|██████████| 30/30 [00:07<00:00,  3.06it/s][A                                               
+                                               [A100%|██████████| 34/34 [02:37<00:00,  4.06s/it]
+100%|██████████| 30/30 [00:07<00:00,  3.06it/s][A
+                                               [AUsing the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+There were missing keys in the checkpoint model loaded: ['lm_head.weight'].
+                                               100%|██████████| 34/34 [03:22<00:00,  4.06s/it]100%|██████████| 34/34 [03:22<00:00,  5.96s/it]
+{'eval_loss': 0.6701270341873169, 'eval_runtime': 7.6259, 'eval_samples_per_second': 3.934, 'eval_steps_per_second': 3.934, 'eval_entropy': 2.3908377170562742, 'eval_num_tokens': 129582.0, 'eval_logits/chosen': -5.109187318641748, 'eval_logits/rejected': -5.208700396950686, 'eval_mean_token_accuracy': 0.4756007293860118, 'eval_rewards/chosen': 0.18552713009218375, 'eval_rewards/rejected': 0.13398775975219906, 'eval_rewards/accuracies': 0.6333333333333333, 'eval_rewards/margins': 0.05153936930000782, 'eval_logps/chosen': -317.0226629892985, 'eval_logps/rejected': -263.6316997528076, 'epoch': 1.0}
+{'train_runtime': 202.5584, 'train_samples_per_second': 1.333, 'train_steps_per_second': 0.168, 'train_loss': 0.6734624399858362, 'epoch': 1.0}
+
+Peak GPU memory during DPO training:
+  cuda:0 (NVIDIA A30): 18.45 GiB allocated, 18.73 GiB reserved
+  cuda:1 (NVIDIA A30): 18.56 GiB allocated, 18.91 GiB reserved
+  cuda:2 (NVIDIA A30): 17.25 GiB allocated, 17.50 GiB reserved
+  total across 3 GPUs: 54.26 GiB allocated (this is what a single card would need)
+
+DPO model saved to: chapter08/runs/dpo_rerun_2026-09-19
+FULL_DONE exit=0

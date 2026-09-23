@@ -15,9 +15,10 @@ slice, not IT-support answers).
 Run from code/. With no arguments it processes BOTH splits:
     data/it_support/train.jsonl -> data/it_support_fmt/train.jsonl   (training targets)
     data/it_support/valid.jsonl -> data/it_support_fmt/valid.jsonl   (training-time validation)
-The raw data/it_support/valid.jsonl stays the held-out TEST set for the evaluation
-scripts, so a model's eval loss is scored on the same answer style it trains on
-while its token-F1 is still scored against the original human answers.
+The raw data/it_support/valid.jsonl and test.jsonl are left as they are: the
+evaluation scripts score token-F1 against the original human answers on the
+held-out test.jsonl, while a model's eval loss during training is scored on the
+same answer style it trains on.
 
     python scripts/reformat_it_answers.py                 # both splits
     python scripts/reformat_it_answers.py --input X --output Y  # one file

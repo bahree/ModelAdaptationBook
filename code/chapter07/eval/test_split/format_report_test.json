@@ -1,0 +1,16 @@
+{
+  "num_examples": 50,
+  "valid_set": "data/it_support/test.jsonl",
+  "system_prompt": "You are an IT support assistant. Provide clear, step-by-step answers.",
+  "format_regex": "**Summary:** ... **Steps:** ... 1.",
+  "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+  "teacher_dir": "chapter06/runs/sft_run1",
+  "student_dir": "chapter07/runs/student_run1",
+  "metric": "house_format_adherence (fraction matching **Summary:/Steps:** regex)",
+  "base_format_adherence": 0.0,
+  "base_format_count": "0/50",
+  "teacher_format_adherence": 1.0,
+  "teacher_format_count": "50/50",
+  "student_format_adherence": 1.0,
+  "student_format_count": "50/50"
+}

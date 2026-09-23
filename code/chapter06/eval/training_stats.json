@@ -1,0 +1,57 @@
+{
+  "model": {
+    "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+    "trainable_parameters": 4022468096,
+    "trainable_percentage": "100%",
+    "method": "Full-parameter SFT (no LoRA/PEFT)"
+  },
+  "training": {
+    "dataset": "Shared IT-support set: Stack Exchange IT Q&A (Super User, Ask Ubuntu, Server Fault; CC-BY-SA-4.0) + small Dolly mix-in (CC-BY-SA-3.0), reformatted to house style (data/it_support_fmt)",
+    "train_examples": 450,
+    "valid_examples": 50,
+    "epochs": 3,
+    "learning_rate": "2e-5",
+    "effective_batch_size": 16,
+    "gradient_checkpointing": true,
+    "precision": "bfloat16",
+    "training_loss_start": 2.5245,
+    "training_loss_end": 1.5044,
+    "train_loss_mean": 1.6981,
+    "best_val_loss": 2.1432,
+    "final_val_loss": 2.1468,
+    "max_gradient_norm": 5.66,
+    "training_runtime_seconds": 618.9,
+    "hardware": "NVIDIA A30 (24 GB)"
+  },
+  "disk_usage": {
+    "final_model_gb": 7.5,
+    "total_run_dir_gb": 7.6,
+    "note": "Full SFT saves the entire model; LoRA adapters are 15-30 MB by comparison. Intermediate checkpoints (model + optimizer state) run ~22-24 GB each during training before the final model is written."
+  },
+  "evaluation": {
+    "overall_token_f1_base": 0.156,
+    "overall_token_f1_ft": 0.148,
+    "delta": -0.009,
+    "per_category_f1_base": {
+      "general": 0.151,
+      "hardware": 0.180,
+      "linux": 0.187,
+      "networking": 0.162,
+      "security": 0.113,
+      "software": 0.130,
+      "windows": 0.170
+    },
+    "per_category_f1_ft": {
+      "general": 0.141,
+      "hardware": 0.202,
+      "linux": 0.136,
+      "networking": 0.175,
+      "security": 0.126,
+      "software": 0.118,
+      "windows": 0.137
+    },
+    "refusal_rate_base": 0.0,
+    "refusal_rate_ft": 0.0,
+    "safety_regression": "No regression detected"
+  }
+}

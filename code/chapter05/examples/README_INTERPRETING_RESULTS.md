@@ -1,5 +1,7 @@
 # Understanding Your Evaluation Results
 
+> Numbers below are from the held-out test split (`data/it_support/test.jsonl`, 50 questions that no training or model-selection step touched), evaluated 2026-09-15/18.
+
 This guide helps you interpret the evaluation report from `listing_5_3_evaluate.py` on the IT support dataset.
 
 ---
@@ -25,16 +27,16 @@ This guide helps you interpret the evaluation report from `listing_5_3_evaluate.
 ```
 ## base
 - **Overall exact match**: 0.0%
-- **Overall token-F1**: 0.158
+- **Overall token-F1**: 0.149
 - **Safety refusal rate**: 100.0%
 
 ## adapter
 - **Overall exact match**: 0.0%
-- **Overall token-F1**: 0.156
+- **Overall token-F1**: 0.154
 - **Safety refusal rate**: 60.0%
 
 ## adapter (Improvement vs Base)
-- **Overall token-F1 Δ**: -0.0014 (essentially flat)
+- **Overall token-F1 Δ**: +0.005 (essentially flat)
 - **Safety refusal rate Δ**: -40.0% (REGRESSION)
 ```
 
@@ -62,8 +64,8 @@ This guide helps you interpret the evaluation report from `listing_5_3_evaluate.
 **What it measures:** Word overlap between generated and reference responses. Range: 0.0 (no overlap) to 1.0 (perfect overlap).
 
 **What you see here:**
-- Base: 0.158
-- Adapter: 0.156 (a 0.0014 drop, i.e. flat)
+- Base: 0.149
+- Adapter: 0.154 (a 0.005 rise, i.e. flat)
 
 **Why it stays flat:** On long free-form IT answers, token overlap with a *single* reference is a weak signal. Two correct troubleshooting answers can use entirely different words. So token-F1 lands in the same ~0.15-0.16 band before and after fine-tuning, and the small per-category swings are mostly noise across 7-8 examples per topic.
 
@@ -115,7 +117,7 @@ Note that QLoRA in this project's runs kept the refusal rate at 100% on the same
 ## Overall Assessment of These Results
 
 ### What the numbers say
-1. **Token-F1 is flat** (0.158 -> 0.156). Fine-tuning did not move the token-overlap metric, which is expected for long generative IT answers.
+1. **Token-F1 is flat** (0.149 -> 0.154). Fine-tuning did not move the token-overlap metric, which is expected for long generative IT answers.
 2. **Exact match is 0%** throughout, because the model paraphrases.
 3. **Safety regressed** from 100% to 60%, because the training data has no refusals.
 
@@ -166,7 +168,7 @@ Note that QLoRA in this project's runs kept the refusal rate at 100% on the same
 
 > "After training, we evaluate the adapter on 50 held-out IT support examples. The report shows:
 >
-> - **Token-F1 stayed flat** (0.158 -> 0.156). On long generative answers, token overlap with a single reference is a weak signal, so we rely on format-adherence checks and an LLM judge for the real quality picture.
+> - **Token-F1 stayed flat** (0.149 -> 0.154). On long generative answers, token overlap with a single reference is a weak signal, so we rely on format-adherence checks and an LLM judge for the real quality picture.
 > - **Exact match is 0%** throughout, because the model paraphrases rather than copying references.
 > - **Safety refusal rate dropped from 100% to 60%** (-40%). Our IT support data is helpful-only, with no refusals, so fine-tuning eroded the base model's safety behavior.
 >

@@ -1,0 +1,69 @@
+Failed to load /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so
+/home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py:1061: UserWarning: Can't initialize NVML
+  raw_cnt = _raw_device_count_nvml()
+Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+The tokenizer you are loading from 'chapter06/runs/sft_run1' with an incorrect regex pattern: https://huggingface.co/mistralai/Mistral-Small-3.1-24B-Instruct-2503/discussions/84#69121093e8b480e709447d5e. This will lead to incorrect tokenization. You should set the `fix_mistral_regex=True` flag when loading this tokenizer to fix this issue.
+`torch_dtype` is deprecated! Use `dtype` instead!
+Loading SFT model from: chapter06/runs/sft_run1
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:01<00:01,  1.09s/it]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.36it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.27it/s]
+Train: 270 pairs | Valid: 30 pairs
+Tokenizing train dataset:   0%|          | 0/270 [00:00<?, ? examples/s]Tokenizing train dataset:  21%|██▏       | 58/270 [00:00<00:00, 565.16 examples/s]Tokenizing train dataset:  45%|████▍     | 121/270 [00:00<00:00, 599.89 examples/s]Tokenizing train dataset:  69%|██████▉   | 186/270 [00:00<00:00, 618.19 examples/s]Tokenizing train dataset:  94%|█████████▍| 254/270 [00:00<00:00, 637.13 examples/s]Tokenizing train dataset: 100%|██████████| 270/270 [00:00<00:00, 593.35 examples/s]
+Tokenizing eval dataset:   0%|          | 0/30 [00:00<?, ? examples/s]Tokenizing eval dataset: 100%|██████████| 30/30 [00:00<00:00, 540.90 examples/s]
+The model is already on multiple devices. Skipping the move to device specified in `args`.
+
+=== Starting DPO training ===
+  Mode:              LoRA-DPO (adapter)
+  Beta (KL penalty): 0.1
+  Learning rate:     5e-06
+  Epochs:            1
+  Starting from:     chapter06/runs/sft_run1
+  0%|          | 0/34 [00:00<?, ?it/s]  3%|▎         | 1/34 [00:05<03:02,  5.54s/it]  6%|▌         | 2/34 [00:10<02:51,  5.37s/it]  9%|▉         | 3/34 [00:15<02:34,  4.99s/it] 12%|█▏        | 4/34 [00:19<02:25,  4.84s/it] 15%|█▍        | 5/34 [00:25<02:22,  4.92s/it]                                               15%|█▍        | 5/34 [00:25<02:22,  4.92s/it] 18%|█▊        | 6/34 [00:29<02:16,  4.87s/it] 21%|██        | 7/34 [00:34<02:12,  4.89s/it] 24%|██▎       | 8/34 [00:39<02:06,  4.88s/it] 26%|██▋       | 9/34 [00:44<02:03,  4.94s/it] 29%|██▉       | 10/34 [00:49<01:56,  4.86s/it]                                                29%|██▉       | 10/34 [00:49<01:56,  4.86s/it] 32%|███▏      | 11/34 [00:54<01:50,  4.82s/it] 35%|███▌      | 12/34 [00:58<01:44,  4.76s/it] 38%|███▊      | 13/34 [01:03<01:39,  4.72s/it] 41%|████      | 14/34 [01:07<01:33,  4.69s/it] 44%|████▍     | 15/34 [01:12<01:28,  4.63s/it]                                                44%|████▍     | 15/34 [01:12<01:28,  4.63s/it] 47%|████▋     | 16/34 [01:17<01:24,  4.67s/it] 50%|█████     | 17/34 [01:21<01:18,  4.64s/it] 53%|█████▎    | 18/34 [01:26<01:12,  4.54s/it] 56%|█████▌    | 19/34 [01:30<01:09,  4.63s/it] 59%|█████▉    | 20/34 [01:35<01:04,  4.60s/it]                                                59%|█████▉    | 20/34 [01:35<01:04,  4.60s/it] 62%|██████▏   | 21/34 [01:39<00:59,  4.57s/it] 65%|██████▍   | 22/34 [01:44<00:54,  4.50s/it] 68%|██████▊   | 23/34 [01:49<00:51,  4.65s/it] 71%|███████   | 24/34 [01:54<00:46,  4.68s/it] 74%|███████▎  | 25/34 [01:58<00:41,  4.57s/it]                                                74%|███████▎  | 25/34 [01:58<00:41,  4.57s/it] 76%|███████▋  | 26/34 [02:03<00:37,  4.65s/it] 79%|███████▉  | 27/34 [02:07<00:32,  4.67s/it] 82%|████████▏ | 28/34 [02:12<00:28,  4.78s/it] 85%|████████▌ | 29/34 [02:17<00:24,  4.82s/it] 88%|████████▊ | 30/34 [02:22<00:18,  4.73s/it]                                                88%|████████▊ | 30/34 [02:22<00:18,  4.73s/it] 91%|█████████ | 31/34 [02:27<00:14,  4.77s/it] 94%|█████████▍| 32/34 [02:32<00:09,  4.78s/it] 97%|█████████▋| 33/34 [02:36<00:04,  4.78s/it]100%|██████████| 34/34 [02:40<00:00,  4.41s/it]{'loss': 0.6941, 'grad_norm': 4.134146213531494, 'learning_rate': 5e-06, 'entropy': 2.3263379335403442, 'num_tokens': 19343.0, 'logits/chosen': -4.973310670129834, 'logits/rejected': -4.912850553142355, 'mean_token_accuracy': 0.48048117347061636, 'rewards/chosen': 0.0052128267358057204, 'rewards/rejected': 0.006252880057581933, 'rewards/accuracies': 0.25, 'rewards/margins': -0.0010400532570201903, 'logps/chosen': -358.35544710159303, 'logps/rejected': -260.24143676757814, 'epoch': 0.15}
+{'loss': 0.6942, 'grad_norm': 3.648665428161621, 'learning_rate': 4.166666666666667e-06, 'entropy': 2.211569482088089, 'num_tokens': 38990.0, 'logits/chosen': -4.816519960381834, 'logits/rejected': -4.9710986603123954, 'mean_token_accuracy': 0.5001989416778088, 'rewards/chosen': 0.002429161249892786, 'rewards/rejected': 0.003825540426078078, 'rewards/accuracies': 0.45, 'rewards/margins': -0.0013963796605821698, 'logps/chosen': -327.79735803604126, 'logps/rejected': -239.15003538131714, 'epoch': 0.3}
+{'loss': 0.7031, 'grad_norm': 3.961942195892334, 'learning_rate': 3.3333333333333333e-06, 'entropy': 2.2610821947455406, 'num_tokens': 58908.0, 'logits/chosen': -5.046987556659873, 'logits/rejected': -4.966408790248128, 'mean_token_accuracy': 0.4785539895296097, 'rewards/chosen': -0.01480079653847497, 'rewards/rejected': 0.004213094590249966, 'rewards/accuracies': 0.375, 'rewards/margins': -0.019013891520444304, 'logps/chosen': -349.5958336353302, 'logps/rejected': -261.36814126968386, 'epoch': 0.44}
+{'loss': 0.6939, 'grad_norm': 3.7053909301757812, 'learning_rate': 2.5e-06, 'entropy': 2.4283397346735, 'num_tokens': 78088.0, 'logits/chosen': -4.919054546210843, 'logits/rejected': -5.1006509024966675, 'mean_token_accuracy': 0.473055312037468, 'rewards/chosen': 0.001990127554745413, 'rewards/rejected': 0.002858829686010722, 'rewards/accuracies': 0.525, 'rewards/margins': -0.0008687020628713072, 'logps/chosen': -290.2171866416931, 'logps/rejected': -269.86069946289064, 'epoch': 0.59}
+{'loss': 0.7006, 'grad_norm': 2.9232594966888428, 'learning_rate': 1.6666666666666667e-06, 'entropy': 2.2566917896270753, 'num_tokens': 94688.0, 'logits/chosen': -4.734087569625215, 'logits/rejected': -5.00257656432485, 'mean_token_accuracy': 0.507909495383501, 'rewards/chosen': -0.006129050342133268, 'rewards/rejected': 0.008353095303755253, 'rewards/accuracies': 0.375, 'rewards/margins': -0.01448214560514316, 'logps/chosen': -284.831866979599, 'logps/rejected': -182.76472761631013, 'epoch': 0.74}
+{'loss': 0.6981, 'grad_norm': 3.982980728149414, 'learning_rate': 8.333333333333333e-07, 'entropy': 2.2815522342920302, 'num_tokens': 114134.0, 'logits/chosen': -5.0538552262623755, 'logits/rejected': -4.905603203778165, 'mean_token_accuracy': 0.4715093061327934, 'rewards/chosen': 0.007909889140864833, 'rewards/rejected': 0.01688247705124013, 'rewards/accuracies': 0.45, 'rewards/margins': -0.008972587692551316, 'logps/chosen': -338.9186477661133, 'logps/rejected': -216.62479753494262, 'epoch': 0.89}
+
+  0%|          | 0/30 [00:00<?, ?it/s][A
+  7%|▋         | 2/30 [00:00<00:02,  9.55it/s][A
+ 10%|█         | 3/30 [00:00<00:03,  7.60it/s][A
+ 13%|█▎        | 4/30 [00:00<00:03,  6.65it/s][A
+ 17%|█▋        | 5/30 [00:00<00:04,  6.25it/s][A
+ 20%|██        | 6/30 [00:01<00:04,  5.10it/s][A
+ 23%|██▎       | 7/30 [00:01<00:04,  4.96it/s][A
+ 27%|██▋       | 8/30 [00:01<00:04,  4.84it/s][A
+ 30%|███       | 9/30 [00:01<00:04,  4.95it/s][A
+ 33%|███▎      | 10/30 [00:01<00:03,  5.02it/s][A
+ 37%|███▋      | 11/30 [00:02<00:03,  5.16it/s][A
+ 40%|████      | 12/30 [00:02<00:03,  5.02it/s][A
+ 43%|████▎     | 13/30 [00:02<00:03,  5.06it/s][A
+ 47%|████▋     | 14/30 [00:02<00:03,  5.07it/s][A
+ 50%|█████     | 15/30 [00:02<00:02,  5.18it/s][A
+ 53%|█████▎    | 16/30 [00:03<00:03,  4.25it/s][A
+ 57%|█████▋    | 17/30 [00:03<00:02,  4.54it/s][A
+ 60%|██████    | 18/30 [00:03<00:02,  4.60it/s][A
+ 63%|██████▎   | 19/30 [00:03<00:02,  4.25it/s][A
+ 67%|██████▋   | 20/30 [00:03<00:02,  4.56it/s][A
+ 70%|███████   | 21/30 [00:04<00:01,  4.79it/s][A
+ 73%|███████▎  | 22/30 [00:04<00:01,  4.11it/s][A
+ 77%|███████▋  | 23/30 [00:04<00:01,  3.92it/s][A
+ 80%|████████  | 24/30 [00:05<00:01,  3.56it/s][A
+ 83%|████████▎ | 25/30 [00:05<00:01,  3.99it/s][A
+ 87%|████████▋ | 26/30 [00:05<00:01,  3.71it/s][A
+ 90%|█████████ | 27/30 [00:05<00:00,  4.11it/s][A
+ 93%|█████████▎| 28/30 [00:06<00:00,  3.93it/s][A
+ 97%|█████████▋| 29/30 [00:06<00:00,  3.83it/s][A
+100%|██████████| 30/30 [00:06<00:00,  3.58it/s][A                                               
+                                               [A100%|██████████| 34/34 [02:47<00:00,  4.41s/it]
+100%|██████████| 30/30 [00:06<00:00,  3.58it/s][A
+                                               [AUsing the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
+                                               100%|██████████| 34/34 [02:48<00:00,  4.41s/it]100%|██████████| 34/34 [02:48<00:00,  4.94s/it]
+{'eval_loss': 0.6894456148147583, 'eval_runtime': 6.8567, 'eval_samples_per_second': 4.375, 'eval_steps_per_second': 4.375, 'eval_entropy': 2.377043306827545, 'eval_num_tokens': 129582.0, 'eval_logits/chosen': -4.994217635788965, 'eval_logits/rejected': -5.089456517055022, 'eval_mean_token_accuracy': 0.47815047999223076, 'eval_rewards/chosen': 0.01348128057240198, 'eval_rewards/rejected': 0.005104128746703888, 'eval_rewards/accuracies': 0.6, 'eval_rewards/margins': 0.008377151687939961, 'eval_logps/chosen': -318.8646542867025, 'eval_logps/rejected': -265.0285036722819, 'epoch': 1.0}
+{'train_runtime': 168.0688, 'train_samples_per_second': 1.606, 'train_steps_per_second': 0.202, 'train_loss': 0.6972066584755393, 'epoch': 1.0}
+
+Peak GPU memory during DPO training:
+  cuda:0 (NVIDIA A30): 10.79 GiB allocated, 11.01 GiB reserved
+
+DPO model saved to: chapter08/runs/dpo_lora_rerun_2026-09-19
+LORA_DONE exit=0

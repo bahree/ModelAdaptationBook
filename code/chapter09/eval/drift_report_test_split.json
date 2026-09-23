@@ -1,0 +1,63 @@
+{
+  "centroid_similarity": 0.8098,
+  "drift_score": 0.1902,
+  "min_prompt_similarity": 0.0962,
+  "mean_prompt_similarity": 0.2017,
+  "alert_level": "yellow",
+  "num_reference": 450,
+  "num_production": 50,
+  "vocab_size": 5504,
+  "top_drift_terms": [
+    {
+      "term": "picture",
+      "production_weight": 0.0235,
+      "reference_weight": 0.0,
+      "delta": 0.0235
+    },
+    {
+      "term": "sudo",
+      "production_weight": 0.0196,
+      "reference_weight": 0.0026,
+      "delta": 0.0169
+    },
+    {
+      "term": "maverick",
+      "production_weight": 0.0148,
+      "reference_weight": 0.0,
+      "delta": 0.0148
+    },
+    {
+      "term": "steam",
+      "production_weight": 0.0145,
+      "reference_weight": 0.0,
+      "delta": 0.0145
+    },
+    {
+      "term": "have",
+      "production_weight": 0.0334,
+      "reference_weight": 0.0197,
+      "delta": 0.0138
+    },
+    {
+      "term": "had",
+      "production_weight": 0.0176,
+      "reference_weight": 0.0038,
+      "delta": 0.0137
+    },
+    {
+      "term": "cable",
+      "production_weight": 0.0127,
+      "reference_weight": 0.0,
+      "delta": 0.0127
+    },
+    {
+      "term": "changes",
+      "production_weight": 0.0134,
+      "reference_weight": 0.002,
+      "delta": 0.0114
+    }
+  ],
+  "timestamp": "2026-09-15T06:24:26Z",
+  "reference_path": "data/it_support/train.jsonl",
+  "production_path": "data/it_support/test.jsonl"
+}
