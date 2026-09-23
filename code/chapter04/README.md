@@ -30,7 +30,7 @@ Shared utilities (JSONL I/O, seeded reproducibility) live in **`code/common/`**.
 | **4.2** | Many-shot prompt assembly | `many_shot_demo.py` |
 | **4.3** | Prompt validator | `prompt_validator.py` |
 | **4.4** | Minimal RAG pipeline | `rag_minimal.py` |
-| **4.5** | RAG retrieval evaluation (Precision@k / Recall@k / Hit@1) | `scripts/listing_4_5_rag_eval.py` |
+| **4.5** | RAG retrieval evaluation (Precision@k / Hit@k / Hit@1) | `scripts/listing_4_5_rag_eval.py` |
 
 ## Prerequisites
 
@@ -144,7 +144,7 @@ python -m chapter04.rag_minimal retrieve \
 
 ### 5. Measure RAG quality (Listing 4.5)
 
-The RAG eval script runs a small labelled query set against the same pipeline and reports Precision@k, Recall@k, and Hit@1 — the retrieval-side metrics that let you tell whether a bad answer is the index's fault or the generator's. The labelled set in `data/rag_eval.jsonl` ships with one query per source document.
+The RAG eval script runs a small labelled query set against the same pipeline and reports Precision@k, Hit@k, and Hit@1, the retrieval-side metrics that let you tell whether a bad answer is the index's fault or the generator's. The labelled set in `data/rag_eval.jsonl` ships with one query per source document.
 
 ```bash
 # Sentence-transformers backend (recommended):

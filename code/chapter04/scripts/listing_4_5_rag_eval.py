@@ -1,4 +1,4 @@
-"""Listing 4.5 -- Measuring RAG quality with Precision@k and Recall@k.
+"""Listing 4.5 -- Measuring RAG quality with Precision@k and Hit@k.
 
 Run a small labelled query set (one expected document per query) through
 the Listing 4.4 pipeline and report the two metrics every RAG team should
@@ -6,16 +6,23 @@ have before they reach for chunking or reranker tuning:
 
 - Precision@k: of the k chunks we retrieved, what fraction came from the
   expected document.
-- Recall@k:    did the expected document appear at least once in the top-k?
+- Hit@k:       did the expected document appear at least once in the top-k?
+  (1 or 0 per query, averaged over queries; sometimes called success rate)
 
 The mean of Precision@k across queries is the headline retrieval quality
-score; the mean of Recall@k tells you how often retrieval handed the
+score; the mean of Hit@k tells you how often retrieval handed the
 generator any chance of being right at all.
 
-A separate ``hit@1`` is also reported because top-1 is what a no-rerank
-production setup actually shows the LLM as the most relevant chunk.
+Hit@1 is Hit@k with k=1 and is reported separately because top-1 is what a
+no-rerank production setup actually shows the LLM as the most relevant chunk.
 
-The script intentionally avoids any LLM call — it measures retrieval in
+Why not "Recall@k"? Recall divides the relevant documents retrieved by all
+the relevant documents that exist. With one labelled document per query the
+two coincide, but published RAG benchmarks report recall on multi-document
+labels, so the metric is named for what it measures here. ``recall_at_k``
+stays as an alias for scripts written against earlier versions.
+
+The script intentionally avoids any LLM call; it measures retrieval in
 isolation so a bad answer can be attributed to retrieval vs. generation.
 For end-to-end answer quality, use the LLM-as-judge pattern from
 ``prompt_validator.py`` (Listing 4.3).
@@ -49,21 +56,21 @@ def precision_at_k(retrieved: List[Dict[str, object]], expected_doc_id: str) -> 
     return hits / len(retrieved)
 
 
-def recall_at_k(retrieved: List[Dict[str, object]], expected_doc_id: str) -> float:
-    """1.0 if the expected document appears in the top-k, else 0.0.
+def hit_at_k(retrieved: List[Dict[str, object]], expected_doc_id: str) -> float:
+    """1.0 if the expected document appears anywhere in the top-k, else 0.0.
 
-    With one labelled doc per query, recall@k collapses to a hit indicator;
-    extend to multi-doc relevance by passing a set of expected_doc_ids and
-    dividing by len(expected) here.
+    To score multi-document labels as true recall, pass a set of expected ids
+    and divide the number found by len(expected) instead.
     """
     return 1.0 if any(item["metadata"]["id"] == expected_doc_id for item in retrieved) else 0.0
 
 
+recall_at_k = hit_at_k  # backwards-compatible alias (pre-2026-09 name)
+
+
 def hit_at_1(retrieved: List[Dict[str, object]], expected_doc_id: str) -> float:
-    """1.0 if the top-1 chunk came from the expected document."""
-    if not retrieved:
-        return 0.0
-    return 1.0 if retrieved[0]["metadata"]["id"] == expected_doc_id else 0.0
+    """Hit@k with k=1: the top-ranked chunk came from the expected document."""
+    return hit_at_k(retrieved[:1], expected_doc_id)
 
 
 def evaluate(rag: MinimalRAG, queries: List[Dict[str, str]], k: int) -> Dict[str, object]:
@@ -76,7 +83,7 @@ def evaluate(rag: MinimalRAG, queries: List[Dict[str, str]], k: int) -> Dict[str
                 "expected_doc_id": case["expected_doc_id"],
                 "top_k_doc_ids": [item["metadata"]["id"] for item in retrieved],
                 "precision_at_k": round(precision_at_k(retrieved, case["expected_doc_id"]), 4),
-                "recall_at_k": round(recall_at_k(retrieved, case["expected_doc_id"]), 4),
+                "hit_at_k": round(hit_at_k(retrieved, case["expected_doc_id"]), 4),
                 "hit_at_1": round(hit_at_1(retrieved, case["expected_doc_id"]), 4),
             }
         )
@@ -86,7 +93,7 @@ def evaluate(rag: MinimalRAG, queries: List[Dict[str, str]], k: int) -> Dict[str
         "k": k,
         "queries": len(rows),
         "mean_precision_at_k": round(sum(r["precision_at_k"] for r in rows) / n, 4),
-        "mean_recall_at_k": round(sum(r["recall_at_k"] for r in rows) / n, 4),
+        "mean_hit_at_k": round(sum(r["hit_at_k"] for r in rows) / n, 4),
         "mean_hit_at_1": round(sum(r["hit_at_1"] for r in rows) / n, 4),
     }
     return {"summary": summary, "per_query": rows}
@@ -142,15 +149,15 @@ def main() -> None:
     print(f"  k                       {summary['k']}")
     print(f"  queries                 {summary['queries']}")
     print(f"  mean Precision@k        {summary['mean_precision_at_k']:.3f}")
-    print(f"  mean Recall@k           {summary['mean_recall_at_k']:.3f}")
+    print(f"  mean Hit@k              {summary['mean_hit_at_k']:.3f}")
     print(f"  mean Hit@1              {summary['mean_hit_at_1']:.3f}")
     print(f"  wall seconds            {elapsed:.2f}")
     print()
     print("Per-query (showing misses first):")
-    misses = [r for r in report["per_query"] if r["recall_at_k"] < 1.0]
-    hits = [r for r in report["per_query"] if r["recall_at_k"] >= 1.0]
+    misses = [r for r in report["per_query"] if r["hit_at_k"] < 1.0]
+    hits = [r for r in report["per_query"] if r["hit_at_k"] >= 1.0]
     for row in misses + hits:
-        marker = "MISS" if row["recall_at_k"] < 1.0 else "  ok"
+        marker = "MISS" if row["hit_at_k"] < 1.0 else "  ok"
         print(
             f"  [{marker}] expected={row['expected_doc_id']:24s} "
             f"top1={row['top_k_doc_ids'][0] if row['top_k_doc_ids'] else 'EMPTY':24s} "
