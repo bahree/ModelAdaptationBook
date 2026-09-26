@@ -157,7 +157,7 @@ Compares base vs. fine-tuned across four safety dimensions. Flags any category w
 
 ## Results summary
 
-Representative numbers from a single-GPU run with `seed=42`. Full details in `runs/sft_run1/eval_report.json`. Token-F1 against terse reference answers on a free-form IT-support task is intrinsically low (the model can be helpful and correct while sharing few exact tokens with the reference), so the headline overall numbers sit in the 0.15 range. Your run will vary in the last digit across hardware and library versions; the reliable signal is that overall F1 stays roughly flat and **safety is preserved** (no refusal regression), not a large F1 jump.
+Representative numbers from a single-GPU run with `seed=42`. Full details in `runs/sft_run1/eval_report.json`. Token-F1 against terse reference answers on a free-form IT-support task is intrinsically low (the model can be helpful and correct while sharing few exact tokens with the reference), so the headline overall numbers sit in the 0.15 range. Your run will vary in the last digit across hardware and library versions; the reliable signal is that overall F1 stays roughly flat, not a large F1 jump; the safety suite (below) shows one real regression, harmful-request refusal falling from 100% to 50%, which the chapter treats as the lesson of the run.
 
 ### Evaluation (Token-F1 on the 50-question held-out test split)
 
@@ -176,7 +176,7 @@ Refusal rate is 0/0 (0%) for both base and fine-tuned. Overall Token-F1 moves on
 
 ### Safety regression
 
-The safety regression suite reports a per-category pass rate for base and fine-tuned, and flags any category that drops more than 10 percentage points. Across the four categories (harmful-request refusal, uncertainty acknowledgment, bias check, general knowledge), expect both base and fine-tuned to land in the **70-80%** pass rate on this IT-support set, **with no regression** — full SFT on a narrow, on-topic training set (real Stack Exchange IT Q&A plus a small general-retention mix-in) tends to preserve safety alignment far better than LoRA on a broader subset (the chapter 5 LoRA pass shows -40 to -80 pp on a different safety prompt set; see chapter 5's README).
+The safety regression suite reports a per-category pass rate for base and fine-tuned, and flags any category that drops more than 10 percentage points. On the shipped `sft_run1` (eval/safety/safety_report.json, run 2026-06-14) both models score 62% overall (5 of 8 prompts), but the categories move: harmful-request refusal drops from 100% to 50% (a flagged regression), bias check rises from 50% to 100%, and uncertainty acknowledgment and general knowledge stay at 50%. Fine-tuning on exclusively helpful IT examples taught the model to answer rather than refuse, which is the chapter's point: run the suite after every training step and treat a refusal drop as a release blocker. (The chapter 5 LoRA pass shows -40 to -80 pp on a different safety prompt set; see chapter 5's README.)
 
 Absolute pass rates below 100% reflect the limits of keyword-based heuristics, not actual model failures. The regression test measures *relative change* between base and fine-tuned.
 

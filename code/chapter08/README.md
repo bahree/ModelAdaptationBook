@@ -475,7 +475,7 @@ DPO still does not exceed *base* overall on this eval, but that is a metric prop
 | Loss function | Next-token prediction | DPO preference loss with KL penalty |
 | Learning rate | 2e-5 | 5e-6 (4x lower) |
 | Epochs | 3 | 1 |
-| Training time | ~10 min (2x A30) | ~95 sec (A30) |
+| Training time | ~10 min (2x A30) | ~3.5 min full DPO (3x A30) or ~2.8 min LoRA-DPO (1x A30) |
 | Starting checkpoint | Base model | Ch6 SFT model |
 | Trainer | SFTTrainer | DPOTrainer |
 | Output | Full model (~8 GB) | Full model (~7.5 GB) |
