@@ -9,16 +9,15 @@ The registry is a single JSON file -- easy to inspect, diff, and commit
 to version control alongside the code that produced each model.
 
 Run from code/:
-    python -m chapter09.model_registry register \
-        --name it-support-v2 --technique lora \
+    python -m chapter09.model_registry --registry_dir chapter09/data register \
+        --name it-support-v1 --technique sft \
         --base_model Qwen/Qwen3-4B-Instruct-2507 \
-        --data_hash abc123 --checkpoint_path chapter05/runs/lora_r8 \
-        --eval_metrics '{"overall_f1": 0.72}' \
-        --registry_dir chapter09/data
+        --data_hash abc123 --checkpoint_path chapter06/runs/sft_run1 \
+        --eval_metrics '{"overall_f1": 0.72}'
 
     python -m chapter09.model_registry --registry_dir chapter09/data list
-    python -m chapter09.model_registry promote --version_tag it-support-v2 --registry_dir chapter09/data
-    python -m chapter09.model_registry rollback --registry_dir chapter09/data
+    python -m chapter09.model_registry --registry_dir chapter09/data promote --version_tag it-support-v2
+    python -m chapter09.model_registry --registry_dir chapter09/data rollback
 """
 from __future__ import annotations
 

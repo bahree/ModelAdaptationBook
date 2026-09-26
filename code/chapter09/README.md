@@ -412,16 +412,16 @@ python -m chapter09.safety_monitor ^
 ```bash
 python -m chapter09.safety_monitor \
     --model_dir chapter08/runs/dpo_run1 \
-    --output chapter09/eval/safety_report.json \
-    --baseline chapter09/eval/safety_baseline.json
+    --output chapter09/eval/safety_report_dpo.json \
+    --baseline chapter09/eval/safety_report.json
 ```
 
 **Windows:**
 ```powershell
 python -m chapter09.safety_monitor ^
     --model_dir chapter08\runs\dpo_run1 ^
-    --output chapter09\eval\safety_report.json ^
-    --baseline chapter09\eval\safety_baseline.json
+    --output chapter09\eval\safety_report_dpo.json ^
+    --baseline chapter09\eval\safety_report.json
 ```
 
 **Arguments:** --model_dir (required), --output (default `chapter09/eval/safety_report.json`), --baseline (optional), --seed (default 42).
@@ -620,7 +620,6 @@ chapter09/
 │   ├── registry/
 │   │   └── registry.json          # Example with 2 versions (v1 active, v2 retired)
 │   ├── rollback_report.json       # Demo timeline output
-│   ├── drift_report_same_domain.json  # Drift detection sample output
 │   ├── safety_monitor_report.json # Safety test summary (5/9 pass)
 │   └── safety_details.jsonl       # Per-prompt safety results
 └── eval/                          # Created on demand by scripts
