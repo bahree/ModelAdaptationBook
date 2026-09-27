@@ -1,0 +1,35 @@
+Failed to load /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so
+/home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py:1061: UserWarning: Can't initialize NVML
+  raw_cnt = _raw_device_count_nvml()
+Loaded 50 prompts from data/it_support/test.jsonl
+generating base...
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.66it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.61it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.39it/s]
+The following generation flags are not valid and may be ignored: ['temperature', 'top_p', 'top_k']. Set `TRANSFORMERS_VERBOSITY=info` for more details.
+The attention mask is not set and cannot be inferred from input because pad token is same as eos token. As a consequence, you may observe unexpected behavior. Please pass your input's `attention_mask` to obtain reliable results.
+  base format 0% (0/50)
+generating teacher...
+Loading checkpoint shards:   0%|          | 0/2 [00:00<?, ?it/s]Loading checkpoint shards:  50%|█████     | 1/2 [00:00<00:00,  1.13it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.54it/s]Loading checkpoint shards: 100%|██████████| 2/2 [00:01<00:00,  1.46it/s]
+  teacher format 100% (50/50)
+generating student...
+  chapter07/runs/student_run1 is a LoRA adapter -> loading base + PeftModel
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]Loading checkpoint shards:  33%|███▎      | 1/3 [00:00<00:01,  1.64it/s]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:01<00:00,  1.62it/s]Loading checkpoint shards: 100%|██████████| 3/3 [00:01<00:00,  2.40it/s]
+  student format 100% (50/50)
+
+Saved chapter07/eval/test_split/format_report_test.json
+{
+  "num_examples": 50,
+  "valid_set": "data/it_support/test.jsonl",
+  "system_prompt": "You are an IT support assistant. Provide clear, step-by-step answers.",
+  "format_regex": "**Summary:** ... **Steps:** ... 1.",
+  "base_model": "Qwen/Qwen3-4B-Instruct-2507",
+  "teacher_dir": "chapter06/runs/sft_run1",
+  "student_dir": "chapter07/runs/student_run1",
+  "metric": "house_format_adherence (fraction matching **Summary:/Steps:** regex)",
+  "base_format_adherence": 0.0,
+  "base_format_count": "0/50",
+  "teacher_format_adherence": 1.0,
+  "teacher_format_count": "50/50",
+  "student_format_adherence": 1.0,
+  "student_format_count": "50/50"
+}
