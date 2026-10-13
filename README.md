@@ -168,6 +168,7 @@ For other CUDA versions (12.1, 11.8) or to confirm the right command for your ma
 **3. Install the book package and smoke-test:**
 
 ```bash
+cd code
 pip install -e ".[dev]"
 pytest chapter04/tests/ -v   # CPU-friendly, no model download needed
 ```
