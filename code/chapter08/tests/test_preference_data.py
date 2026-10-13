@@ -10,21 +10,21 @@ DATA_DIR = Path(__file__).resolve().parent.parent / "data" / "preference_pairs"
 @pytest.fixture
 def train_data():
     path = DATA_DIR / "train.jsonl"
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         return [json.loads(line) for line in f if line.strip()]
 
 
 @pytest.fixture
 def valid_data():
     path = DATA_DIR / "valid.jsonl"
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         return [json.loads(line) for line in f if line.strip()]
 
 
 @pytest.fixture
 def manifest():
     path = DATA_DIR / "manifest.json"
-    with open(path) as f:
+    with open(path, encoding="utf-8") as f:
         return json.load(f)
 
 
