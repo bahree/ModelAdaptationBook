@@ -466,9 +466,9 @@ The default capture (one prompt against three frontier models plus the local SFT
 
 | Model (default set) | OpenRouter id | Cost per prompt (approx) |
 |---|---|---|
-| Claude Sonnet 4.5 | `anthropic/claude-sonnet-4.5` | ~$0.006 |
-| Gemini 2.5 Pro | `google/gemini-2.5-pro` | ~$0.025 (thinking-mode tokens) |
-| DeepSeek V3.1 | `deepseek/deepseek-chat-v3.1` | ~$0.001 |
+| Claude Sonnet 5.5 | `anthropic/claude-sonnet-5.5` | ~$0.004 |
+| Gemini 3.1 Pro | `google/gemini-3.1-pro-preview` | ~$0.025 (thinking-mode tokens) |
+| DeepSeek V4.1 Flash | `deepseek/deepseek-v4.1-flash` | ~$0.001 |
 
 A test budget of $5 covers thousands of comparisons.
 
@@ -497,12 +497,12 @@ The script writes a single JSON to `chapter07/runs/frontier_comparison.json` (or
 
 ### Reading the output
 
-The chapter quotes the Ch6 SFT response (terse, generic) alongside Claude Sonnet 4.5's response (structured by category, with command examples and a follow-up question). The same gap will show up on most domain-specific prompts where you have an SFT model trained on a few hundred examples and the frontier model has been trained on the entire internet:
+The chapter quotes the Ch6 SFT response (terse, generic) alongside Claude Sonnet 5.5's response (structured by category, with command examples and a follow-up question). The same gap will show up on most domain-specific prompts where you have an SFT model trained on a few hundred examples and the frontier model has been trained on the entire internet:
 
 - If the frontier response is dramatically more thorough and specific, distillation has a clear quality target. The cost model in §7.3 then tells you whether the per-request economics justify it.
 - If the responses are roughly comparable, your SFT model is already close to the ceiling for this task type and distillation may not move the needle. Save the budget for a different intervention (a better prompt, more training data, a different metric).
 
-The Gemini 2.5 Pro response includes a `reasoning` field with the model's internal scratchpad; the `content` field is the user-facing answer. The chapter quotes only `content`; the JSON keeps both for audit.
+The Gemini 3.1 Pro response includes a `reasoning` field with the model's internal scratchpad; the `content` field is the user-facing answer. The chapter quotes only `content`; the JSON keeps both for audit.
 
 ## Understanding the results
 

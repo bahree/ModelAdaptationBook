@@ -52,7 +52,7 @@ def chat(
 
     Args:
         messages: Chat messages in OpenAI format ([{"role": "user", "content": "..."}]).
-        model: OpenRouter model id (e.g. ``anthropic/claude-sonnet-4.5``).
+        model: OpenRouter model id (e.g. ``anthropic/claude-sonnet-5.5``).
         max_tokens: Cap on total generated tokens. Reasoning-mode models (Gemini)
             consume some of this budget on hidden reasoning before emitting
             ``content``; default 1024 is enough for typical chapter prompts.
