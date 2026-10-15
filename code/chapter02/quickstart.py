@@ -243,6 +243,9 @@ def step4_compare(model, tokenizer, demo_rows: List[Dict[str, Any]]) -> List[Dic
     is now domain-tuned.
     """
     print("Step 4: compare outputs on held-out prompts")
+    # SFTTrainer leaves the model in train mode, where gradient checkpointing drops
+    # the KV cache and generate() produces garbage. eval() restores normal decoding.
+    model.eval()
     samples: List[Dict[str, str]] = []
     for row in demo_rows:
         ctx = row.get("context", "") or ""
