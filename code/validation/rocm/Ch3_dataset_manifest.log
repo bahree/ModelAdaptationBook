@@ -3,7 +3,7 @@ Chapter 3.7 — Data Versioning and Lineage
 ============================================================
 
 [1] Creating manifest v1.0.0
-~/FTBook-pvt/code/chapter03/ch03_datasetmanifest.py:45: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+<repo>/code/chapter03/ch03_datasetmanifest.py:45: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
   created_at:        str   = field(default_factory=lambda: datetime.datetime.utcnow().isoformat() + "Z")
   Version     : 1.0.0
   Created     : 2026-06-18T22:26:29.886840Z
@@ -19,7 +19,7 @@ Chapter 3.7 — Data Versioning and Lineage
   Saved to /tmp/ch03_demo/v1_0_0/manifest.json
 
 [2] Recording training run on v1.0.0
-~/FTBook-pvt/code/chapter03/ch03_datasetmanifest.py:94: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+<repo>/code/chapter03/ch03_datasetmanifest.py:94: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
   "trained_at":    datetime.datetime.utcnow().isoformat() + "Z",
   Training run recorded:
   Checkpoint  : ./qwen-open-finance-v1-output
@@ -48,13 +48,13 @@ Chapter 3.7 — Data Versioning and Lineage
     content : changed
 
 [5] Retention status
-~/FTBook-pvt/code/chapter03/ch03_datasetmanifest.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+<repo>/code/chapter03/ch03_datasetmanifest.py:248: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
   now       = datetime.datetime.utcnow()
   v1.0.0: ACTIVE           729 days remaining  |  No action needed
   v2.0.0: ACTIVE           729 days remaining  |  No action needed
 
 [6] GDPR deletion request
-~/FTBook-pvt/code/chapter03/ch03_datasetmanifest.py:116: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
+<repo>/code/chapter03/ch03_datasetmanifest.py:116: DeprecationWarning: datetime.datetime.utcnow() is deprecated and scheduled for removal in a future version. Use timezone-aware objects to represent datetimes in UTC: datetime.datetime.now(datetime.UTC).
   "requested_at":      datetime.datetime.utcnow().isoformat() + "Z",
   Deletion logged: user_98421  |  3 examples affected
   Retraining required: True

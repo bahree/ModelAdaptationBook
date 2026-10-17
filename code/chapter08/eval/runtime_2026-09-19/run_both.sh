@@ -1,6 +1,6 @@
 #!/bin/bash
 # Runtime re-measure for chapter 8 (2026-09-19): full-parameter DPO sharded across three A30s, then LoRA-DPO on one A30.
-cd /home/amit/FTBook-pvt/code
+cd "$(dirname "$0")/../../.."   # the code/ directory
 export WANDB_DISABLED=1 PYTORCH_CUDA_ALLOC_CONF=expandable_segments:True
 CUDA_VISIBLE_DEVICES=0,1,2 .venv/bin/python -m chapter08.train_dpo --model_dir chapter06/runs/sft_run1 \
   --train chapter08/data/preference_pairs/train.jsonl --valid chapter08/data/preference_pairs/valid.jsonl \

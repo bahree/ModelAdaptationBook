@@ -1,9 +1,9 @@
-Failed to load /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
-Failed to load /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: /home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so
-/home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py:1061: UserWarning: Can't initialize NVML
+Failed to load <repo>/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so: Could not load this library: <repo>/code/.venv/lib/python3.12/site-packages/torchao/_C_mxfp8.cpython-310-x86_64-linux-gnu.so
+Failed to load <repo>/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so: Could not load this library: <repo>/code/.venv/lib/python3.12/site-packages/torchao/_C_cutlass_90a.abi3.so
+<repo>/code/.venv/lib/python3.12/site-packages/torch/cuda/__init__.py:1061: UserWarning: Can't initialize NVML
   raw_cnt = _raw_device_count_nvml()
 Using the `WANDB_DISABLED` environment variable is deprecated and will be removed in v5. Use the --report_to flag to control the integrations used for logging result (for instance --report_to none).
-Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]/home/amit/FTBook-pvt/code/.venv/lib/python3.12/site-packages/bitsandbytes/backends/cuda/ops.py:213: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
+Loading checkpoint shards:   0%|          | 0/3 [00:00<?, ?it/s]<repo>/code/.venv/lib/python3.12/site-packages/bitsandbytes/backends/cuda/ops.py:213: FutureWarning: _check_is_size will be removed in a future PyTorch release along with guard_size_oblivious.     Use _check(i >= 0) instead.
   torch._check_is_size(blocksize)
 Loading checkpoint shards:  33%|███▎      | 1/3 [00:13<00:27, 13.72s/it]Loading checkpoint shards:  67%|██████▋   | 2/3 [00:27<00:13, 13.72s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:27<00:00,  7.62s/it]Loading checkpoint shards: 100%|██████████| 3/3 [00:27<00:00,  9.27s/it]
 Tokenizing train dataset:   0%|          | 0/450 [00:00<?, ? examples/s]Tokenizing train dataset:  31%|███       | 138/450 [00:00<00:00, 1356.15 examples/s]Tokenizing train dataset:  67%|██████▋   | 300/450 [00:00<00:00, 1500.48 examples/s]Tokenizing train dataset: 100%|██████████| 450/450 [00:00<00:00, 1347.33 examples/s]

@@ -31,7 +31,7 @@ import common.env  # noqa: F401  (side-effect import: loads OPENROUTER_API_KEY)
 OPENROUTER_URL = "https://openrouter.ai/api/v1/chat/completions"
 DEFAULT_TIMEOUT_SECONDS = 60
 # Required by OpenRouter for attribution headers; used in usage analytics.
-DEFAULT_REFERER = "https://github.com/bahree/FTBook-pvt"
+DEFAULT_REFERER = "https://github.com/bahree/ModelAdaptationBook"
 DEFAULT_TITLE = "Practical Model Adaptation Techniques (book)"
 
 
