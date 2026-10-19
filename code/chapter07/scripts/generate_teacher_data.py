@@ -19,6 +19,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from common.device import resolve_device_map
 from common.jsonl import read_jsonl, write_jsonl
 from common.seed import seed_everything
 
@@ -85,7 +86,7 @@ def main() -> None:
     model = AutoModelForCausalLM.from_pretrained(
         args.teacher_dir,
         torch_dtype=torch.bfloat16,
-        device_map="auto",
+        device_map=resolve_device_map(),
         trust_remote_code=True,
     )
     model.eval()

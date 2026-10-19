@@ -33,6 +33,7 @@ import time
 from pathlib import Path
 from typing import Callable, Dict, List, Sequence
 
+from common.device import resolve_device_map
 from common.jsonl import read_jsonl_list, write_jsonl
 from common.seed import seed_everything
 
@@ -119,7 +120,7 @@ def make_hf_backend(
 
     tokenizer = AutoTokenizer.from_pretrained(model_name, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
-        model_name, torch_dtype=torch.bfloat16, device_map="auto", trust_remote_code=True
+        model_name, torch_dtype=torch.bfloat16, device_map=resolve_device_map(), trust_remote_code=True
     )
     model.eval()
 

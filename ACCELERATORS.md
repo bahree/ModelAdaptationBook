@@ -101,7 +101,7 @@ We verified the following on Apple Silicon (an M2 Pro and an M4, both 16 GB), us
 **One gotcha that matters on a memory-constrained Mac: pin the model to MPS, do not use `device_map="auto"`.** On a 16 GB Mac, `device_map="auto"` offloads layers to the meta/CPU device, and that offload corrupts LoRA training:
 
 - **What we saw:** NaN gradients on an M2 Pro, and a backward device-mismatch error on an M4.
-- **The fix:** pin the model to a single device, `device_map={"":"mps"}` (the `_resolve_device_map` pattern the book's code uses). With the pin, the chapter 2 quickstart trains cleanly: loss ~3.0 to ~1.7 with finite gradients throughout (confirmed on an M4, macOS 26 Tahoe).
+- **The fix:** pin the model to a single device, `device_map={"":"mps"}` (the shared `resolve_device_map` in `code/common/device.py`). With the pin, the chapter 2 quickstart trains cleanly: loss ~3.0 to ~1.7 with finite gradients throughout (confirmed on an M4, macOS 26 Tahoe).
 
 Two things still will not run on Apple Silicon regardless:
 

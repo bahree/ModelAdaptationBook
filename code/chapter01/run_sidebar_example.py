@@ -39,6 +39,8 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from common.device import resolve_device_map
+
 # Optional: PEFT is only needed if a LoRA adapter is present
 try:
     from peft import PeftModel
@@ -114,7 +116,7 @@ def main():
     print(f"[load] base model {BASE_MODEL}")
     tok = AutoTokenizer.from_pretrained(BASE_MODEL)
     base = AutoModelForCausalLM.from_pretrained(
-        BASE_MODEL, torch_dtype=torch.bfloat16, device_map="auto"
+        BASE_MODEL, torch_dtype=torch.bfloat16, device_map=resolve_device_map()
     )
     pt = chat_prompt(tok, SYSTEM, PROMPT)
     results["base"] = generate(base, tok, pt, "BASE Qwen3-4B-Instruct-2507")
@@ -163,7 +165,7 @@ def main():
         # base model id to dodge the incompatibility.
         sft_tok = AutoTokenizer.from_pretrained(BASE_MODEL)
         sft = AutoModelForCausalLM.from_pretrained(
-            str(args.sft_dir), torch_dtype=torch.bfloat16, device_map="auto"
+            str(args.sft_dir), torch_dtype=torch.bfloat16, device_map=resolve_device_map()
         )
         pt2 = chat_prompt(sft_tok, SYSTEM, PROMPT)
         results["sft"] = generate(sft, sft_tok, pt2,

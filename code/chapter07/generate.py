@@ -17,6 +17,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
 
+from common.device import resolve_device_map
 from common.hub import split_ref, subfolder_kwargs
 
 
@@ -52,7 +53,7 @@ def main() -> None:
         base_p,
         **subfolder_kwargs(base_s),
         torch_dtype=torch.bfloat16,
-        device_map="auto",
+        device_map=resolve_device_map(),
         trust_remote_code=True,
     )
 

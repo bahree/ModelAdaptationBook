@@ -13,6 +13,8 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from common.device import resolve_device_map
+
 SYSTEM = "You are an IT support assistant. Provide clear, step-by-step answers."
 EVAL = Path("chapter08/data/preference_safety/eval_prompts.jsonl")
 MODELS = [("SFT", "chapter06/runs/sft_run1"), ("DPO-safety", "chapter08/runs/dpo_safety")]
@@ -46,7 +48,7 @@ def main():
         if tok.pad_token_id is None:
             tok.pad_token = tok.eos_token
         model = AutoModelForCausalLM.from_pretrained(
-            path, torch_dtype=torch.bfloat16, device_map="auto", trust_remote_code=True)
+            path, torch_dtype=torch.bfloat16, device_map=resolve_device_map(), trust_remote_code=True)
         model.eval()
         refusals = 0
         print(f"\n========== {name} ==========")

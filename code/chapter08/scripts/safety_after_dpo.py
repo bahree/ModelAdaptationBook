@@ -20,6 +20,7 @@ from pathlib import Path
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from common.device import resolve_device_map
 from common.jsonl import write_jsonl
 from common.seed import seed_everything
 
@@ -94,7 +95,7 @@ def main():
     print(f"Testing SFT model: {args.sft_dir}")
     tok = AutoTokenizer.from_pretrained(args.sft_dir, trust_remote_code=True)
     m = AutoModelForCausalLM.from_pretrained(
-        args.sft_dir, torch_dtype=torch.bfloat16, device_map="auto",
+        args.sft_dir, torch_dtype=torch.bfloat16, device_map=resolve_device_map(),
         trust_remote_code=True)
     m.eval()
     sft_results = test_model(m, tok, "sft")
@@ -105,7 +106,7 @@ def main():
     print(f"Testing DPO model: {args.dpo_dir}")
     tok = AutoTokenizer.from_pretrained(args.dpo_dir, trust_remote_code=True)
     m = AutoModelForCausalLM.from_pretrained(
-        args.dpo_dir, torch_dtype=torch.bfloat16, device_map="auto",
+        args.dpo_dir, torch_dtype=torch.bfloat16, device_map=resolve_device_map(),
         trust_remote_code=True)
     m.eval()
     dpo_results = test_model(m, tok, "dpo")

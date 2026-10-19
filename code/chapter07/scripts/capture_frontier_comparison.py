@@ -33,6 +33,7 @@ import time
 from pathlib import Path
 from typing import Dict, List
 
+from common.device import resolve_device_map
 from common.openrouter import OpenRouterError, chat
 
 DEFAULT_PROMPT = "How do I troubleshoot a VPN connection failure?"
@@ -58,7 +59,7 @@ def run_local_sft(
     started = time.time()
     tok = AutoTokenizer.from_pretrained(sft_dir, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
-        sft_dir, torch_dtype=torch.bfloat16, device_map="auto", trust_remote_code=True
+        sft_dir, torch_dtype=torch.bfloat16, device_map=resolve_device_map(), trust_remote_code=True
     )
     model.eval()
 

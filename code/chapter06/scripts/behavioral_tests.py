@@ -16,6 +16,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 
 from common.seed import seed_everything
+from common.device import resolve_device_map
 
 BASE_MODEL = "Qwen/Qwen3-4B-Instruct-2507"
 
@@ -80,7 +81,7 @@ def load_model(model_path, device="auto"):
     model = AutoModelForCausalLM.from_pretrained(
         model_path,
         torch_dtype=torch.bfloat16,
-        device_map=device,
+        device_map=resolve_device_map(device),
         trust_remote_code=True,
     )
     model.eval()

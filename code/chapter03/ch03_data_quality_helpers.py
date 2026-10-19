@@ -246,6 +246,7 @@ def train_condition(
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from peft import LoraConfig, get_peft_model, TaskType, prepare_model_for_kbit_training
     from trl import SFTTrainer, SFTConfig
+    from common.device import resolve_device_map
 
     output_dir = os.path.join(output_base, condition_key)
     os.makedirs(output_dir, exist_ok=True)
@@ -254,18 +255,15 @@ def train_condition(
     # Default is plain bf16 (LOAD_IN_4BIT=False) so the experiment runs on CUDA,
     # Apple Silicon (MPS), and CPU. 4-bit is opt-in and CUDA-only (bitsandbytes).
     bnb_config = _make_bnb_config() if LOAD_IN_4BIT else None
-    # device_map="auto" is for CUDA (multi-GPU / offload). On Apple Silicon
-    # (MPS) it mis-dispatches under gradient checkpointing ("expected device
-    # meta but got mps"), so place the whole model on one device instead.
-    device_map = "auto" if torch.cuda.is_available() else None
+    # resolve_device_map keeps "auto" on CUDA and pins the whole model to one device
+    # on Apple Silicon (MPS), where "auto" mis-dispatches under gradient checkpointing
+    # ("expected device meta but got mps").
     model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
         quantization_config=bnb_config,
-        device_map=device_map,
+        device_map=resolve_device_map(),
         dtype=torch.bfloat16,
     )
-    if device_map is None:
-        model = model.to("mps" if torch.backends.mps.is_available() else "cpu")
     tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME)
     if tokenizer.pad_token is None:
         tokenizer.pad_token = tokenizer.eos_token
@@ -371,20 +369,17 @@ def evaluate_condition(
     from transformers import AutoModelForCausalLM, AutoTokenizer, GenerationConfig
     from peft import PeftModel
     from sklearn.metrics import accuracy_score, f1_score
+    from common.device import resolve_device_map
 
     bnb_config = _make_bnb_config() if LOAD_IN_4BIT else None
 
     # Load the frozen base model, then layer the saved LoRA adapter on top.
-    # device_map="auto" only on CUDA; single-device on MPS/CPU (see train_condition).
-    device_map = "auto" if torch.cuda.is_available() else None
     base_model = AutoModelForCausalLM.from_pretrained(
         MODEL_NAME,
         quantization_config=bnb_config,
-        device_map=device_map,
+        device_map=resolve_device_map(),
         dtype=torch.bfloat16,
     )
-    if device_map is None:
-        base_model = base_model.to("mps" if torch.backends.mps.is_available() else "cpu")
     model = PeftModel.from_pretrained(base_model, checkpoint_path)
     model.eval()
 

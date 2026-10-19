@@ -23,6 +23,7 @@ from common.jsonl import read_jsonl
 from common.seed import seed_everything
 from common.hub import split_ref, subfolder_kwargs
 from chapter05.metrics import token_f1, exact_match, is_refusal
+from common.device import resolve_device_map
 
 BASE_MODEL = "Qwen/Qwen3-4B-Instruct-2507"
 DEFAULT_SYSTEM_PROMPT = "You are an IT support assistant. Provide clear, step-by-step answers."
@@ -44,7 +45,7 @@ def load_model_and_tokenizer(model_path: str,
         p,
         **subfolder_kwargs(s),
         torch_dtype=torch.bfloat16,
-        device_map=device,
+        device_map=resolve_device_map(device),
         trust_remote_code=True,
     )
     model.eval()

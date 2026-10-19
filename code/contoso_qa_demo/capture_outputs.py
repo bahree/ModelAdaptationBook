@@ -6,6 +6,7 @@ import torch
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from contoso_qa_demo.lora_domain_demo import BASE_SYS, PROMPT_SYS, generate, load
+from common.device import resolve_device_map
 
 HERE = Path("contoso_qa_demo")
 BASE = "Qwen/Qwen3-4B-Instruct-2507"
@@ -14,7 +15,7 @@ PICK = [1, 3]  # network (GlobalConnect VPN), software (Software Center/Standard
 
 golden = load(HERE / "data/expanded/eval.jsonl")
 tok = AutoTokenizer.from_pretrained(BASE)
-base = AutoModelForCausalLM.from_pretrained(BASE, torch_dtype=torch.bfloat16, device_map="auto")
+base = AutoModelForCausalLM.from_pretrained(BASE, torch_dtype=torch.bfloat16, device_map=resolve_device_map())
 base.eval()
 out = {}
 for i in PICK:
