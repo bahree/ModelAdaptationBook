@@ -27,7 +27,10 @@ dependencies = [
   # Capped below 5.0: transformers 5.x removed HybridCache, which peft<0.18
   # imports at load time, so a fresh install on 5.x breaks `import peft`.
   "transformers>=4.47.0,<5.0",
-  "trl>=0.9.0,<1.15",
+  # 1.15.0 made the fused LM head the default; it needs Triton on a GPU (Linux CUDA/ROCm/XPU)
+  # and fails on Mac MPS with "'NoneType' object has no attribute 'apply'" (TRL issue #7659).
+  # Upstream merged a no-Triton fallback on 2026-10-14; the next release lifts this exclusion.
+  "trl>=0.9.0,!=1.15.0",
   "python-dotenv>=1.0.1",
   # HTML -> text cleaning for the Stack Exchange IT-support dataset builder
   # (scripts/build_it_support_dataset.py).

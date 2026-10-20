@@ -277,7 +277,7 @@ A few scripts call a hosted LLM API. **None of the core Chapter 1-5 hands-on wor
 Two keys are used, depending on what you run:
 
 - **`OPENROUTER_API_KEY`** — the dataset build's answer-reformatting step (`scripts/reformat_it_answers.py`), the Chapter 5 Contoso capstone seed expansion (`contoso_qa_demo/expand_seed.py`), the LLM-as-judge evaluation (`scripts/eval_3lens.py`), and Chapter 7's optional frontier comparison. Create a key at <https://openrouter.ai/keys>.
-- **`ANTHROPIC_API_KEY`** — only Chapter 3's synthetic-data pipeline (`chapter03/ch03_synthetic_data_generation.py`), which calls the Anthropic API directly. Create a key at <https://console.anthropic.com>.
+- **`ANTHROPIC_API_KEY`** — Chapter 2's one-call managed-API example (`chapter02/managed_api_call.py`, Listing 2.1) and Chapter 3's synthetic-data pipeline (`chapter03/ch03_synthetic_data_generation.py`), both of which call the Anthropic API directly. Create a key at <https://console.anthropic.com>.
 
 Set whichever you need in `code/.env` (gitignored, auto-loaded by `common/env.py`), or export it in your shell:
 

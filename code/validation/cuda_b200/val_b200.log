@@ -97,7 +97,7 @@ device NVIDIA B200
 MATMUL_OK True
 ===== TORCH_WHEEL_USED: stable cu128 (ok=1) =====
 Resolved 87 packages in 1.49s
-   Building model-adaptation-book @ file://~/FTBook-pvt/code
+   Building model-adaptation-book @ file://<repo>/code
 Downloading ruff (11.0MiB)
 Downloading aiohttp (1.7MiB)
 Downloading hf-xet (4.3MiB)
@@ -112,7 +112,7 @@ Downloading scikit-learn (8.7MiB)
  Downloaded aiohttp
  Downloaded tokenizers
  Downloaded hf-xet
-      Built model-adaptation-book @ file://~/FTBook-pvt/code
+      Built model-adaptation-book @ file://<repo>/code
  Downloaded scikit-learn
  Downloaded ruff
  Downloaded transformers
@@ -144,7 +144,7 @@ Installed 57 packages in 33ms
  + joblib==1.5.3
  + markdown-it-py==4.2.0
  + mdurl==0.1.2
- + model-adaptation-book==0.1.0 (from file://~/FTBook-pvt/code)
+ + model-adaptation-book==0.1.0 (from file://<repo>/code)
  + multidict==6.7.1
  + multiprocess==0.70.19
  + narwhals==2.22.1

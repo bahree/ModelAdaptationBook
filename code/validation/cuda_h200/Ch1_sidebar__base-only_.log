@@ -34,4 +34,4 @@ If your Outlook is tied to a company or school email (e.g., @company.com), the p
 
 [skip] --base_only set; skipping SFT run.
 
-[saved] ~/FTBook-pvt/code/chapter01/sidebar_outputs.json
+[saved] <repo>/code/chapter01/sidebar_outputs.json
