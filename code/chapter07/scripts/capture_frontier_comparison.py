@@ -122,7 +122,7 @@ def main() -> None:
         help="OpenRouter model ids to query",
     )
     parser.add_argument("--max_tokens_local", type=int, default=400)
-    parser.add_argument("--max_tokens_remote", type=int, default=1024)
+    parser.add_argument("--max_tokens_remote", type=int, default=3072)
     parser.add_argument(
         "--skip_local",
         action="store_true",
