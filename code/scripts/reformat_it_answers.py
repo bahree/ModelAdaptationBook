@@ -38,7 +38,7 @@ import common.env  # noqa: F401  triggers load_dotenv(code/.env)
 from common.jsonl import read_jsonl, write_jsonl
 from common.openrouter import chat
 
-TEACHER = "anthropic/claude-sonnet-4.5"
+TEACHER = "anthropic/claude-sonnet-5.5"
 
 SYSTEM = (
     "You are a senior IT support engineer and technical editor. You rewrite "

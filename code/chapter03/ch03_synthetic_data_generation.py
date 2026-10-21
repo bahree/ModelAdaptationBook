@@ -36,8 +36,8 @@ SYSTEM_PROMPT = (
 )
 
 SEED_DATASET  = "takala/financial_phrasebank"   # public, CC-BY-NC-SA 3.0
-TEACHER_MODEL = "claude-sonnet-4-6"             # teacher LLM (direct Anthropic id)
-OPENROUTER_TEACHER_MODEL = "anthropic/claude-sonnet-4.5"  # same family, via OpenRouter
+TEACHER_MODEL = "claude-sonnet-5-5"             # teacher LLM (direct Anthropic id)
+OPENROUTER_TEACHER_MODEL = "anthropic/claude-sonnet-5.5"  # same family, via OpenRouter
 
 
 def call_teacher(prompt: str, max_tokens: int = 4096, system: str = None) -> str:

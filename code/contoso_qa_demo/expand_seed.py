@@ -28,7 +28,7 @@ HERE = Path(__file__).parent
 SEED = HERE / "data" / "it_qa_train.jsonl"
 OUT = HERE / "data" / "expanded"
 SYSTEM = "You are Contoso's internal IT support assistant. Give clear, accurate help."
-TEACHERS = ["anthropic/claude-sonnet-4.5", "openai/gpt-4o", "openai/gpt-4o-mini"]
+TEACHERS = ["anthropic/claude-sonnet-5.5", "openai/gpt-4o", "openai/gpt-4o-mini"]
 
 HOUSE_RULES = (
     "Answer STYLE (follow exactly):\n"

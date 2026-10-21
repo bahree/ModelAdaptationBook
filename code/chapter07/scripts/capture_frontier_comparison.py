@@ -13,8 +13,8 @@ with:
 - responses from each frontier model, with usage and cost,
 - ISO timestamp + each model's exact id-as-served (for stable footnoting).
 
-Default frontier set is Claude Sonnet 4.5, Gemini 2.5 Pro, DeepSeek
-V3.1. Override with ``--frontier_models`` if needed.
+Default frontier set is Claude Sonnet 5.5, Gemini 3.1 Pro, DeepSeek
+V4.1 Flash. Override with ``--frontier_models`` if needed.
 
 Run from code/ (with the venv activated and OPENROUTER_API_KEY in
 ``code/.env``):
@@ -38,9 +38,9 @@ from common.openrouter import OpenRouterError, chat
 DEFAULT_PROMPT = "How do I troubleshoot a VPN connection failure?"
 DEFAULT_SYSTEM = "You are an IT support assistant."
 DEFAULT_FRONTIER_MODELS = [
-    "anthropic/claude-sonnet-4.5",
-    "google/gemini-2.5-pro",
-    "deepseek/deepseek-chat-v3.1",
+    "anthropic/claude-sonnet-5.5",
+    "google/gemini-3.1-pro-preview",
+    "deepseek/deepseek-v4.1-flash",
 ]
 
 
@@ -122,7 +122,7 @@ def main() -> None:
         help="OpenRouter model ids to query",
     )
     parser.add_argument("--max_tokens_local", type=int, default=400)
-    parser.add_argument("--max_tokens_remote", type=int, default=1024)
+    parser.add_argument("--max_tokens_remote", type=int, default=3072)
     parser.add_argument(
         "--skip_local",
         action="store_true",
