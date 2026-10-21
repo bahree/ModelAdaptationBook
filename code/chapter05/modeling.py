@@ -17,6 +17,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
 
 from peft import LoraConfig, prepare_model_for_kbit_training
 
+from common.device import resolve_device_map
 from common.hub import split_ref, subfolder_kwargs
 
 from .chat_template import ensure_padding
@@ -57,28 +58,6 @@ def load_tokenizer(model_name: str):
     return tok
 
 
-def _resolve_device_map(device_map):
-    """Resolve "auto" to a concrete placement that avoids CPU/disk OFFLOAD.
-
-    device_map="auto" offloads layers to CPU/disk on memory-constrained or
-    non-CUDA machines. That offload path trips a PEFT adapter-loading bug
-    (KeyError in _update_offload, e.g.
-    'base_model.model.model.model.embed_tokens') when a LoRA adapter is later
-    attached for eval/inference, which is exactly what a reader on Apple
-    Silicon (MPS) or CPU hits in eval.py / generate.py. Pinning everything to a
-    single device builds no offload index, so the adapter loads cleanly. The 4B
-    base fits on one MPS/CPU device for inference and 1-epoch LoRA.
-    """
-    if device_map != "auto":
-        return device_map
-    if torch.cuda.is_available():
-        return "auto"  # a single 24GB+ CUDA card fits the 4B with no offload
-    mps = getattr(torch.backends, "mps", None)
-    if mps is not None and mps.is_available():
-        return {"": "mps"}
-    return {"": "cpu"}
-
-
 def load_base_model_lora(
     model_name: str,
     *,
@@ -105,7 +84,7 @@ def load_base_model_lora(
     model = AutoModelForCausalLM.from_pretrained(
         p,
         **subfolder_kwargs(s),
-        device_map=_resolve_device_map(device_map),
+        device_map=resolve_device_map(device_map),
         dtype=dtype,
         trust_remote_code=True,
     )
@@ -163,7 +142,7 @@ def load_base_model_qlora(
     model = AutoModelForCausalLM.from_pretrained(
         p,
         **subfolder_kwargs(s),
-        device_map=_resolve_device_map(device_map),
+        device_map=resolve_device_map(device_map),
         quantization_config=bnb_config,
         trust_remote_code=True,
     )

@@ -8,6 +8,7 @@ Run with:
 """
 
 import argparse
+import gc
 import json
 import time
 from pathlib import Path
@@ -17,6 +18,7 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from common.jsonl import write_jsonl
 from common.seed import seed_everything
+from common.device import resolve_device_map
 
 
 # Safety test categories with representative prompts
@@ -225,23 +227,25 @@ def main():
     output_path = Path(args.output_dir)
     output_path.mkdir(parents=True, exist_ok=True)
 
-    device = "cuda" if torch.cuda.is_available() else "cpu"
-    print(f"Device: {device}")
+    device_map = resolve_device_map("auto")
+    print(f"Device map: {device_map}")
 
     # Load and test base model
     print(f"\nLoading base model: {args.base_model}")
     tokenizer = AutoTokenizer.from_pretrained(args.base_model)
     base_model = AutoModelForCausalLM.from_pretrained(
-        args.base_model, torch_dtype=torch.bfloat16, device_map="auto"
+        args.base_model, torch_dtype=torch.bfloat16, device_map=device_map
     )
     base_results = run_safety_tests(base_model, tokenizer, "base")
     del base_model
-    torch.cuda.empty_cache()
+    gc.collect()
+    if torch.cuda.is_available():
+        torch.cuda.empty_cache()
 
     # Load and test fine-tuned model
     print(f"\nLoading fine-tuned model: {args.model_dir}")
     ft_model = AutoModelForCausalLM.from_pretrained(
-        args.model_dir, torch_dtype=torch.bfloat16, device_map="auto"
+        args.model_dir, torch_dtype=torch.bfloat16, device_map=device_map
     )
     ft_tokenizer = AutoTokenizer.from_pretrained(args.model_dir)
     ft_results = run_safety_tests(ft_model, ft_tokenizer, "fine_tuned")

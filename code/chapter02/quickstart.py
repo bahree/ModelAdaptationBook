@@ -39,30 +39,11 @@ import torch
 from datasets import Dataset as HFDataset
 
 import common.env  # noqa: F401  loads code/.env and guards Hugging Face download settings
+from common.device import has_mps, resolve_device_map
 from common.gpu import report_peak_gpu_memory
 from peft import LoraConfig
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from trl import SFTConfig, SFTTrainer
-
-
-def _has_mps() -> bool:
-    """True on Apple Silicon (Metal/MPS) builds of PyTorch."""
-    return bool(getattr(torch.backends, "mps", None) and torch.backends.mps.is_available())
-
-
-def _resolve_device_map():
-    """Pin placement so the 4B model is never offloaded to meta/CPU.
-
-    device_map="auto" offloads layers on a memory-constrained or non-CUDA box;
-    on Apple Silicon that offload is what corrupts LoRA training (NaN gradients,
-    or a backward device-mismatch error). Pinning to a single device avoids it.
-    Same pattern as chapter05/modeling.py.
-    """
-    if torch.cuda.is_available():
-        return "auto"            # a single 24 GB+ CUDA card fits the 4B with no offload
-    if _has_mps():
-        return {"": "mps"}
-    return {"": "cpu"}
 
 
 # Defaults match chapter 5. See chapter05/__init__.py and chapter05/modeling.py.
@@ -131,14 +112,14 @@ def step2_load_model_and_lora():
         tokenizer.pad_token = tokenizer.eos_token
     tokenizer.padding_side = "right"
 
-    # Pin the model to one device (_resolve_device_map): device_map="auto" offloads
+    # Pin the model to one device (resolve_device_map): device_map="auto" offloads
     # layers on a 16 GB Mac, and that offload is what makes MPS LoRA training go NaN.
     # bf16 fits a 16 GB Mac (fp32 4B would not); the trainer also autocasts in bf16
     # (step 3). fp32 only as a CPU fallback.
-    load_dtype = torch.bfloat16 if (torch.cuda.is_available() or _has_mps()) else torch.float32
+    load_dtype = torch.bfloat16 if (torch.cuda.is_available() or has_mps()) else torch.float32
     model = AutoModelForCausalLM.from_pretrained(
         BASE_MODEL,
-        device_map=_resolve_device_map(),
+        device_map=resolve_device_map(),
         dtype=load_dtype,
         trust_remote_code=True,
     )
@@ -188,7 +169,7 @@ def step3_train(model, tokenizer, lora_config, train_ds, valid_ds) -> SFTTrainer
     # essential: without it the bf16 base model's logits overflow and grad_norm
     # becomes NaN. fp16 only on older CUDA cards that lack bf16.
     cuda_bf16 = torch.cuda.is_available() and torch.cuda.is_bf16_supported()
-    use_bf16 = cuda_bf16 or _has_mps()
+    use_bf16 = cuda_bf16 or has_mps()
     use_fp16 = torch.cuda.is_available() and not cuda_bf16
 
     # Apple MPS has ~16 GB of unified memory and no fp32 master-weight headroom, so
@@ -197,7 +178,7 @@ def step3_train(model, tokenizer, lora_config, train_ds, valid_ds) -> SFTTrainer
     # into NaN. On MPS we shorten the sequence and skip the in-training eval (the
     # memory spike); CUDA keeps the full settings. A short warmup steadies the start
     # on every device.
-    mps = _has_mps()
+    mps = has_mps()
     max_len = 256 if mps else 512
     eval_strategy = "no" if mps else "steps"
 

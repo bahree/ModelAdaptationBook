@@ -24,6 +24,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import PeftModel
 
+from common.device import resolve_device_map
 from common.jsonl import write_jsonl
 from common.seed import seed_everything
 
@@ -131,7 +132,7 @@ def main():
     print(f"Loading base model: {args.base_model}")
     tokenizer = AutoTokenizer.from_pretrained(args.base_model, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
-        args.base_model, torch_dtype=torch.bfloat16, device_map="auto",
+        args.base_model, torch_dtype=torch.bfloat16, device_map=resolve_device_map(),
         trust_remote_code=True,
     )
     model.eval()
@@ -145,7 +146,7 @@ def main():
     print(f"\nLoading student from {args.student_dir}")
     tokenizer = AutoTokenizer.from_pretrained(args.student_dir, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
-        args.base_model, torch_dtype=torch.bfloat16, device_map="auto",
+        args.base_model, torch_dtype=torch.bfloat16, device_map=resolve_device_map(),
         trust_remote_code=True,
     )
     model = PeftModel.from_pretrained(model, args.student_dir)

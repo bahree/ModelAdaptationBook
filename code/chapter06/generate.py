@@ -16,6 +16,7 @@ import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 from common.hub import split_ref, subfolder_kwargs
+from common.device import resolve_device_map
 
 
 def parse_args() -> argparse.Namespace:
@@ -44,7 +45,7 @@ def main() -> None:
         p,
         **subfolder_kwargs(s),
         torch_dtype=torch.bfloat16,
-        device_map="auto",
+        device_map=resolve_device_map("auto"),
         trust_remote_code=True,
     )
     model.eval()

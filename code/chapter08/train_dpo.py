@@ -21,6 +21,7 @@ from datasets import Dataset as HFDataset
 from trl import DPOConfig, DPOTrainer
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from common.device import resolve_device_map
 from common.env import resolve_report_to
 from common.gpu import report_peak_gpu_memory
 from common.jsonl import read_jsonl_list
@@ -101,7 +102,7 @@ def main() -> None:
     model = AutoModelForCausalLM.from_pretrained(
         args.model_dir,
         torch_dtype=torch.bfloat16,
-        device_map="auto",
+        device_map=resolve_device_map(),
         trust_remote_code=True,
     )
 

@@ -69,11 +69,12 @@ def train_lora(base, train_path, out_dir, max_steps):
     from peft import LoraConfig
     from transformers import AutoModelForCausalLM, AutoTokenizer
     from trl import SFTConfig, SFTTrainer
+    from common.device import resolve_device_map
     rows = load(train_path)
     tok = AutoTokenizer.from_pretrained(base)
     ds = Dataset.from_list([{"messages": r["messages"]} for r in rows])
     model = AutoModelForCausalLM.from_pretrained(base, torch_dtype=torch.bfloat16,
-                                                 device_map="auto")
+                                                 device_map=resolve_device_map())
     cfg = SFTConfig(output_dir=str(out_dir), num_train_epochs=3,
                     per_device_train_batch_size=2, gradient_accumulation_steps=4,
                     learning_rate=2e-4, max_steps=max_steps, logging_steps=10,
@@ -125,6 +126,7 @@ def main():
     import torch
     from peft import PeftModel
     from transformers import AutoModelForCausalLM, AutoTokenizer
+    from common.device import resolve_device_map
 
     golden = load(args.eval)
     print(f"training LoRA on {len(load(args.train))} examples ...")
@@ -132,7 +134,7 @@ def main():
 
     tok = AutoTokenizer.from_pretrained(args.base)
     base = AutoModelForCausalLM.from_pretrained(args.base, torch_dtype=torch.bfloat16,
-                                                device_map="auto")
+                                                device_map=resolve_device_map())
     base.eval()
     res = {"base": score(base, tok, BASE_SYS, golden),
            "base+prompt": score(base, tok, PROMPT_SYS, golden)}

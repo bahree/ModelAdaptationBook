@@ -36,6 +36,7 @@ from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 import common.env  # noqa: F401  loads code/.env and guards Hugging Face download settings
+from common.device import resolve_device_map
 
 
 BASE_MODEL = "Qwen/Qwen3-4B-Instruct-2507"
@@ -162,7 +163,7 @@ def main() -> None:
 
     base = AutoModelForCausalLM.from_pretrained(
         BASE_MODEL,
-        device_map="auto",
+        device_map=resolve_device_map(),
         dtype="auto",
         trust_remote_code=True,
     )

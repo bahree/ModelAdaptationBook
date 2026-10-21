@@ -38,6 +38,7 @@ import torch
 from transformers import AutoTokenizer, AutoModelForCausalLM
 from peft import PeftModel
 
+from common.device import resolve_device_map
 from common.jsonl import read_jsonl
 from common.seed import seed_everything
 from common.hub import split_ref, subfolder_kwargs
@@ -189,7 +190,7 @@ def main():
     base_p, base_s = split_ref(args.base_model)
     tokenizer = AutoTokenizer.from_pretrained(base_p, **subfolder_kwargs(base_s), trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
-        base_p, **subfolder_kwargs(base_s), torch_dtype=torch.bfloat16, device_map="auto",
+        base_p, **subfolder_kwargs(base_s), torch_dtype=torch.bfloat16, device_map=resolve_device_map(),
         trust_remote_code=True,
     )
     model.eval()
@@ -205,7 +206,7 @@ def main():
     teacher_p, teacher_s = split_ref(args.teacher_dir)
     tokenizer = AutoTokenizer.from_pretrained(teacher_p, **subfolder_kwargs(teacher_s), trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
-        teacher_p, **subfolder_kwargs(teacher_s), torch_dtype=torch.bfloat16, device_map="auto",
+        teacher_p, **subfolder_kwargs(teacher_s), torch_dtype=torch.bfloat16, device_map=resolve_device_map(),
         trust_remote_code=True,
     )
     model.eval()
@@ -222,7 +223,7 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(student_p, **subfolder_kwargs(student_s), trust_remote_code=True)
     base_p, base_s = split_ref(args.base_model)
     model = AutoModelForCausalLM.from_pretrained(
-        base_p, **subfolder_kwargs(base_s), torch_dtype=torch.bfloat16, device_map="auto",
+        base_p, **subfolder_kwargs(base_s), torch_dtype=torch.bfloat16, device_map=resolve_device_map(),
         trust_remote_code=True,
     )
     model = PeftModel.from_pretrained(model, student_p, **subfolder_kwargs(student_s))

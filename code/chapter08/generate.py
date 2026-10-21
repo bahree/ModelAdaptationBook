@@ -15,6 +15,7 @@ import argparse
 import torch
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
+from common.device import resolve_device_map
 from common.hub import split_ref, subfolder_kwargs
 
 SYSTEM_PROMPT = "You are an IT support assistant. Provide clear, step-by-step answers."
@@ -41,7 +42,7 @@ def main():
     p, s = split_ref(args.model_dir)
     tokenizer = AutoTokenizer.from_pretrained(p, **subfolder_kwargs(s), trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(
-        p, **subfolder_kwargs(s), torch_dtype=torch.bfloat16, device_map="auto",
+        p, **subfolder_kwargs(s), torch_dtype=torch.bfloat16, device_map=resolve_device_map(),
         trust_remote_code=True,
     )
     model.eval()

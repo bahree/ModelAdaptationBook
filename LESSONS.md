@@ -32,9 +32,9 @@ def resolve_device_map():
     return {"": "cpu"}
 ```
 
-The book's `chapter05/modeling.py` uses this (`_resolve_device_map`); we applied the
-same pattern to the chapter 2 quickstart. With the pin, the quickstart trains cleanly
-on an M4 (loss ~3.0 → ~1.7, finite gradients), where `"auto"` had failed.
+Every script that loads a model uses the shared `resolve_device_map()` in
+`code/common/device.py` (chapters 1 to 9). With the pin, the chapter 2 quickstart trains
+cleanly on an M4 (loss ~3.0 → ~1.7, finite gradients), where `"auto"` had failed.
 
 ## 2. Hugging Face rate-limits some datacenter IPs (HTTP 429)
 
