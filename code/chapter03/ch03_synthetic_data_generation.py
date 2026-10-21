@@ -40,7 +40,7 @@ TEACHER_MODEL = "claude-sonnet-5-5"             # teacher LLM (direct Anthropic 
 OPENROUTER_TEACHER_MODEL = "anthropic/claude-sonnet-5.5"  # same family, via OpenRouter
 
 
-def call_teacher(prompt: str, max_tokens: int = 4096, system: str = None) -> str:
+def call_teacher(prompt: str, max_tokens: int = 4096, system: str | None = None) -> str:
     """Return the teacher LLM's raw text response to a prompt.
 
     Default path: the Anthropic SDK directly, when ANTHROPIC_API_KEY is set -- this
@@ -287,7 +287,7 @@ def parse_candidates(raw_response: str, expected_label: str) -> list[dict]:
 
 def generate_candidates(
     seeds:      list[dict],
-    categories: list[str] = None,
+    categories: list[str] | None = None,
     n_per_cat:  int = 30,
 ) -> list[dict]:
     """
