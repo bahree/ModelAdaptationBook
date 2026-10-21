@@ -214,6 +214,23 @@ python -m chapter05.train_lora ^
 Saved LoRA adapter to: **chapter05/runs/it_lora**
 ```
 
+### Run without training: the published adapters
+
+The chapter's LoRA adapter is published as `bahree/ModelAdaptationBook#ch5-lora` (and the QLoRA adapter as `#ch5-qlora`); every `--adapter` argument below accepts that `repo#subfolder` form, so steps 3 to 5 run on any machine, including Apple Silicon, without a training run:
+
+```bash
+python -m chapter05.scripts.listing_5_3_evaluate \
+    --base Qwen/Qwen3-4B-Instruct-2507 \
+    --adapter "bahree/ModelAdaptationBook#ch5-lora" \
+    --test data/it_support/test.jsonl
+python -m chapter05.generate \
+    --base Qwen/Qwen3-4B-Instruct-2507 \
+    --adapter "bahree/ModelAdaptationBook#ch5-lora" \
+    --prompt "Explain how photosynthesis works in simple terms."
+```
+
+The QLoRA adapter needs `--quantized_4bit` (CUDA only) to match training. See [ACCELERATORS.md](../../ACCELERATORS.md#running-without-training-pull-the-model-from-hugging-face) for every chapter's commands.
+
 ### Step 3: Evaluate LoRA vs Base Model
 
 Compare the fine-tuned model to the base model:

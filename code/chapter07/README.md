@@ -413,6 +413,8 @@ WARNING: Safety regression detected in student model.
 Generate text with the trained student adapter:
 
 **Linux/macOS:**
+> **No training GPU?** The distilled student is published as `bahree/ModelAdaptationBook#ch7-distilled` and the teacher as `#ch6-sft`; `--teacher_dir`, `--student_dir`, and `--adapter_dir` accept that `repo#subfolder` form (for example `--adapter_dir "bahree/ModelAdaptationBook#ch7-distilled"`). Commands for every chapter: [ACCELERATORS.md](../../ACCELERATORS.md#running-without-training-pull-the-model-from-hugging-face).
+
 ```bash
 python -m chapter07.generate \
     --adapter_dir chapter07/runs/student_run1 \
@@ -497,12 +499,12 @@ The script writes a single JSON to `chapter07/runs/frontier_comparison.json` (or
 
 ### Reading the output
 
-The chapter quotes the Ch6 SFT response (terse, generic) alongside Claude Sonnet 5.5's response (structured by category, with command examples and a follow-up question). The same gap will show up on most domain-specific prompts where you have an SFT model trained on a few hundred examples and the frontier model has been trained on the entire internet:
+The chapter quotes the Ch6 SFT response (terse, generic) alongside Claude Sonnet 4.5's response (structured by category, with command examples and a follow-up question). The same gap will show up on most domain-specific prompts where you have an SFT model trained on a few hundred examples and the frontier model has been trained on the entire internet:
 
 - If the frontier response is dramatically more thorough and specific, distillation has a clear quality target. The cost model in §7.3 then tells you whether the per-request economics justify it.
 - If the responses are roughly comparable, your SFT model is already close to the ceiling for this task type and distillation may not move the needle. Save the budget for a different intervention (a better prompt, more training data, a different metric).
 
-The Gemini 3.1 Pro response includes a `reasoning` field with the model's internal scratchpad; the `content` field is the user-facing answer. The chapter quotes only `content`; the JSON keeps both for audit.
+The Gemini 2.5 Pro response includes a `reasoning` field with the model's internal scratchpad; the `content` field is the user-facing answer. The chapter quotes only `content`; the JSON keeps both for audit.
 
 ## Understanding the results
 

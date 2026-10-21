@@ -159,7 +159,7 @@ def main():
     cache_path = Path(args.out).with_name("generations_cache.json")
     if args.use_cache and cache_path.exists():
         print(f"loading cached generations from {cache_path}...", flush=True)
-        gens = json.load(open(cache_path))
+        gens = json.load(open(cache_path, encoding="utf-8"))
         assert all(len(gens[k]) == n for k in ("base", "sft", "dpo")), "cache length mismatch"
     else:
         gens = {}
@@ -171,7 +171,7 @@ def main():
             gc.collect()
             torch.cuda.empty_cache()
         cache_path.parent.mkdir(parents=True, exist_ok=True)
-        json.dump(gens, open(cache_path, "w"))
+        json.dump(gens, open(cache_path, "w", encoding="utf-8"))
 
     # --- Absolute judge scores: all (model, example) pairs in parallel ---
     print("judging absolute scores via gpt-5.5...", flush=True)
@@ -278,7 +278,7 @@ def main():
 
     out = Path(args.out)
     out.parent.mkdir(parents=True, exist_ok=True)
-    json.dump(report, open(out, "w"), indent=1)
+    json.dump(report, open(out, "w", encoding="utf-8"), indent=1)
     write_jsonl(out.with_name("judge_examples.jsonl"), per_example)
 
     # --- Console summary ---

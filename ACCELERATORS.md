@@ -45,12 +45,65 @@ You do not need a training-capable GPU to follow along. Every chapter's trained 
 | Subfolder | Chapter | Artifact | Base |
 | --- | --- | --- | --- |
 | `ch5-lora` | 5 | LoRA adapter | Qwen3-4B-Instruct-2507 |
+| `ch5-qlora` | 5 | QLoRA adapter (r=8; `--quantized_4bit` needs a CUDA card, or load it on the bf16 base) | Qwen3-4B-Instruct-2507 |
 | `ch6-sft` | 6 | full SFT model (standalone) | (full fine-tune) |
 | `ch7-distilled` | 7 | distilled student (LoRA) | Qwen3-4B-Instruct-2507 |
 | `ch8-dpo` | 8 | full DPO model (standalone) | (full fine-tune) |
 | `ch8-dpo-lora` | 8 | LoRA-DPO adapter (fits one 24 GB card) | `ch6-sft` |
 
-Load a full model with `AutoModelForCausalLM.from_pretrained("bahree/ModelAdaptationBook", subfolder="ch6-sft")`, or an adapter with `PeftModel.from_pretrained(base, "bahree/ModelAdaptationBook", subfolder="ch5-lora")`. This is why the "What runs where" table marks chapters 6 to 8 as not running on Apple Silicon: that is about *training* them. You can still *use* their results on a Mac by pulling the trained model.
+Load a full model with `AutoModelForCausalLM.from_pretrained("bahree/ModelAdaptationBook", subfolder="ch6-sft")`, or an adapter with `PeftModel.from_pretrained(base, "bahree/ModelAdaptationBook", subfolder="ch5-lora")`.
+
+**The exact commands.** Every model or adapter path argument in the book's scripts also accepts a Hub reference of the form `repo#subfolder` (resolved by `common/hub.py`), so each chapter's evaluation and inference steps run from the published artifact with no local training run. Run from `code/` with the virtual environment active; the first run downloads the base model (about 8 GB) and the artifact, both cached afterwards, no token required. Quote the reference on shells where `#` starts a comment.
+
+```bash
+# Chapter 5: evaluate and run the published LoRA adapter (step 3 and step 5 of the chapter)
+python -m chapter05.scripts.listing_5_3_evaluate \
+    --base Qwen/Qwen3-4B-Instruct-2507 \
+    --adapter "bahree/ModelAdaptationBook#ch5-lora" \
+    --test data/it_support/test.jsonl
+python -m chapter05.generate \
+    --base Qwen/Qwen3-4B-Instruct-2507 \
+    --adapter "bahree/ModelAdaptationBook#ch5-lora" \
+    --prompt "Explain how photosynthesis works in simple terms."
+# Chapter 5, step 6: the QLoRA adapter (4-bit base, CUDA only)
+python -m chapter05.generate \
+    --base Qwen/Qwen3-4B-Instruct-2507 \
+    --adapter "bahree/ModelAdaptationBook#ch5-qlora" --quantized_4bit \
+    --prompt "Explain how photosynthesis works in simple terms."
+
+# Chapter 6: the full SFT model
+python -m chapter06.eval_sft --data_dir data/it_support --split test \
+    --model_dir "bahree/ModelAdaptationBook#ch6-sft" \
+    --output chapter06/runs/sft_hub/eval_report.json
+python -m chapter06.generate --model_dir "bahree/ModelAdaptationBook#ch6-sft" \
+    --prompt "How do I troubleshoot a VPN connection failure?"
+
+# Chapter 7: teacher (the chapter 6 model) and the distilled student
+python -m chapter07.eval_distillation --data_dir chapter07/data/distill_ready \
+    --teacher_dir "bahree/ModelAdaptationBook#ch6-sft" \
+    --student_dir "bahree/ModelAdaptationBook#ch7-distilled" \
+    --source_dir data/it_support_fmt
+python -m chapter07.generate --adapter_dir "bahree/ModelAdaptationBook#ch7-distilled" \
+    --prompt "How do I troubleshoot a VPN connection failure?"
+
+# Chapter 8: the DPO model against the SFT model
+python -m chapter08.eval_dpo --data_dir data/it_support --split test \
+    --sft_dir "bahree/ModelAdaptationBook#ch6-sft" \
+    --dpo_dir "bahree/ModelAdaptationBook#ch8-dpo" \
+    --output chapter08/eval/dpo_report_hub.json
+python -m chapter08.generate --model_dir "bahree/ModelAdaptationBook#ch8-dpo" \
+    --prompt "How do I troubleshoot a VPN connection failure?"
+
+# Chapter 9: canary prompts and the safety monitor on the published models
+python -m chapter09.scripts.run_canary_prompts \
+    --model_dir "bahree/ModelAdaptationBook#ch6-sft" \
+    --output chapter09/eval/canary_baseline.jsonl
+python -m chapter09.safety_monitor \
+    --model_dir "bahree/ModelAdaptationBook#ch6-sft" \
+    --output chapter09/eval/safety_report.json
+```
+
+On Windows, replace the trailing `\` with `^` and keep the quotes around the Hub references. This is why the "What runs where" table marks chapters 6 to 8 as not running on Apple Silicon: that is about *training* them. You can still *use* their results on a Mac by pulling the trained model.
 
 ## GPU requirements at a glance
 
@@ -63,7 +116,7 @@ AMD (ROCm) was validated end-to-end on a datacenter card (Instinct MI300X); VRAM
 | 3 (data-quality experiment) | same profile as chapter 5 LoRA | 8 GB | 12 GB+ | Yes | Synthetic-data pipeline yes; manifest module yes; full experiment slow | Yes, verified (bf16 LoRA on MPS); synthetic-data pipeline and manifest module also yes |
 | 4 (ICL/RAG) | inference only (~8 GB for the optional HF backend) | None for mock backends; ~8 GB for the optional Qwen3-4B HF backend | 12 GB+ | Yes | Yes (mock backend / hash embedder) | Yes (mock backends are CPU; HF backend uses MPS, slow on 8 GB) |
 | 5 (LoRA, r=16) | **9.0 GB** allocated (10.2 GB reserved), one card | 8 GB (RTX 3060/4060+) | 12 GB+ | Yes | Yes, but ~20× slower | Yes (trains on MPS) |
-| 5 (QLoRA, r=8) | **5.1 GB** allocated (5.4 GB reserved), one card | 6 GB | 8 GB+ | Yes (4-bit works; benign `rocminfo` warning) | Not recommended | **No** (`bitsandbytes` is CUDA-only) |
+| 5 (QLoRA, r=8) | **5.1 GB** allocated (5.4 GB reserved), one card | 6 GB | 8 GB+ | Yes (4-bit works; benign `rocminfo` warning) | Not recommended | **No** (`bitsandbytes` is CUDA-only; the published `ch5-qlora` adapter loads on the bf16 base for inference) |
 | 6 (Full SFT) | **32.5 GB** total (17.2 + 15.3 GB across two A30s); **OOM on one A30** at 23.2 GB during AdamW state init | Two 24 GB cards (A30 / RTX 4090), or one 40 GB card | A100 40 GB+ | Yes | No | No |
 | 7 (Distillation, LoRA student r=16) | **10.5 GB** allocated (15.8 GB reserved, batch 2), one card | 12 GB for the student; the teacher-generation stage loads the chapter 6 model for inference (~10 GB) | 24 GB+ | Yes | Not recommended | Student: yes in principle (LoRA on MPS); teacher generation is slow |
 | 8 (DPO, full-parameter) | **54.3 GB** total (18.4 + 18.6 + 17.3 GB across three A30s); **OOM on two A30s** (23.2 + 22.7 GB) | Three 24 GB cards, or one 80 GB card | A100 80 GB / H100 | Yes | No | No |

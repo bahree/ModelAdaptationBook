@@ -38,7 +38,7 @@ It is a **starter**: 24 hand-authored rows are enough to illustrate the idea, no
 
 ## Results (domain LoRA on a single GPU)
 
-The seed was expanded to **166 training rows** (18 hand-authored, 148 synthesized with `anthropic/claude-sonnet-5.5` via OpenRouter, all gated to the house style and balanced across categories: hardware 34, access 30, software 27, cloud/network/security 25 each), with 6 held out for evaluation. A LoRA (r=16, about 5 epochs, roughly a minute on a single 24 GB GPU) was scored against the base model and a format-prompted base. Timing varies by accelerator; the functional results below do not. Full numbers are in `results/results.json`, with a chart in `results/contrast.png`:
+The seed was expanded to **166 training rows** (18 hand-authored, 148 synthesized with `anthropic/claude-sonnet-4.5` via OpenRouter, all gated to the house style and balanced across categories: hardware 34, access 30, software 27, cloud/network/security 25 each), with 6 held out for evaluation. A LoRA (r=16, about 5 epochs, roughly a minute on a single 24 GB GPU) was scored against the base model and a format-prompted base. Timing varies by accelerator; the functional results below do not. Full numbers are in `results/results.json`, with a chart in `results/contrast.png`:
 
 | config | internal tool in body | house format | token-F1 |
 | --- | --- | --- | --- |

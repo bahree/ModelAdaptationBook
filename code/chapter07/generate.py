@@ -76,6 +76,7 @@ def main() -> None:
             **inputs,
             max_new_tokens=args.max_new_tokens,
             do_sample=False,
+            temperature=None, top_p=None, top_k=None,  # greedy: silence the sampling-flag warning
             pad_token_id=tokenizer.pad_token_id,
         )
 

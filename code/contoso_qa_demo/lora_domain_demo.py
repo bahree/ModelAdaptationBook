@@ -40,7 +40,7 @@ INTERNAL_TERMS = ["GlobalConnect", "AccessHub", "StandardBuild",
 
 
 def load(path):
-    return [json.loads(ln) for ln in open(path) if ln.strip()]
+    return [json.loads(ln) for ln in open(path, encoding="utf-8") if ln.strip()]
 
 
 def token_f1(pred, ref):

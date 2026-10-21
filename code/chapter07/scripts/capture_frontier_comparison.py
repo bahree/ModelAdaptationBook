@@ -71,7 +71,10 @@ def run_local_sft(
     )
     inputs = tok(text, return_tensors="pt").to(model.device)
     with torch.no_grad():
-        output_ids = model.generate(**inputs, max_new_tokens=max_new_tokens, do_sample=False)
+        output_ids = model.generate(
+            **inputs, max_new_tokens=max_new_tokens, do_sample=False,
+            temperature=None, top_p=None, top_k=None,  # greedy: silence the sampling-flag warning
+        )
     gen_ids = output_ids[0][inputs["input_ids"].shape[1] :]
     content = tok.decode(gen_ids, skip_special_tokens=True).strip()
     elapsed = time.time() - started
@@ -123,7 +126,7 @@ def main() -> None:
         help="OpenRouter model ids to query",
     )
     parser.add_argument("--max_tokens_local", type=int, default=400)
-    parser.add_argument("--max_tokens_remote", type=int, default=3072)
+    parser.add_argument("--max_tokens_remote", type=int, default=1024)
     parser.add_argument(
         "--skip_local",
         action="store_true",

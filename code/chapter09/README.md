@@ -87,33 +87,33 @@ source .venv/bin/activate   # Linux/macOS
 
 Register, promote, and manage model versions with a lightweight JSON-based registry. No GPU or model loading required.
 
-**Register a model version:**
+**Register a model version:** the shipped `chapter09/data/registry.json` already holds `it-support-v1` (the chapter 6 SFT model, active) and `it-support-v2` (a DPO experiment, retired), and a tag can be registered only once, so the walkthrough registers the chapter 7 student as `it-support-v3`. To start from an empty registry instead, point `--registry_dir` at a new folder.
 
 `--registry_dir` is a parent-parser flag and must come **before** the subcommand (`register`, `list`, `promote`, `rollback`). Putting it after the subcommand is rejected by argparse.
 
 **Linux/macOS:**
 ```bash
 python -m chapter09.model_registry --registry_dir chapter09/data \
-    register --name it-support-v1 --technique sft \
+    register --name it-support-v3 --technique distill \
     --base_model Qwen/Qwen3-4B-Instruct-2507 \
     --data_hash abc123 \
-    --checkpoint_path chapter06/runs/sft_run1 \
-    --eval_metrics '{"overall_f1": 0.72}'
+    --checkpoint_path chapter07/runs/student_run1 \
+    --eval_metrics '{"overall_f1": 0.70}'
 ```
 
 **Windows:**
 ```powershell
 python -m chapter09.model_registry --registry_dir chapter09\data ^
-    register --name it-support-v1 --technique sft ^
+    register --name it-support-v3 --technique distill ^
     --base_model Qwen/Qwen3-4B-Instruct-2507 ^
     --data_hash abc123 ^
-    --checkpoint_path chapter06\runs\sft_run1 ^
-    --eval_metrics "{\"overall_f1\": 0.72}"
+    --checkpoint_path chapter07\runs\student_run1 ^
+    --eval_metrics "{\"overall_f1\": 0.70}"
 ```
 
 **Expected output:**
 ```
-Registered: it-support-v1  status=registered
+Registered: it-support-v3  status=registered
 ```
 
 **List all versions:**
@@ -134,6 +134,7 @@ Version Tag                                             Status       Technique  
 ----------------------------------------------------------------------------------------------------
 it-support-v1                                           active       sft        2026-02-15T19:36:04Z
 it-support-v2                                           retired      dpo        2026-02-15T19:36:04Z
+it-support-v3                                           registered   distill    2026-10-20T19:36:04Z
 ```
 
 **Promote a version to active:**
@@ -141,18 +142,18 @@ it-support-v2                                           retired      dpo        
 **Linux/macOS:**
 ```bash
 python -m chapter09.model_registry --registry_dir chapter09/data \
-    promote --version_tag it-support-v1
+    promote --version_tag it-support-v3
 ```
 
 **Windows:**
 ```powershell
 python -m chapter09.model_registry --registry_dir chapter09/data ^
-    promote --version_tag it-support-v1
+    promote --version_tag it-support-v3
 ```
 
 **Expected output:**
 ```
-Promoted: it-support-v1 -> active
+Promoted: it-support-v3 -> active
 ```
 
 **Rollback to the previous active version:**
@@ -265,6 +266,8 @@ Run a fixed suite of 10 canary prompts across 5 capability dimensions (factual_r
 **Generate baseline outputs:**
 
 **Linux/macOS:**
+> **No training GPU?** `--model_dir` accepts a published model in the `repo#subfolder` form, for example `--model_dir "bahree/ModelAdaptationBook#ch6-sft"` or `#ch8-dpo`, so the canary and safety-monitor stages run without the chapter 6 and 8 training runs. Commands for every chapter: [ACCELERATORS.md](../../ACCELERATORS.md#running-without-training-pull-the-model-from-hugging-face).
+
 ```bash
 python -m chapter09.scripts.run_canary_prompts \
     --model_dir chapter06/runs/sft_run1 \

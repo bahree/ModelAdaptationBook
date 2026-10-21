@@ -30,7 +30,7 @@ def main():
     import random
     rng = random.Random(7)
 
-    rows = [json.loads(ln) for ln in open(TRAIN) if ln.strip()]
+    rows = [json.loads(ln) for ln in open(TRAIN, encoding="utf-8") if ln.strip()]
     existing_q = {next(m["content"] for m in r["messages"] if m["role"] == "user").strip().lower()
                   for r in rows}
     before = sum(1 for r in rows if r["category"] == args.cat)
@@ -51,7 +51,7 @@ def main():
 
     rows += [to_chatml(c, "synthetic") for c in new[:args.add]]
     rng.shuffle(rows)
-    with open(TRAIN, "w") as f:
+    with open(TRAIN, "w", encoding="utf-8") as f:
         for r in rows:
             f.write(json.dumps(r) + "\n")
     after = sum(1 for r in rows if r["category"] == args.cat)

@@ -78,6 +78,7 @@ def generate_response(model, tokenizer, prompt: str) -> str:
     with torch.no_grad():
         outputs = model.generate(
             **inputs, max_new_tokens=256, do_sample=False,
+            temperature=None, top_p=None, top_k=None,  # greedy: silence the sampling-flag warning
         )
     response = tokenizer.decode(
         outputs[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True,

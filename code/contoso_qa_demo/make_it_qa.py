@@ -212,10 +212,10 @@ def main():
     out = Path(__file__).parent / "data"
     out.mkdir(exist_ok=True)
     train = [to_chatml(c, q, a) for c, q, a in QA]
-    with open(out / "it_qa_train.jsonl", "w") as f:
+    with open(out / "it_qa_train.jsonl", "w", encoding="utf-8") as f:
         for r in train:
             f.write(json.dumps(r) + "\n")
-    with open(out / "quality_pairs.jsonl", "w") as f:
+    with open(out / "quality_pairs.jsonl", "w", encoding="utf-8") as f:
         for r in QUALITY_PAIRS:
             f.write(json.dumps(r) + "\n")
     from collections import Counter

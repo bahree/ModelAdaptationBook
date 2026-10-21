@@ -150,7 +150,7 @@ def main():
         gc.collect()
         torch.cuda.empty_cache()
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    json.dump(gens, open(Path(args.out).with_name("lora_generations_cache.json"), "w"))
+    json.dump(gens, open(Path(args.out).with_name("lora_generations_cache.json"), "w", encoding="utf-8"))
 
     # --- Absolute judge scores for all four models ---
     print("judging absolute scores via gpt-5.5...", flush=True)
@@ -209,7 +209,7 @@ def main():
         })
 
     out = Path(args.out)
-    json.dump(report, open(out, "w"), indent=1)
+    json.dump(report, open(out, "w", encoding="utf-8"), indent=1)
     write_jsonl(out.with_name("lora_judge_examples.jsonl"), per_example)
 
     print("\n==== CH8 LoRA-DPO EVAL REPORT ====")

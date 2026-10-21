@@ -10,7 +10,7 @@ to version control alongside the code that produced each model.
 
 Run from code/:
     python -m chapter09.model_registry --registry_dir chapter09/data register \
-        --name it-support-v1 --technique sft \
+        --name it-support-v3 --technique distill \
         --base_model Qwen/Qwen3-4B-Instruct-2507 \
         --data_hash abc123 --checkpoint_path chapter06/runs/sft_run1 \
         --eval_metrics '{"overall_f1": 0.72}'
@@ -23,6 +23,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -294,7 +295,10 @@ def main() -> None:
     rb.set_defaults(func=_cli_rollback)
 
     args = parser.parse_args()
-    args.func(args)
+    try:
+        args.func(args)
+    except ValueError as e:
+        sys.exit(f"Error: {e}")
 
 
 if __name__ == "__main__":

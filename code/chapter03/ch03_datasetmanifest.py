@@ -136,13 +136,13 @@ class DatasetManifest:
     def save(self, path: str) -> None:
         """Write the manifest to a JSON file."""
         Path(path).parent.mkdir(parents=True, exist_ok=True)
-        with open(path, "w") as f:
+        with open(path, "w", encoding="utf-8") as f:
             json.dump(vars(self), f, indent=2)
 
     @classmethod
     def load(cls, path: str) -> "DatasetManifest":
         """Load a manifest from a JSON file."""
-        with open(path) as f:
+        with open(path, encoding="utf-8") as f:
             data = json.load(f)
         return cls(**data)
 

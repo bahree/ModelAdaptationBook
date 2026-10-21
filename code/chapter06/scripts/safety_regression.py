@@ -280,7 +280,7 @@ def main():
         "regression_detected": regression_detected,
     }
     report_path = output_path / "safety_report.json"
-    with open(report_path, "w") as f:
+    with open(report_path, "w", encoding="utf-8") as f:
         json.dump(report, f, indent=2)
 
     write_jsonl(output_path / "safety_details.jsonl", base_results + ft_results)

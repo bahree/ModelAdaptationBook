@@ -371,6 +371,8 @@ The key result is that SFT and DPO score identically (no regression). The absolu
 Generate a response from the DPO-optimized model:
 
 **Linux/macOS:**
+> **No training GPU?** The DPO model is published as `bahree/ModelAdaptationBook#ch8-dpo` (and the single-card LoRA-DPO adapter as `#ch8-dpo-lora`); `--sft_dir`, `--dpo_dir`, and `--model_dir` accept that `repo#subfolder` form (for example `--model_dir "bahree/ModelAdaptationBook#ch8-dpo"`). Commands for every chapter: [ACCELERATORS.md](../../ACCELERATORS.md#running-without-training-pull-the-model-from-hugging-face).
+
 ```bash
 python -m chapter08.generate \
     --model_dir chapter08/runs/dpo_run1 \

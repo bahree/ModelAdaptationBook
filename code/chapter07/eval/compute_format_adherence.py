@@ -16,6 +16,7 @@ Run from code/:
 """
 from __future__ import annotations
 
+import argparse
 import gc
 import json
 import sys
@@ -38,12 +39,14 @@ STUDENT_DIR = "chapter07/runs/student_run1"
 VALID = "data/it_support/valid.jsonl"
 OUT = "chapter07/eval/format_report.json"
 # --eval_file / --out override these (the book reports on data/it_support/test.jsonl, 2026-09-19)
-import argparse
 _ap = argparse.ArgumentParser(add_help=False)
-_ap.add_argument("--eval_file", default=None); _ap.add_argument("--out", default=None)
+_ap.add_argument("--eval_file", default=None)
+_ap.add_argument("--out", default=None)
 _args, _ = _ap.parse_known_args()
-if _args.eval_file: VALID = _args.eval_file
-if _args.out: OUT = _args.out
+if _args.eval_file:
+    VALID = _args.eval_file
+if _args.out:
+    OUT = _args.out
 
 
 def is_adapter(path: str) -> bool:

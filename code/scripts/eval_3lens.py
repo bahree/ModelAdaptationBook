@@ -151,7 +151,7 @@ def main():
                             **{f"{mdl}_judge": judge[(mdl, i)] for mdl in gens}})
 
     Path(args.out).parent.mkdir(parents=True, exist_ok=True)
-    json.dump(report, open(args.out, "w"), indent=1)
+    json.dump(report, open(args.out, "w", encoding="utf-8"), indent=1)
     write_jsonl(Path(args.out).with_name("eval_3lens_examples.jsonl"), per_example)
     print("\n==== 3-LENS REPORT ====")
     for mdl in ("base", "lora", "sft"):

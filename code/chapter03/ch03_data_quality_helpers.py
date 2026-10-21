@@ -513,7 +513,7 @@ def save_results_json(results: dict[str, dict], output_dir: str) -> str:
         for k, v in results.items()
     }
     path = os.path.join(output_dir, "results.json")
-    with open(path, "w") as f:
+    with open(path, "w", encoding="utf-8") as f:
         json.dump(save, f, indent=2)
     return path
 

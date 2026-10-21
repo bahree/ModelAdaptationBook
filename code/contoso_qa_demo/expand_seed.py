@@ -49,7 +49,7 @@ HOUSE_RULES = (
 
 
 def load_seed():
-    rows = [json.loads(ln) for ln in open(SEED) if ln.strip()]
+    rows = [json.loads(ln) for ln in open(SEED, encoding="utf-8") if ln.strip()]
     by_cat = {}
     for r in rows:
         q = next(m["content"] for m in r["messages"] if m["role"] == "user")
@@ -154,10 +154,10 @@ def main():
 
     train = train_hand + synth
     rng.shuffle(train)
-    with open(OUT / "train.jsonl", "w") as f:
+    with open(OUT / "train.jsonl", "w", encoding="utf-8") as f:
         for r in train:
             f.write(json.dumps(r) + "\n")
-    with open(OUT / "eval.jsonl", "w") as f:
+    with open(OUT / "eval.jsonl", "w", encoding="utf-8") as f:
         for r in eval_rows:
             f.write(json.dumps(r) + "\n")
     print(f"\ntrain.jsonl: {len(train)} ({len(train_hand)} hand + {len(synth)} synthetic)")

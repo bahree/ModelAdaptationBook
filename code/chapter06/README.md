@@ -103,6 +103,8 @@ Training time: ~10 min (2x A30, sharded), ~45-60 min (A100). A single 24 GB card
 
 ### Step 3: Generate a response (Listing 6.3)
 
+> **No training GPU?** The chapter's SFT model is published as `bahree/ModelAdaptationBook#ch6-sft`; `--model_dir` accepts that `repo#subfolder` form, so `eval_sft` and `generate` run from the published model (for example `--model_dir "bahree/ModelAdaptationBook#ch6-sft"`). Commands for every chapter: [ACCELERATORS.md](../../ACCELERATORS.md#running-without-training-pull-the-model-from-hugging-face).
+
 ```bash
 python -m chapter06.generate \
     --model_dir chapter06/runs/sft_run1 \

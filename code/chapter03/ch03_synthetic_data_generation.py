@@ -659,7 +659,7 @@ def mix_and_save(
         "trained_models": [],   # populated after training with checkpoint info
     }
 
-    with open(f"{output_dir}/manifest.json", "w") as f:
+    with open(f"{output_dir}/manifest.json", "w", encoding="utf-8") as f:
         json.dump(manifest, f, indent=2)
 
     print(f"\nStep 6: Mixed dataset saved to {output_dir}/")
